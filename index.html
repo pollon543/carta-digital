@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carta Digital – Pollería El Pollón Iquique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+      background:
+        radial-gradient(circle at top, #1e293b 0, transparent 45%),
+        radial-gradient(circle at bottom, #020617 0, #020617 55%);
+      color:#f9fafb;
+      min-height:100vh;
+    }
+    .glass-card{
+      backdrop-filter:blur(14px);
+      background:linear-gradient(145deg,rgba(15,23,42,0.96),rgba(15,23,42,0.85));
+      border:1px solid rgba(148,163,184,0.3);
+    }
+    .category-card{
+      backdrop-filter:blur(16px);
+      background:radial-gradient(circle at top,#dc2626,#7f1d1d);
+      border:1px solid rgba(248,250,252,0.18);
+      box-shadow:0 20px 40px rgba(0,0,0,0.7);
+      transition:.25s;
+    }
+    .category-card:hover{
+      transform:translateY(-4px) scale(1.01);
+      box-shadow:0 26px 55px rgba(0,0,0,0.85);
+    }
+    .category-cover{
+      height:170px;
+      width:100%;
+      object-fit:cover;
+      border-radius:0.9rem;
+    }
+    .product-img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+      border-radius:1rem;
+    }
+    .product-img-fallback{
+      width:100%;
+      height:220px;
+      border-radius:1rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:3rem;
+      background:radial-gradient(circle at top,#f97316,#7f1d1d);
+    }
+    .badge-pill{
+      font-size:.65rem;
+      letter-spacing:.06em;
+    }
+    .shadow-soft{
+      box-shadow:0 18px 45px rgba(0,0,0,0.55);
+    }
+    .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
+    .scrollbar-hide::-webkit-scrollbar{display:none}
+    .product-badge{
+      position:absolute;
+      top:0.6rem;
+      left:0.6rem;
+      padding:0.2rem 0.6rem;
+      border-radius:999px;
+      background:rgba(15,23,42,0.9);
+      color:#fef9c3;
+      font-size:.65rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      border:1px solid rgba(250,250,250,0.35);
+    }
+    /* Ajuste mobile */
+    @media (max-width:640px){
+      main{padding-left:0.75rem;padding-right:0.75rem}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- OVERLAY MENÚ HAMBURGUESA (MÓVIL) -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm hidden"
+  >
+    <div class="absolute right-0 top-0 h-full w-72 max-w-[80%] bg-slate-50 text-slate-900 shadow-2xl flex flex-col">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📋</span>
+          <span class="font-semibold text-sm">Menú</span>
+        </div>
+        <button id="mobile-menu-close" class="text-slate-500 text-xl leading-none">&times;</button>
+      </div>
+
+      <div class="px-4 pt-3 pb-2 text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">
+        Categorías
+      </div>
+
+      <nav class="flex-1 overflow-y-auto px-2 pb-4 text-sm">
+        <button
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
+          data-menu-category="ofertas-familiares"
+        >
+          <span>👨‍👩‍👧‍👦</span>
+          <span>Ofertas Familiares</span>
+        </button>
+        <button
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
+          data-menu-category="ofertas-dos"
+        >
+          <span>👫</span>
+          <span>Ofertas para Dos</span>
+        </button>
+        <button
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
+          data-menu-category="ofertas-personales"
+        >
+          <span>🧑</span>
+          <span>Ofertas Personales</span>
+        </button>
+        <button
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
+          data-menu-category="platos-extras"
+        >
+          <span>🍽️</span>
+          <span>Platos Extras</span>
+        </button>
+        <button
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
+          data-menu-category="agregados"
+        >
+          <span>➕</span>
+          <span>Agregados</span>
+        </button>
+
+        <div class="mt-4 border-t border-slate-200 pt-3 text-[12px] space-y-2 text-slate-600">
+          <div class="flex items-center gap-2">
+            <span>📞</span><span>+56 9 8692 5310</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>📍</span><span>Vivar 1086, Iquique</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>⏰</span><span>Lun-Dom: 11:30 – 23:00</span>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- CABECERA -->
+  <header class="sticky top-0 z-30 bg-black/60 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center shadow-lg">
+          <img
+            src="img/logo.png"
+            alt="Logo Pollería El Pollón"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p class="uppercase tracking-[0.2em] text-red-300 font-semibold text-[0.6rem] sm:text-xs">
+            Carta Digital
+          </p>
+          <h1 class="text-sm sm:text-lg font-bold leading-tight">
+            Pollería <span class="text-yellow-300">El Pollón</span>
+            <span class="hidden sm:inline text-[0.7rem] text-slate-300 ml-1">• Iquique</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="hidden sm:flex flex-col text-right text-[0.7rem] text-slate-300">
+          <span class="uppercase tracking-[0.2em] text-slate-400">En el local</span>
+          <span class="font-semibold">Elige aquí</span>
+          <span>Pide en caja o a tu garzón</span>
+        </div>
+        <!-- Botón menú hamburguesa (móvil) -->
+        <button
+          id="mobile-menu-toggle"
+          class="sm:hidden inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 border border-white/15 text-[0.75rem] font-semibold text-slate-50"
+        >
+          <span class="text-lg leading-none">☰</span>
+          <span>Menú</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-3 sm:px-4 pt-0 pb-24">
+
+    <!-- CARRUSEL DE NOVEDADES -->
+    <section class="mb-5 sm:mb-7 -mx-3 sm:-mx-4">
+      <div class="relative overflow-hidden w-full h-[410px] sm:h-[250px] lg:h-[310px]">
+        <div id="hero-carousel-track" class="flex w-[100%] h-full transition-transform duration-700 ease-in-out">
+          <div class="w-full h-full flex-shrink-0">
+            <img src="img/bistec.png" alt="Ofertón más chaufa" class="w-full h-full object-cover">
+          </div>
+          <div class="w-full h-full flex-shrink-0">
+            <img src="img/chuleta de cerdo.png" alt="Chuleta de cerdo" class="w-full h-full object-cover">
+          </div>
+          <div class="w-full h-full flex-shrink-0">
+            <img src="img/chaufa brasa con papas fritas.png" alt="Chaufa brasa con papas fritas" class="w-full h-full object-cover">
+          </div>
+          <div class="w-full h-full flex-shrink-0">
+            <img src="img/lomo saltado con chaufa.png" alt="Lomo saltado con chaufa" class="w-full h-full object-cover">
+          </div>
+          <div class="w-full h-full flex-shrink-0">
+            <img src="img/porcion de fideo.png" alt="Porción de papas fritas" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Título / descripción corta -->
+    <section class="mb-5 sm:mb-7">
+      <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
+        <div class="flex-1">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-50">
+            Elige, pide y disfruta
+          </h2>
+          <p class="mt-2 text-[13px] sm:text-sm text-slate-200 max-w-2xl">
+            Mira las categorías, decide tus platos y luego
+            <span class="text-amber-300 font-semibold">pide en caja o a tu garzón</span>.  
+            Carta pensada para usar desde tu celular en el local.
+          </p>
+        </div>
+        <div class="text-[0.7rem] sm:text-xs text-right text-slate-300 flex flex-col gap-1">
+          <p class="uppercase tracking-[0.22em] text-slate-400">Pasos rápidos</p>
+          <p>1. Revisa la carta.</p>
+          <p>2. Elige tu combo o plato.</p>
+          <p class="text-amber-200 font-semibold">3. Pide en caja o al garzón.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTADA DE CATEGORÍAS -->
+    <section id="categories-section" class="mb-10">
+      <header class="mb-4 sm:mb-6">
+        <h3 class="text-sm font-semibold tracking-[0.22em] uppercase text-slate-300">
+          Categorías
+        </h3>
+        <p class="mt-1 text-[13px] sm:text-sm text-slate-400 max-w-2xl">
+          Toca una categoría para ver todos los platos que incluye.
+        </p>
+      </header>
+
+      <div id="categories-grid" class="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- JS rellena las 5 tarjetas de categoría -->
+      </div>
+    </section>
+
+    <!-- HOJA DE CATEGORÍA (DETALLE) -->
+    <section id="products-section" class="mb-10 hidden">
+      <!-- Encabezado de la categoría seleccionada -->
+      <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4 mb-4">
+        <div class="flex-1">
+          <p class="text-[0.7rem] uppercase tracking-[0.24em] text-slate-400 mb-1">
+            Categoría
+          </p>
+          <h2 id="current-category-title" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-50">
+            Ofertas Familiares
+          </h2>
+          <p id="current-category-description" class="mt-2 text-[13px] sm:text-sm text-slate-300 max-w-2xl">
+            Combos completos para compartir en familia.
+          </p>
+          <p class="mt-1 text-[12px] text-slate-400">
+            Puedes mostrar esta pantalla en caja o a tu garzón.
+          </p>
+        </div>
+        <div class="flex gap-2 sm:justify-end">
+          <button
+            id="back-to-categories"
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700 text-[0.7rem] font-semibold text-slate-100 hover:bg-slate-800"
+          >
+            <span>←</span>
+            <span>Volver</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GRID DE PLATOS -->
+      <section aria-label="Listado de platos de la categoría">
+        <div id="products-grid" class="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- JS rellena acá -->
+        </div>
+      </section>
+    </section>
+
+    <!-- PANEL INFORMATIVO / FOOTER MODERNO -->
+    <section class="mt-10 sm:mt-12 border-t border-slate-800 pt-6">
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 text-[13px] sm:text-sm text-slate-200">
+
+        <!-- Contacto -->
+        <div>
+          <h4 class="font-semibold mb-3 text-amber-300 text-base flex items-center gap-2">
+            <span class="text-lg">📞</span>
+            <span>Contacto</span>
+          </h4>
+          <div class="space-y-1.5">
+            <p class="flex items-center gap-2">
+              <span>📱</span>
+              <span>+56 9 8692 5310</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span>📧</span>
+              <span>contacto@elpollon.cl</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span>📍</span>
+              <span>Calle Vivar 1086, Iquique</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Información Legal -->
+        <div>
+          <h4 class="font-semibold mb-3 text-amber-300 text-base flex items-center gap-2">
+            <span class="text-lg">📋</span>
+            <span>Información Legal</span>
+          </h4>
+          <div class="space-y-1.5">
+            <a href="#libro-reclamaciones" class="flex items-center gap-2 hover:text-amber-300">
+              <span>📓</span>
+              <span>Libro de Reclamaciones</span>
+            </a>
+            <a href="#politica-privacidad" class="flex items-center gap-2 hover:text-amber-300">
+              <span>🔒</span>
+              <span>Política de Privacidad</span>
+            </a>
+            <a href="#terminos-condiciones" class="flex items-center gap-2 hover:text-amber-300">
+              <span>📜</span>
+              <span>Términos y Condiciones</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Métodos de pago -->
+        <div>
+          <h4 class="font-semibold mb-3 text-amber-300 text-base flex items-center gap-2">
+            <span class="text-lg">💳</span>
+            <span>Método de Pago</span>
+          </h4>
+          <div class="space-y-2">
+            <div class="rounded-2xl bg-emerald-600 flex flex-col px-4 py-3 shadow-soft">
+              <span class="text-sm font-semibold">💵 Efectivo</span>
+              <span class="text-[11px] text-emerald-50/90">Pago contra entrega</span>
+            </div>
+            <div class="rounded-2xl bg-sky-600 flex flex-col px-4 py-3 shadow-soft">
+              <span class="text-sm font-semibold">💳 Tarjeta</span>
+              <span class="text-[11px] text-sky-50/90">Débito y crédito</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Redes sociales -->
+        <div>
+          <h4 class="font-semibold mb-3 text-amber-300 text-base flex items-center gap-2">
+            <span class="text-lg">📲</span>
+            <span>Síguenos</span>
+          </h4>
+          <div class="space-y-2">
+            <a
+              href="https://wa.me/56986925310"
+              target="_blank"
+              class="flex items-center justify-between px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-500 text-[13px] shadow-soft"
+            >
+              <span class="flex items-center gap-2">
+                <span>🟢</span><span>WhatsApp</span>
+              </span>
+              <span class="text-xs text-green-50/80">Chat</span>
+            </a>
+            <a
+              href="https://facebook.com/elpolloniquique"
+              target="_blank"
+              class="flex items-center justify-between px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-500 text-[13px] shadow-soft"
+            >
+              <span class="flex items-center gap-2">
+                <span>📘</span><span>Facebook</span>
+              </span>
+              <span class="text-xs text-blue-50/80">Fanpage</span>
+            </a>
+            <a
+              href="https://instagram.com/elpolloniquique"
+              target="_blank"
+              class="flex items-center justify-between px-4 py-2 rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:from-pink-400 hover:via-red-400 hover:to-yellow-400 text-[13px] shadow-soft"
+            >
+              <span class="flex items-center gap-2">
+                <span>📸</span><span>Instagram</span>
+              </span>
+              <span class="text-xs text-slate-50/90">Fotos</span>
+            </a>
+            <a
+              href="https://www.tiktok.com/@elpolloniquique"
+              target="_blank"
+              class="flex items-center justify-between px-4 py-2 rounded-2xl bg-black hover:bg-slate-900 text-[13px] shadow-soft"
+            >
+              <span class="flex items-center gap-2">
+                <span>🎵</span><span>TikTok</span>
+              </span>
+              <span class="text-xs text-slate-200/80">Videos</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Línea inferior -->
+      <div class="mt-6 border-t border-slate-800 pt-4 text-[11px] sm:text-[12px] text-slate-400 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <p>© 2024 Pollería El Pollón - Iquique, Chile. Todos los derechos reservados.</p>
+        <p>Desarrollado con ❤️ para los amantes del buen pollo a la brasa.</p>
+      </div>
+    </section>
+
+    <!-- PANEL DELIVERY – PEDIDOS CON ENTREGA A DOMICILIO -->
+    <section class="mt-6 sm:mt-8">
+      <div class="glass-card rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-soft">
+        <div class="flex items-start gap-3">
+          <div class="text-2xl sm:text-3xl">🚚</div>
+          <div>
+            <h4 class="text-sm sm:text-base font-semibold text-amber-300">
+              Delivery – Pedido con entrega a domicilio
+            </h4>
+            <p class="text-[12px] sm:text-[13px] text-slate-200 mt-1 max-w-xl">
+              Para pedidos con entrega a domicilio visita nuestra página web y realiza tu pedido
+              <span class="font-semibold text-amber-200">fácil, práctico y rápido</span>.
+            </p>
+          </div>
+        </div>
+        <div class="flex sm:block">
+          <a
+            href="#"
+            target="_blank"
+            class="inline-flex items-center justify-center px-5 py-2.5 w-full sm:w-auto rounded-full bg-red-600 hover:bg-red-500 text-sm font-semibold text-amber-50 shadow-soft"
+          >
+            <span class="mr-1.5">🚚</span>
+            <span>Ir a Delivery</span>
+          </a>
+        </div>
+      </div>
+      <!-- Reemplaza el valor de href="#" por el enlace real de tu sitio web de delivery -->
+    </section>
+
+  </main>
+
+  <script>
+    // Formato CLP
+    const moneyCL = new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      maximumFractionDigits: 0
+    });
+
+    // Datos de productos
+    const products = {
+      "ofertas-familiares": [
+        {
+          name: "Ofertón más chaufa",
+          description: "Pollo entero, papas, chaufa, ensalada y bebida 1.5 L.",
+          price: 24500,
+          image: "img/oferton mas chaufa.png",
+          badge: "Top ventas"
+        },
+        {
+          name: "Ofertón más fideo",
+          description: "Pollo entero, papas, fideos al pesto, ensalada y bebida.",
+          price: 24500,
+          image: "img/oferton mas fideo.png",
+          badge: "Recomendado"
+        },
+        {
+          name: "Ofertón más chaufa pura papa",
+          description: "Pollo entero, chaufa y papas extra con bebida 1.5 L.",
+          price: 24500,
+          image: "img/oferton mas chaufa pura papa.png"
+        },
+        {
+          name: "Ofertón con fideo",
+          description: "Pollo entero, papas, fideos al pesto y bebida.",
+          price: 23500,
+          image: "img/oferton con fideo.png"
+        },
+        {
+          name: "Ofertón sin ensalada",
+          description: "Pollo entero, papas, chaufa y bebida, sin ensalada.",
+          price: 23500,
+          image: "img/oferton sin ensalada.png"
+        },
+        {
+          name: "Ofertón pura papa",
+          description: "Pollo entero con papas fritas extra y bebida 1.5 L.",
+          price: 23500,
+          image: "img/oferton pura papa.png"
+        },
+        {
+          name: "Ofertón familiar",
+          description: "Pollo entero, papas, ensalada y bebida familiar.",
+          price: 22500,
+          image: "img/oferton familiar.png",
+          badge: "Ideal 4 pers."
+        },
+        {
+          name: "Mega Familiar",
+          description: "2 pollos, papas XXL, ensalada y varias bebidas.",
+          price: 225000,
+          image: "img/oferton familiar.png",
+          badge: "Grupos"
+        }
+      ],
+      "ofertas-dos": [
+        {
+          name: "1/2 combo chaufa",
+          description: "Medio pollo, papas fritas y chaufa para dos.",
+          price: 15100,
+          image: "img/medio combo chaufa.png",
+          badge: "Para 2"
+        },
+        {
+          name: "1/2 combo",
+          description: "Medio pollo, papas y ensalada.",
+          price: 15100,
+          image: "img/medio combo.png"
+        },
+        {
+          name: "1/2 combo pura papa",
+          description: "Medio pollo con más papas fritas.",
+          price: 15100,
+          image: "img/medio combo pura papa.png"
+        }
+      ],
+      "ofertas-personales": [
+        {
+          name: "1/4 combo",
+          description: "1/4 pollo, papas personales y ensalada.",
+          price: 8100,
+          image: "img/personal combo.png"
+        },
+        {
+          name: "1/4 combo pura papa",
+          description: "1/4 pollo con papas extra.",
+          price: 8100,
+          image: "img/personal pura papa.png"
+        },
+        {
+          name: "Chaufa brasa",
+          description: "1/4 pollo a la brasa con chaufa.",
+          price: 8200,
+          image: "img/chaufa brasa.png",
+          badge: "Nuevo"
+        },
+        {
+          name: "Fideo al pesto con 1/4 pollo",
+          description: "1/4 pollo con fideos al pesto cremosos.",
+          price: 8100,
+          image: "img/personal pesto con pollo.png"
+        },
+        {
+          name: "Chaufa brasa con papas",
+          description: "1/4 pollo, chaufa y papas personales.",
+          price: 9200,
+          image: "img/chaufa brasa con papas fritas.png"
+        }
+      ],
+      "platos-extras": [
+        {
+          name: "Lomo saltado con chaufa",
+          description: "Lomo saltado clásico con arroz chaufa.",
+          price: 12200,
+          image: "img/lomo saltado con chaufa.png",
+          badge: "Top ventas"
+        },
+        {
+          name: "Lomo de carne con arroz",
+          description: "Lomo salteado de carne con arroz blanco.",
+          price: 11700,
+          image: ""
+        },
+        {
+          name: "Lomo de pollo con arroz",
+          description: "Lomo saltado de pollo con arroz blanco.",
+          price: 11700,
+          image: "img/lomo saltado de pollo con arroz blanco.png"
+        },
+        {
+          name: "Tallarin saltado",
+          description: "Tallarines salteados con carne y verduras.",
+          price: 11700,
+          image: "img/tallarin saltado de carne.png"
+        },
+        {
+          name: "Bistec a lo pobre",
+          description: "Bistec, papas, huevo y plátano.",
+          price: 10700,
+          image: "img/bistec a lo pobre.png"
+        },
+        {
+          name: "Bistec con pesto",
+          description: "Bistec con fideos al pesto.",
+          price: 10700,
+          image: ""
+        },
+        {
+          name: "Chuleta de cerdo",
+          description: "Chuleta de cerdo a la plancha con guarnición.",
+          price: 10700,
+          image: "img/chuleta de cerdo.png"
+        },
+        {
+          name: "Pechuga a la plancha",
+          description: "Pechuga de pollo a la plancha.",
+          price: 10200,
+          image: "img/pechuga a la plancha.png"
+        },
+        {
+          name: "Combo nuggets",
+          description: "Nuggets con papas fritas.",
+          price: 6700,
+          image: ""
+        },
+        {
+          name: "Salchipapas",
+          description: "Salchichas con papas fritas.",
+          price: 6700,
+          image: "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=400&h=300&fit=crop"
+        }
+      ],
+      "agregados": [
+        {
+          name: "1 pollo entero solo",
+          description: "Pollo entero a la brasa sin acompañamientos.",
+          price: 15000,
+          image: "img/pollo solo.png"
+        },
+        {
+          name: "1/2 pollo solo",
+          description: "Medio pollo (según stock).",
+          price: 9900,
+          image: "img/medio pollo solo.png"
+        },
+        {
+          name: "1/4 pollo solo",
+          description: "1/4 pollo (truto o pechuga).",
+          price: 5800,
+          image: ""
+        },
+        {
+          name: "Papas fritas familiar",
+          description: "Porción grande de papas fritas.",
+          price: 9000,
+          image: "img/porcion de papa.png",
+          badge: "Acompañamiento"
+        },
+        {
+          name: "1/2 porción de papas",
+          description: "Media porción de papas fritas.",
+          price: 6100,
+          image: ""
+        },
+        {
+          name: "Arroz chaufa",
+          description: "Porción individual de chaufa.",
+          price: 5300,
+          image: ""
+        },
+        {
+          name: "Fideos al pesto",
+          description: "Porción de fideos al pesto.",
+          price: 5300,
+          image: "img/porcion de fideo.png"
+        },
+        {
+          name: "Ensalada familiar",
+          description: "Ensalada surtida tamaño familiar.",
+          price: 5400,
+          image: ""
+        },
+        {
+          name: "Ensalada personal",
+          description: "Ensalada surtida individual.",
+          price: 3700,
+          image: ""
+        }
+      ]
+    };
+
+    // Meta de categorías
+    const categoriesMeta = {
+      "ofertas-familiares": {
+        title: "Ofertas Familiares",
+        short: "Combos con pollo entero y acompañamientos para 3 a 5 personas.",
+        tagline: "Perfectas para compartir.",
+        coverImage: "img/oferton mas chaufa.png",
+        emoji: "👨‍👩‍👧‍👦"
+      },
+      "ofertas-dos": {
+        title: "Ofertas para Dos",
+        short: "Platos ideales para compartir entre dos.",
+        tagline: "Parejas y amigos.",
+        coverImage: "img/medio combo chaufa.png",
+        emoji: "👫"
+      },
+      "ofertas-personales": {
+        title: "Ofertas Personales",
+        short: "Porciones individuales con sabor a la brasa.",
+        tagline: "Tu plato personal.",
+        coverImage: "img/personal combo.png",
+        emoji: "🧑"
+      },
+      "platos-extras": {
+        title: "Platos Extras",
+        short: "Lomo, tallarines, bistec, chuleta y más.",
+        tagline: "Más opciones de cocina.",
+        coverImage: "img/lomo saltado con chaufa.png",
+        emoji: "🍽️"
+      },
+      "agregados": {
+        title: "Agregados",
+        short: "Pollos solos, papas, arroces y ensaladas.",
+        tagline: "Suma extra sabor.",
+        coverImage: "img/porcion de papa.png",
+        emoji: "➕"
+      }
+    };
+
+    const categoriesSection = document.getElementById('categories-section');
+    const categoriesGrid   = document.getElementById('categories-grid');
+    const productsSection  = document.getElementById('products-section');
+    const productsGrid     = document.getElementById('products-grid');
+    const currentCategoryTitle = document.getElementById('current-category-title');
+    const currentCategoryDescription = document.getElementById('current-category-description');
+    const backBtn = document.getElementById('back-to-categories');
+
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+    let currentCategory = 'ofertas-familiares';
+
+    function createCategoryCard(catKey){
+      const meta = categoriesMeta[catKey];
+      if(!meta) return document.createElement('div');
+
+      const card = document.createElement('article');
+      card.className = 'category-card rounded-2xl p-3 sm:p-4 flex flex-col gap-3 shadow-soft';
+
+      card.innerHTML = `
+        <div class="relative overflow-hidden rounded-xl">
+          <img
+            src="${meta.coverImage}"
+            alt="${meta.title}"
+            class="category-cover"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          />
+          <div class="product-img-fallback hidden">
+            <span>${meta.emoji || '🍗'}</span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent rounded-b-xl"></div>
+          <div class="absolute left-3 bottom-3 px-3 py-1 rounded-full bg-black/75 text-[0.65rem] uppercase tracking-[0.16em] text-amber-200 font-semibold badge-pill">
+            ${meta.emoji} ${meta.title}
+          </div>
+        </div>
+        <div class="flex-1 flex flex-col gap-2">
+          <h4 class="text-base sm:text-lg font-bold text-amber-50">
+            ${meta.title}
+          </h4>
+          <p class="text-[13px] sm:text-sm text-amber-100/95">
+            ${meta.short}
+          </p>
+          <p class="text-[0.7rem] uppercase tracking-[0.2em] text-orange-200/90 mt-1">
+            ${meta.tagline}
+          </p>
+        </div>
+        <div class="mt-2 flex justify-between items-center">
+          <span class="text-[0.7rem] text-amber-100/90 flex items-center gap-1">
+            <span>👀</span>
+            <span>Ver platos</span>
+          </span>
+          <button
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600 hover:bg-red-500 text-amber-50 border border-red-300/60 shadow-md transition"
+            data-open-category="${catKey}"
+          >
+            <span>Ver</span>
+            <span>→</span>
+          </button>
+        </div>
+      `;
+
+      const btn = card.querySelector('button[data-open-category]');
+      btn.addEventListener('click', ()=>{
+        openCategoryPage(catKey, {pushState:true});
+      });
+
+      return card;
+    }
+
+    function createProductCard(product){
+      const desc = product.description && product.description.trim().length > 0
+        ? product.description
+        : 'Plato especial de la casa.';
+
+      const card = document.createElement('article');
+      card.className = 'glass-card shadow-soft rounded-2xl p-3 sm:p-4 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-2xl transition-transform duration-200';
+
+      let mediaHtml = '';
+      if(product.image && product.image.trim().length > 0){
+        mediaHtml = `
+          <div class="relative overflow-hidden rounded-2xl">
+            <img
+              src="${product.image}"
+              alt="${product.name}"
+              class="product-img"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            />
+            <div class="product-img-fallback hidden">
+              <span>🍗</span>
+            </div>
+            <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/75 to-transparent rounded-b-2xl"></div>
+            <div class="absolute left-3 bottom-3 px-3 py-1 rounded-full bg-black/75 text-[0.65rem] uppercase tracking-[0.16em] text-amber-200 font-semibold badge-pill">
+              El Pollón · Iquique
+            </div>
+            ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+          </div>
+        `;
+      }else{
+        mediaHtml = `
+          <div class="product-img-fallback">
+            <span>🍗</span>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        ${mediaHtml}
+        <div class="flex flex-col gap-2">
+          <div class="flex items-start justify-between gap-3">
+            <h4 class="text-[0.95rem] sm:text-lg font-semibold text-slate-50 leading-snug">
+              ${product.name}
+            </h4>
+            <div class="text-right">
+              <p class="text-[0.6rem] uppercase tracking-[0.18em] text-slate-400 mb-1">
+                Precio
+              </p>
+              <p class="text-sm sm:text-base font-extrabold text-amber-300">
+                ${moneyCL.format(product.price)}
+              </p>
+            </div>
+          </div>
+          <p class="text-[13px] sm:text-sm leading-relaxed text-slate-200/90">
+            ${desc}
+          </p>
+        </div>
+      `;
+      return card;
+    }
+
+    function renderCategory(catKey){
+      currentCategory = catKey;
+      const list = products[catKey] || [];
+      productsGrid.innerHTML = '';
+
+      const meta = categoriesMeta[catKey];
+      if(meta){
+        currentCategoryTitle.textContent = meta.title;
+        currentCategoryDescription.textContent = meta.short;
+      }
+
+      if(list.length === 0){
+        productsGrid.innerHTML = `
+          <p class="text-sm text-slate-200/80 col-span-full">
+            No hay platos disponibles en esta categoría por el momento.
+          </p>
+        `;
+        return;
+      }
+
+      list.forEach(prod=>{
+        productsGrid.appendChild(createProductCard(prod));
+      });
+    }
+
+    function openCategoryPage(catKey, {pushState=false} = {}){
+      renderCategory(catKey);
+      categoriesSection.classList.add('hidden');
+      productsSection.classList.remove('hidden');
+      productsSection.scrollIntoView({behavior:'smooth',block:'start'});
+      if(pushState && history.pushState){
+        history.pushState({cat:catKey,view:'detail'},'',`#${catKey}`);
+      }
+      closeMobileMenu();
+    }
+
+    function backToCategories(){
+      productsSection.classList.add('hidden');
+      categoriesSection.classList.remove('hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+      if(history.pushState){
+        history.pushState({view:'home'},'',window.location.pathname);
+      }
+    }
+
+    function renderCategoriesOverview(){
+      categoriesGrid.innerHTML = '';
+      Object.keys(categoriesMeta).forEach(catKey=>{
+        categoriesGrid.appendChild(createCategoryCard(catKey));
+      });
+    }
+
+    // Carrusel hero
+    const heroTrack = document.getElementById('hero-carousel-track');
+    if(heroTrack){
+      const totalSlides = heroTrack.children.length;
+      let heroIndex = 0;
+      setInterval(()=>{
+        heroIndex = (heroIndex + 1) % totalSlides;
+        heroTrack.style.transform = `translateX(-${heroIndex * 100}%)`;
+      }, 3500);
+    }
+
+    // Botón volver
+    if(backBtn){
+      backBtn.addEventListener('click', backToCategories);
+    }
+
+    // Menú móvil
+    function openMobileMenu(){
+      if(mobileMenu) mobileMenu.classList.remove('hidden');
+    }
+    function closeMobileMenu(){
+      if(mobileMenu) mobileMenu.classList.add('hidden');
+    }
+
+    if(mobileMenuToggle){
+      mobileMenuToggle.addEventListener('click', openMobileMenu);
+    }
+    if(mobileMenuClose){
+      mobileMenuClose.addEventListener('click', closeMobileMenu);
+    }
+    if(mobileMenu){
+      mobileMenu.addEventListener('click', (e)=>{
+        if(e.target === mobileMenu){
+          closeMobileMenu();
+        }
+      });
+    }
+
+    // Click en categorías del menú móvil
+    const mobileMenuCategoryButtons = document.querySelectorAll('[data-menu-category]');
+    mobileMenuCategoryButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const catKey = btn.dataset.menuCategory;
+        if(!catKey) return;
+        openCategoryPage(catKey, {pushState:true});
+      });
+    });
+
+    // Historial navegador
+    window.addEventListener('popstate',(e)=>{
+      const state = e.state || {};
+      if(state.view === 'detail' && state.cat){
+        openCategoryPage(state.cat,{pushState:false});
+      }else{
+        backToCategories();
+      }
+    });
+
+    // Inicio
+    renderCategoriesOverview();
+  </script>
+</body>
+</html>

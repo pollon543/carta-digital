@@ -1,884 +1,896 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carta Digital – Pollería El Pollón Iquique</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta Digital - Pollería</title>
+  <script src="/_sdk/element_sdk.js"></script>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
-      background:
-        radial-gradient(circle at top, #c70909 0, transparent 45%),
-        radial-gradient(circle at bottom, #4d0303 0, #ffffff 55%);
-      color:#ffffff;
-      min-height:100vh;
-    }
-    .glass-card{
-      backdrop-filter:blur(14px);
-      background:linear-gradient(145deg,rgba(15,23,42,0.96),rgba(238, 240, 243, 0.85));
-      border:1px solid rgba(212, 215, 219, 0.3);
-    }
-    .category-card{
-      backdrop-filter:blur(16px);
-      background:radial-gradient(circle at top,#dc2626,#7f1d1d);
-      border:1px solid rgba(252, 252, 252, 0.18);
-      box-shadow:0 20px 40px rgba(14, 13, 13, 0.7);
-      transition:.25s;
-    }
-    .category-card:hover{
-      transform:translateY(-4px) scale(1.01);
-      box-shadow:0 26px 55px rgba(0,0,0,0.85);
-    }
-    .category-cover{
-      height:170px;
-      width:100%;
-      object-fit:cover;
-      border-radius:0.9rem;
-    }
-    .product-img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      border-radius:1rem;
-    }
-    .product-img-fallback{
-      width:100%;
-      height:220px;
-      border-radius:1rem;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:3rem;
-      background:radial-gradient(circle at top,#f97316,#7f1d1d);
-    }
-    .badge-pill{
-      font-size:.65rem;
-      letter-spacing:.06em;
-    }
-    .shadow-soft{
-      box-shadow:0 18px 45px rgba(0,0,0,0.55);
-    }
-    .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
-    .scrollbar-hide::-webkit-scrollbar{display:none}
-    .product-badge{
-      position:absolute;
-      top:0.6rem;
-      left:0.6rem;
-      padding:0.2rem 0.6rem;
-      border-radius:999px;
-      background:rgba(15,23,42,0.9);
-      color:#fef9c3;
-      font-size:.65rem;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      border:1px solid rgba(250,250,250,0.35);
-    }
-    /* Ajuste mobile */
-    @media (max-width:640px){
-      main{padding-left:0.75rem;padding-right:0.75rem}
-    }
-  </style>
-</head>
-<body>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            min-height: 100%;
+        }
 
-  <!-- OVERLAY MENÚ HAMBURGUESA (MÓVIL) -->
-  <div
-    id="mobile-menu"
-    class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm hidden"
-  >
-    <div class="absolute right-0 top-0 h-full w-72 max-w-[80%] bg-slate-50 text-slate-900 shadow-2xl flex flex-col">
-      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
-        <div class="flex items-center gap-2">
-          <span class="text-lg">📋</span>
-          <span class="font-semibold text-sm">Menú</span>
-        </div>
-        <button id="mobile-menu-close" class="text-slate-500 text-xl leading-none">&times;</button>
-      </div>
+        * {
+            box-sizing: border-box;
+        }
 
-      <div class="px-4 pt-3 pb-2 text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">
-        Categorías
-      </div>
+        /* Header */
+        .header {
+            background: #2c1810;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-      <nav class="flex-1 overflow-y-auto px-2 pb-4 text-sm">
-        <button
-          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
-          data-menu-category="ofertas-familiares"
-        >
-          <span>👨‍👩‍👧‍👦</span>
-          <span>Ofertas Familiares</span>
-        </button>
-        <button
-          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
-          data-menu-category="ofertas-dos"
-        >
-          <span>👫</span>
-          <span>Ofertas para Dos</span>
-        </button>
-        <button
-          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
-          data-menu-category="ofertas-personales"
-        >
-          <span>🧑</span>
-          <span>Ofertas Personales</span>
-        </button>
-        <button
-          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
-          data-menu-category="platos-extras"
-        >
-          <span>🍽️</span>
-          <span>Platos Extras</span>
-        </button>
-        <button
-          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-amber-100 text-left"
-          data-menu-category="agregados"
-        >
-          <span>➕</span>
-          <span>Agregados</span>
-        </button>
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        <div class="mt-4 border-t border-slate-200 pt-3 text-[12px] space-y-2 text-slate-600">
-          <div class="flex items-center gap-2">
-            <span>📞</span><span>+56 9 8692 5310</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span>📍</span><span>Vivar 1086, Iquique</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span>⏰</span><span>Lun-Dom: 11:30 – 23:00</span>
-          </div>
-        </div>
-      </nav>
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #ff6b35;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .restaurant-name {
+            font-size: 14px;
+            color: #ff6b35;
+            margin: 0;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .hamburger-line {
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            right: -300px;
+            width: 280px;
+            height: calc(100% - 80px);
+            background: #2c1810;
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 15px 0;
+            border-bottom: 1px solid #444;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover {
+            color: #ff6b35;
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .carousel {
+            display: flex;
+            width: 1000%;
+            height: 100%;
+            animation: slide 20s infinite;
+        }
+
+        .carousel-slide {
+            width: 10%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,107,53,0.1), rgba(247,147,30,0.1));
+        }
+
+        @keyframes slide {
+            0%, 10% { transform: translateX(0%); }
+            10%, 20% { transform: translateX(-10%); }
+            20%, 30% { transform: translateX(-20%); }
+            30%, 40% { transform: translateX(-30%); }
+            40%, 50% { transform: translateX(-40%); }
+            50%, 60% { transform: translateX(-50%); }
+            60%, 70% { transform: translateX(-60%); }
+            70%, 80% { transform: translateX(-70%); }
+            80%, 90% { transform: translateX(-80%); }
+            90%, 100% { transform: translateX(-90%); }
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .category-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,107,53,0.1), rgba(247,147,30,0.1));
+        }
+
+        .category-content {
+            padding: 20px;
+        }
+
+        .category-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c1810;
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .view-more-btn {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .view-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.4);
+        }
+
+        /* Dishes Section */
+        .dishes-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .dishes-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .dish-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .dish-image {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .dish-info {
+            padding: 20px;
+        }
+
+        .dish-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c1810;
+            margin: 0 0 10px 0;
+        }
+
+        .dish-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0 0 15px 0;
+        }
+
+        .dish-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b35;
+            text-align: right;
+        }
+
+        .back-btn {
+            background: #2c1810;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #3d2318;
+            transform: translateY(-2px);
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+            padding: 40px 20px;
+            margin-top: 0;
+        }
+
+        .video-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .video-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .video-description {
+            font-size: 16px;
+            color: white;
+            margin: 0 0 20px 0;
+            line-height: 1.6;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Payment and Delivery Section */
+        .payment-delivery-section {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 50px 20px;
+            margin-top: 0;
+        }
+
+        .payment-delivery-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .payment-delivery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .payment-panel, .delivery-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .payment-panel:hover, .delivery-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+        }
+
+        .panel-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c1810;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 15px;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+
+        .payment-icon {
+            font-size: 24px;
+        }
+
+        .payment-text {
+            font-size: 18px;
+        }
+
+        .delivery-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ff6b35;
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .delivery-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            text-align: center;
+        }
+
+        .website-btn {
+            background: linear-gradient(135deg, #2c1810, #3d2318);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .website-btn:hover {
+            background: linear-gradient(135deg, #3d2318, #4e2d1f);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44,24,16,0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dishes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-title {
+                font-size: 18px;
+            }
+            
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .video-section {
+                padding: 25px 15px;
+            }
+
+            .video-title {
+                font-size: 20px;
+            }
+
+            .video-description {
+                font-size: 14px;
+            }
+
+            .payment-delivery-section {
+                padding: 30px 15px;
+            }
+
+            .payment-delivery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .payment-panel, .delivery-panel {
+                padding: 25px 20px;
+            }
+
+            .panel-title {
+                font-size: 20px;
+            }
+
+            .payment-text {
+                font-size: 16px;
+            }
+
+            .delivery-description {
+                font-size: 14px;
+            }
+
+            .website-btn {
+                font-size: 14px;
+                padding: 12px 25px;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Header -->
+  <header class="header">
+   <div class="logo-section">
+    <div class="logo"><img src="img/logo.png" alt="Logo Pollería" onerror="this.src=''; this.alt='Logo no disponible'; this.style.display='none';">
     </div>
-  </div>
-
-  <!-- CABECERA -->
-  <header class="sticky top-0 z-30 bg-black/60 backdrop-blur-xl border-b border-white/10">
-    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl overflow-hidden bg-slate-900 flex items-center justify-center shadow-lg">
-          <img
-            src="img/logo.png"
-            alt="Logo Pollería El Pollón"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div>
-          <p class="uppercase tracking-[0.2em] text-red-300 font-semibold text-[0.6rem] sm:text-xs">
-            Carta Digital
-          </p>
-          <h1 class="text-sm sm:text-lg font-bold leading-tight">
-            Pollería <span class="text-yellow-300">El Pollón</span>
-            <span class="hidden sm:inline text-[0.7rem] text-slate-300 ml-1">• Iquique</span>
-          </h1>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <div class="hidden sm:flex flex-col text-right text-[0.7rem] text-slate-300">
-          <span class="uppercase tracking-[0.2em] text-slate-400">En el local</span>
-          <span class="font-semibold">Elige aquí</span>
-          <span>Pide en caja o a tu garzón</span>
-        </div>
-        <!-- Botón menú hamburguesa (móvil) -->
-        <button
-          id="mobile-menu-toggle"
-          class="sm:hidden inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/85 border border-white/15 text-[0.75rem] font-semibold text-slate-50"
-        >
-          <span class="text-lg leading-none">☰</span>
-          <span>Menú</span>
-        </button>
-      </div>
+    <div>
+     <h3 class="menu-title" id="menu-title">Carta Digital</h3>
+     <p class="restaurant-name" id="restaurant-name">Pollería El Pollón</p>
     </div>
-  </header>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-6xl mx-auto px-3 sm:px-4 pt-0 pb-24">
-
-    <!-- CARRUSEL DE NOVEDADES -->
-    <section class="mb-5 sm:mb-7 -mx-3 sm:-mx-4">
-      <div class="relative overflow-hidden w-full h-[410px] sm:h-[250px] lg:h-[310px]">
-        <div id="hero-carousel-track" class="flex w-[100%] h-full transition-transform duration-700 ease-in-out">
-          <div class="w-full h-full flex-shrink-0">
-            <img src="img/bistec.png" alt="Ofertón más chaufa" class="w-full h-full object-cover">
-          </div>
-          <div class="w-full h-full flex-shrink-0">
-            <img src="img/chuleta de cerdo.png" alt="Chuleta de cerdo" class="w-full h-full object-cover">
-          </div>
-          <div class="w-full h-full flex-shrink-0">
-            <img src="img/chaufa brasa con papas fritas.png" alt="Chaufa brasa con papas fritas" class="w-full h-full object-cover">
-          </div>
-          <div class="w-full h-full flex-shrink-0">
-            <img src="img/lomo saltado con chaufa.png" alt="Lomo saltado con chaufa" class="w-full h-full object-cover">
-          </div>
-          <div class="w-full h-full flex-shrink-0">
-            <img src="img/porcion de fideo.png" alt="Porción de papas fritas" class="w-full h-full object-cover">
-          </div>
-        </div>
+   </div>
+   <div class="hamburger-menu" id="hamburger">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+   </div>
+  </header><!-- Mobile Menu -->
+  <nav class="mobile-menu" id="mobile-menu"><a href="#" class="menu-item" data-category="familiares" id="cat-1">OFERTAS FAMILIARES</a> <a href="#" class="menu-item" data-category="dos" id="cat-2">OFERTAS PARA DOS</a> <a href="#" class="menu-item" data-category="personales" id="cat-3">OFERTAS PERSONALES</a> <a href="#" class="menu-item" data-category="extras" id="cat-4">PLATOS EXTRAS</a> <a href="#" class="menu-item" data-category="agregados" id="cat-5">AGREGADOS</a>
+  </nav><!-- Overlay -->
+  <div class="overlay" id="overlay"></div><!-- Carousel -->
+  <div class="carousel-container">
+   <div class="carousel">
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1574484284002-952d92456975?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+    <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&amp;h=400&amp;fit=crop&amp;crop=center')"></div>
+   </div>
+  </div><!-- Main Content -->
+  <main class="main-content"><!-- Categories Section -->
+   <section class="categories-section" id="categories-section">
+    <div class="categories-grid">
+     <div class="category-card">
+      <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&amp;h=200&amp;fit=crop&amp;crop=center')"></div>
+      <div class="category-content">
+       <h3 class="category-name" id="category-name-1">OFERTAS FAMILIARES</h3><button class="view-more-btn" data-category="familiares">Ver Más Platos</button>
       </div>
-    </section>
-
-    <!-- Título / descripción corta -->
-    <section class="mb-5 sm:mb-7">
-      <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
-        <div class="flex-1">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-200">
-            Elige, pide y disfruta
-          </h2>
-          <p class="mt-2 text-[13px] sm:text-sm text-slate-200 max-w-2xl">
-            Mira las categorías, decide tus platos y luego
-            <span class="text-amber-300 font-semibold">pide en caja o a tu garzón</span>.  
-            Carta pensada para usar desde tu celular en el local.
-          </p>
-        </div>
-        <div class="text-[0.7rem] sm:text-xs text-right text-slate-300 flex flex-col gap-1">
-          <p class="uppercase tracking-[0.22em] text-slate-400">Pasos rápidos</p>
-          <p>1. Revisa la carta.</p>
-          <p>2. Elige tu combo o plato.</p>
-          <p class="text-amber-200 font-semibold">3. Pide en caja o al garzón.</p>
-        </div>
+     </div>
+     <div class="category-card">
+      <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&amp;h=200&amp;fit=crop&amp;crop=center')"></div>
+      <div class="category-content">
+       <h3 class="category-name" id="category-name-2">OFERTAS PARA DOS</h3><button class="view-more-btn" data-category="dos">Ver Más Platos</button>
       </div>
-    </section>
-
-    <!-- PORTADA DE CATEGORÍAS -->
-    <section id="categories-section" class="mb-10">
-      <header class="mb-4 sm:mb-6">
-        <h3 class="text-sm font-semibold tracking-[0.22em] uppercase text-slate-300">
-          Categorías
-        </h3>
-        <p class="mt-1 text-[13px] sm:text-sm text-slate-400 max-w-2xl">
-          Toca una categoría para ver todos los platos que incluye.
-        </p>
-      </header>
-
-      <div id="categories-grid" class="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <!-- JS rellena las 5 tarjetas de categoría -->
+     </div>
+     <div class="category-card">
+      <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&amp;h=200&amp;fit=crop&amp;crop=center')"></div>
+      <div class="category-content">
+       <h3 class="category-name" id="category-name-3">OFERTAS PERSONALES</h3><button class="view-more-btn" data-category="personales">Ver Más Platos</button>
       </div>
-    </section>
-
-    <!-- HOJA DE CATEGORÍA (DETALLE) -->
-    <section id="products-section" class="mb-10 hidden">
-      <!-- Encabezado de la categoría seleccionada -->
-      <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4 mb-4">
-        <div class="flex-1">
-          <p class="text-[0.7rem] uppercase tracking-[0.24em] text-slate-400 mb-1">
-            Categoría
-          </p>
-          <h2 id="current-category-title" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-50">
-            Ofertas Familiares
-          </h2>
-          <p id="current-category-description" class="mt-2 text-[13px] sm:text-sm text-slate-300 max-w-2xl">
-            Combos completos para compartir en familia.
-          </p>
-          <p class="mt-1 text-[12px] text-slate-400">
-            Puedes mostrar esta pantalla en caja o a tu garzón.
-          </p>
-        </div>
-        <div class="flex gap-2 sm:justify-end">
-          <button
-            id="back-to-categories"
-            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700 text-[0.7rem] font-semibold text-slate-100 hover:bg-slate-800"
-          >
-            <span>←</span>
-            <span>Volver</span>
-          </button>
-        </div>
+     </div>
+     <div class="category-card">
+      <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&amp;h=200&amp;fit=crop&amp;crop=center')"></div>
+      <div class="category-content">
+       <h3 class="category-name" id="category-name-4">PLATOS EXTRAS</h3><button class="view-more-btn" data-category="extras">Ver Más Platos</button>
       </div>
-
-      <!-- GRID DE PLATOS -->
-      <section aria-label="Listado de platos de la categoría">
-        <div id="products-grid" class="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- JS rellena acá -->
-        </div>
-      </section>
-    </section>
-
-    <!-- PANEL INFORMATIVO / FOOTER MODERNO -->
-    <section class="mt-10 sm:mt-12 border-t border-slate-800 pt-6">
-      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 text-[13px] sm:text-sm text-slate-200">
-
-        <!-- SOLO MÉTODO DE PAGO -->
-        <div>
-          <h4 class="font-semibold mb-3 text-amber-300 text-base flex items-center gap-2">
-            <span class="text-lg">💳</span>
-            <span>Método de Pago</span>
-          </h4>
-          <div class="space-y-2">
-            <div class="rounded-2xl bg-emerald-600 flex flex-col px-4 py-3 shadow-soft">
-              <span class="text-sm font-semibold">💵 Efectivo</span>
-              <span class="text-[11px] text-emerald-50/90">Pago contra entrega</span>
-            </div>
-            <div class="rounded-2xl bg-sky-600 flex flex-col px-4 py-3 shadow-soft">
-              <span class="text-sm font-semibold">💳 Tarjeta</span>
-              <span class="text-[11px] text-sky-50/90">Débito y crédito</span>
-            </div>
-          </div>
-        </div>
-
+     </div>
+     <div class="category-card">
+      <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&amp;h=200&amp;fit=crop&amp;crop=center')"></div>
+      <div class="category-content">
+       <h3 class="category-name" id="category-name-5">AGREGADOS</h3><button class="view-more-btn" data-category="agregados">Ver Más Platos</button>
       </div>
-
-      <!-- Línea inferior -->
-      <div class="mt-6 border-t border-slate-800 pt-4 text-[11px] sm:text-[12px] text-slate-400 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <p>© 2024 Pollería El Pollón - Iquique, Chile. Todos los derechos reservados.</p>
-        <p>Desarrollado con ❤️ para los amantes del buen pollo a la brasa.</p>
+     </div>
+    </div>
+   </section><!-- Dishes Sections -->
+   <section class="dishes-section" id="dishes-familiares"><button class="back-btn" onclick="showCategories()">← Volver al Menú</button>
+    <h2 class="section-title" id="section-title-familiares">OFERTAS FAMILIARES</h2>
+    <div class="dishes-grid" id="dishes-grid-familiares"></div>
+   </section>
+   <section class="dishes-section" id="dishes-dos"><button class="back-btn" onclick="showCategories()">← Volver al Menú</button>
+    <h2 class="section-title" id="section-title-dos">OFERTAS PARA DOS</h2>
+    <div class="dishes-grid" id="dishes-grid-dos"></div>
+   </section>
+   <section class="dishes-section" id="dishes-personales"><button class="back-btn" onclick="showCategories()">← Volver al Menú</button>
+    <h2 class="section-title" id="section-title-personales">OFERTAS PERSONALES</h2>
+    <div class="dishes-grid" id="dishes-grid-personales"></div>
+   </section>
+   <section class="dishes-section" id="dishes-extras"><button class="back-btn" onclick="showCategories()">← Volver al Menú</button>
+    <h2 class="section-title" id="section-title-extras">PLATOS EXTRAS</h2>
+    <div class="dishes-grid" id="dishes-grid-extras"></div>
+   </section>
+   <section class="dishes-section" id="dishes-agregados"><button class="back-btn" onclick="showCategories()">← Volver al Menú</button>
+    <h2 class="section-title" id="section-title-agregados">AGREGADOS</h2>
+    <div class="dishes-grid" id="dishes-grid-agregados"></div>
+   </section>
+  </main><!-- Video Section -->
+  <section class="video-section">
+   <div class="video-container">
+    <h2 class="video-title">🔥 Descubre el Arte del Pollo a la Brasa 🔥</h2>
+    <p class="video-description">Mira cómo preparamos nuestro delicioso pollo a la brasa con técnicas tradicionales</p>
+    <div class="video-wrapper"><iframe src="video/Download.mp4" title="Preparación de Pollo a la Brasa" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+    </div>
+   </div>
+  </section><!-- Payment and Delivery Section -->
+  <section class="payment-delivery-section">
+   <div class="payment-delivery-container">
+    <div class="payment-delivery-grid"><!-- Payment Methods Panel -->
+     <div class="payment-panel">
+      <h3 class="panel-title">Métodos de Pago</h3>
+      <div class="payment-methods">
+       <div class="payment-method"><span class="payment-icon">💵</span> <span class="payment-text">Efectivo</span>
+       </div>
+       <div class="payment-method"><span class="payment-icon">💳</span> <span class="payment-text">Tarjeta</span>
+       </div>
+       <div class="payment-method"><span class="payment-icon">💳</span> <span class="payment-text">Débito</span>
+       </div>
       </div>
-    </section>
-
-    <!-- PANEL DELIVERY – PEDIDOS CON ENTREGA A DOMICILIO -->
-    <section class="mt-6 sm:mt-8">
-      <div class="glass-card rounded-2xl px-4 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-soft">
-        <div class="flex items-start gap-3">
-          <div class="text-2xl sm:text-3xl">🚚</div>
-          <div>
-            <h4 class="text-sm sm:text-base font-semibold text-amber-300">
-              Delivery – Pedido con entrega a domicilio
-            </h4>
-            <p class="text-[12px] sm:text-[13px] text-slate-200 mt-1 max-w-xl">
-              Para pedidos con entrega a domicilio visita nuestra página web y realiza tu pedido
-              <span class="font-semibold text-amber-200">fácil, práctico y rápido</span>.
-            </p>
-          </div>
-        </div>
-        <div class="flex sm:block">
-          <a
-            href="https://elpolloniquique.github.io/el-pollon-iquique/"
-            target="_blank"
-            class="inline-flex items-center justify-center px-5 py-2.5 w-full sm:w-auto rounded-full bg-red-600 hover:bg-red-500 text-sm font-semibold text-amber-50 shadow-soft"
-          >
-            <span class="mr-1.5">🚚</span>
-            <span>Ir a Delivery</span>
-          </a>
-        </div>
-      </div>
-      <!-- Reemplaza el valor de href por el enlace real de tu sitio web de delivery si lo deseas -->
-    </section>
-
-  </main>
-
+     </div><!-- Delivery Panel -->
+     <div class="delivery-panel">
+      <h3 class="panel-title">🚚 Delivery</h3>
+      <p class="delivery-subtitle">Pedido con entrega a domicilio</p>
+      <p class="delivery-description">Para pedidos con entrega a domicilio visita nuestra página web y realiza tu pedido fácil, práctico y rápido.</p><button class="website-btn" onclick="window.open('https://elpolloniquique.github.io/el-pollon-iquique/', '_blank', 'noopener,noreferrer')"> 🌐 Ir a Página Web </button>
+     </div>
+    </div>
+   </div>
+  </section>
   <script>
-    // Formato CLP
-    const moneyCL = new Intl.NumberFormat('es-CL', {
-      style: 'currency',
-      currency: 'CLP',
-      maximumFractionDigits: 0
-    });
+        // Configuration object
+        const defaultConfig = {
+            restaurant_name: "Pollería El Dorado",
+            menu_title: "Carta Digital",
+            category_1: "OFERTAS FAMILIARES",
+            category_2: "OFERTAS PARA DOS", 
+            category_3: "OFERTAS PERSONALES",
+            category_4: "PLATOS EXTRAS",
+            category_5: "AGREGADOS"
+        };
 
-    // Datos de productos
-    const products = {
-      "ofertas-familiares": [
-        {
-          name: "Ofertón más chaufa",
-          description: "Pollo entero, papas, chaufa, ensalada y bebida 1.5 L.",
-          price: 24500,
-          image: "img/oferton mas chaufa.png",
-          badge: "Top ventas"
-        },
-        {
-          name: "Ofertón más fideo",
-          description: "Pollo entero, papas, fideos al pesto, ensalada y bebida.",
-          price: 24500,
-          image: "img/oferton mas fideo.png",
-          badge: "Recomendado"
-        },
-        {
-          name: "Ofertón más chaufa pura papa",
-          description: "Pollo entero, chaufa y papas extra con bebida 1.5 L.",
-          price: 24500,
-          image: "img/oferton mas chaufa pura papa.png"
-        },
-        {
-          name: "Ofertón con fideo",
-          description: "Pollo entero, papas, fideos al pesto y bebida.",
-          price: 23500,
-          image: "img/oferton con fideo.png"
-        },
-        {
-          name: "Ofertón sin ensalada",
-          description: "Pollo entero, papas, chaufa y bebida, sin ensalada.",
-          price: 23500,
-          image: "img/oferton sin ensalada.png"
-        },
-        {
-          name: "Ofertón pura papa",
-          description: "Pollo entero con papas fritas extra y bebida 1.5 L.",
-          price: 23500,
-          image: "img/oferton pura papa.png"
-        },
-        {
-          name: "Ofertón familiar",
-          description: "Pollo entero, papas, ensalada y bebida familiar.",
-          price: 22500,
-          image: "img/oferton familiar.png",
-          badge: "Ideal 4 pers."
-        },
-        {
-          name: "Mega Familiar",
-          description: "2 pollos, papas XXL, ensalada y varias bebidas.",
-          price: 225000,
-          image: "img/oferton familiar.png",
-          badge: "Grupos"
+        // Real dishes data
+        const dishesData = {
+            familiares: [
+                { name: "Ofertón más chaufa", description: "Pollo entero, papas, chaufa, ensalada y bebida 1.5 L.", price: "$24.500", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón más fideo", description: "Pollo entero, papas, fideos al pesto, ensalada y bebida.", price: "$24.500", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón más chaufa pura papa", description: "Pollo entero, chaufa y papas extra con bebida 1.5 L.", price: "$24.500", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón con fideo", description: "Pollo entero, papas, fideos al pesto y bebida.", price: "$23.500", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón sin ensalada", description: "Pollo entero, papas, chaufa y bebida, sin ensalada.", price: "$23.500", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón pura papa", description: "Pollo entero con papas fritas extra y bebida 1.5 L.", price: "$23.500", image: "https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ofertón familiar", description: "Pollo entero, papas, ensalada y bebida familiar.", price: "$22.500", image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&h=250&fit=crop&crop=center" },
+                { name: "Mega Familiar", description: "2 pollos, papas XXL, ensalada y varias bebidas.", price: "$225.000", image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=250&fit=crop&crop=center" }
+            ],
+            dos: [
+                { name: "1/2 combo chaufa", description: "Medio pollo, papas fritas y chaufa para dos.", price: "$15.100", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/2 combo", description: "Medio pollo, papas y ensalada.", price: "$15.100", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/2 combo pura papa", description: "Medio pollo con más papas fritas.", price: "$15.100", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" }
+            ],
+            personales: [
+                { name: "1/4 combo", description: "1/4 pollo, papas personales y ensalada.", price: "$8.100", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/4 combo pura papa", description: "1/4 pollo con papas extra.", price: "$8.100", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop&crop=center" },
+                { name: "Chaufa brasa", description: "1/4 pollo a la brasa con chaufa.", price: "$8.200", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" },
+                { name: "Fideo al pesto con 1/4 pollo", description: "1/4 pollo con fideos al pesto cremosos.", price: "$8.100", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=250&fit=crop&crop=center" },
+                { name: "Chaufa brasa con papas", description: "1/4 pollo, chaufa y papas personales.", price: "$9.200", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop&crop=center" }
+            ],
+            extras: [
+                { name: "Lomo saltado con chaufa", description: "Lomo saltado clásico con arroz chaufa.", price: "$12.200", image: "https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=400&h=250&fit=crop&crop=center" },
+                { name: "Lomo de carne con arroz", description: "Lomo salteado de carne con arroz blanco.", price: "$11.700", image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&h=250&fit=crop&crop=center" },
+                { name: "Lomo de pollo con arroz", description: "Lomo saltado de pollo con arroz blanco.", price: "$11.700", image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=250&fit=crop&crop=center" },
+                { name: "Tallarin saltado", description: "Tallarines salteados con carne y verduras.", price: "$11.700", image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=250&fit=crop&crop=center" },
+                { name: "Bistec a lo pobre", description: "Bistec, papas, huevo y plátano.", price: "$10.700", image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=250&fit=crop&crop=center" },
+                { name: "Bistec con pesto", description: "Bistec con fideos al pesto.", price: "$10.700", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop&crop=center" },
+                { name: "Chuleta de cerdo", description: "Chuleta de cerdo a la plancha con guarnición.", price: "$10.700", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=400&h=250&fit=crop&crop=center" },
+                { name: "Pechuga a la plancha", description: "Pechuga de pollo a la plancha.", price: "$10.200", image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=400&h=250&fit=crop&crop=center" },
+                { name: "Combo nuggets", description: "Nuggets con papas fritas.", price: "$6.700", image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400&h=250&fit=crop&crop=center" },
+                { name: "Salchipapas", description: "Salchichas con papas fritas.", price: "$6.700", image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=250&fit=crop&crop=center" }
+            ],
+            agregados: [
+                { name: "1 pollo entero solo", description: "Pollo entero a la brasa sin acompañamientos.", price: "$15.000", image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/2 pollo solo", description: "Medio pollo (según stock).", price: "$9.900", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/4 pollo solo", description: "1/4 pollo (truto o pechuga).", price: "$5.800", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=250&fit=crop&crop=center" },
+                { name: "Papas fritas familiar", description: "Porción grande de papas fritas.", price: "$9.000", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&h=250&fit=crop&crop=center" },
+                { name: "1/2 porción de papas", description: "Media porción de papas fritas.", price: "$6.100", image: "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=400&h=250&fit=crop&crop=center" },
+                { name: "Arroz chaufa", description: "Porción individual de chaufa.", price: "$5.300", image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=250&fit=crop&crop=center" },
+                { name: "Fideos al pesto", description: "Porción de fideos al pesto.", price: "$5.300", image: "https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ensalada familiar", description: "Ensalada surtida tamaño familiar.", price: "$5.400", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=250&fit=crop&crop=center" },
+                { name: "Ensalada personal", description: "Ensalada surtida individual.", price: "$3.700", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=250&fit=crop&crop=center" }
+            ]
+        };
+
+        // Mobile menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('overlay');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Category navigation
+        function showCategory(category) {
+            // Hide categories section
+            document.getElementById('categories-section').style.display = 'none';
+            
+            // Hide all dishes sections
+            document.querySelectorAll('.dishes-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected category
+            document.getElementById(`dishes-${category}`).classList.add('active');
+            
+            // Generate dishes for the category
+            generateDishes(category);
+            
+            // Close mobile menu
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
         }
-      ],
-      "ofertas-dos": [
-        {
-          name: "1/2 combo chaufa",
-          description: "Medio pollo, papas fritas y chaufa para dos.",
-          price: 15100,
-          image: "img/medio combo chaufa.png",
-          badge: "Para 2"
-        },
-        {
-          name: "1/2 combo",
-          description: "Medio pollo, papas y ensalada.",
-          price: 15100,
-          image: "img/medio combo.png"
-        },
-        {
-          name: "1/2 combo pura papa",
-          description: "Medio pollo con más papas fritas.",
-          price: 15100,
-          image: "img/medio combo pura papa.png"
+
+        function showCategories() {
+            // Show categories section
+            document.getElementById('categories-section').style.display = 'block';
+            
+            // Hide all dishes sections
+            document.querySelectorAll('.dishes-section').forEach(section => {
+                section.classList.remove('active');
+            });
         }
-      ],
-      "ofertas-personales": [
-        {
-          name: "1/4 combo",
-          description: "1/4 pollo, papas personales y ensalada.",
-          price: 8100,
-          image: "img/personal combo.png"
-        },
-        {
-          name: "1/4 combo pura papa",
-          description: "1/4 pollo con papas extra.",
-          price: 8100,
-          image: "img/personal pura papa.png"
-        },
-        {
-          name: "Chaufa brasa",
-          description: "1/4 pollo a la brasa con chaufa.",
-          price: 8200,
-          image: "img/chaufa brasa.png",
-          badge: "Nuevo"
-        },
-        {
-          name: "Fideo al pesto con 1/4 pollo",
-          description: "1/4 pollo con fideos al pesto cremosos.",
-          price: 8100,
-          image: "img/personal pesto con pollo.png"
-        },
-        {
-          name: "Chaufa brasa con papas",
-          description: "1/4 pollo, chaufa y papas personales.",
-          price: 9200,
-          image: "img/chaufa brasa con papas fritas.png"
+
+        function generateDishes(category) {
+            const dishesGrid = document.getElementById(`dishes-grid-${category}`);
+            const dishes = dishesData[category] || [];
+            
+            dishesGrid.innerHTML = dishes.map(dish => `
+                <div class="dish-card">
+                    <div class="dish-image" style="background-image: url('${dish.image}')"></div>
+                    <div class="dish-info">
+                        <h3 class="dish-name">${dish.name}</h3>
+                        <p class="dish-description">${dish.description}</p>
+                        <div class="dish-price">${dish.price}</div>
+                    </div>
+                </div>
+            `).join('');
         }
-      ],
-      "platos-extras": [
-        {
-          name: "Lomo saltado con chaufa",
-          description: "Lomo saltado clásico con arroz chaufa.",
-          price: 12200,
-          image: "img/lomo saltado con chaufa.png",
-          badge: "Top ventas"
-        },
-        {
-          name: "Lomo de carne con arroz",
-          description: "Lomo salteado de carne con arroz blanco.",
-          price: 11700,
-          image: ""
-        },
-        {
-          name: "Lomo de pollo con arroz",
-          description: "Lomo saltado de pollo con arroz blanco.",
-          price: 11700,
-          image: "img/lomo saltado de pollo con arroz blanco.png"
-        },
-        {
-          name: "Tallarin saltado",
-          description: "Tallarines salteados con carne y verduras.",
-          price: 11700,
-          image: "img/tallarin saltado de carne.png"
-        },
-        {
-          name: "Bistec a lo pobre",
-          description: "Bistec, papas, huevo y plátano.",
-          price: 10700,
-          image: "img/bistec a lo pobre.png"
-        },
-        {
-          name: "Bistec con pesto",
-          description: "Bistec con fideos al pesto.",
-          price: 10700,
-          image: ""
-        },
-        {
-          name: "Chuleta de cerdo",
-          description: "Chuleta de cerdo a la plancha con guarnición.",
-          price: 10700,
-          image: "img/chuleta de cerdo.png"
-        },
-        {
-          name: "Pechuga a la plancha",
-          description: "Pechuga de pollo a la plancha.",
-          price: 10200,
-          image: "img/pechuga a la plancha.png"
-        },
-        {
-          name: "Combo nuggets",
-          description: "Nuggets con papas fritas.",
-          price: 6700,
-          image: ""
-        },
-        {
-          name: "Salchipapas",
-          description: "Salchichas con papas fritas.",
-          price: 6700,
-          image: "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=400&h=300&fit=crop"
+
+        // Event listeners for category buttons
+        document.querySelectorAll('.view-more-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.getAttribute('data-category');
+                showCategory(category);
+            });
+        });
+
+        // Event listeners for mobile menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = e.target.getAttribute('data-category');
+                showCategory(category);
+            });
+        });
+
+        // Element SDK Configuration
+        async function onConfigChange(config) {
+            // Update restaurant name and menu title
+            document.getElementById('restaurant-name').textContent = config.restaurant_name || defaultConfig.restaurant_name;
+            document.getElementById('menu-title').textContent = config.menu_title || defaultConfig.menu_title;
+            
+            // Update category names in cards
+            document.getElementById('category-name-1').textContent = config.category_1 || defaultConfig.category_1;
+            document.getElementById('category-name-2').textContent = config.category_2 || defaultConfig.category_2;
+            document.getElementById('category-name-3').textContent = config.category_3 || defaultConfig.category_3;
+            document.getElementById('category-name-4').textContent = config.category_4 || defaultConfig.category_4;
+            document.getElementById('category-name-5').textContent = config.category_5 || defaultConfig.category_5;
+            
+            // Update category names in mobile menu
+            document.getElementById('cat-1').textContent = config.category_1 || defaultConfig.category_1;
+            document.getElementById('cat-2').textContent = config.category_2 || defaultConfig.category_2;
+            document.getElementById('cat-3').textContent = config.category_3 || defaultConfig.category_3;
+            document.getElementById('cat-4').textContent = config.category_4 || defaultConfig.category_4;
+            document.getElementById('cat-5').textContent = config.category_5 || defaultConfig.category_5;
+            
+            // Update section titles
+            document.getElementById('section-title-familiares').textContent = config.category_1 || defaultConfig.category_1;
+            document.getElementById('section-title-dos').textContent = config.category_2 || defaultConfig.category_2;
+            document.getElementById('section-title-personales').textContent = config.category_3 || defaultConfig.category_3;
+            document.getElementById('section-title-extras').textContent = config.category_4 || defaultConfig.category_4;
+            document.getElementById('section-title-agregados').textContent = config.category_5 || defaultConfig.category_5;
         }
-      ],
-      "agregados": [
-        {
-          name: "1 pollo entero solo",
-          description: "Pollo entero a la brasa sin acompañamientos.",
-          price: 15000,
-          image: "img/pollo solo.png"
-        },
-        {
-          name: "1/2 pollo solo",
-          description: "Medio pollo (según stock).",
-          price: 9900,
-          image: "img/medio pollo solo.png"
-        },
-        {
-          name: "1/4 pollo solo",
-          description: "1/4 pollo (truto o pechuga).",
-          price: 5800,
-          image: ""
-        },
-        {
-          name: "Papas fritas familiar",
-          description: "Porción grande de papas fritas.",
-          price: 9000,
-          image: "img/porcion de papa.png",
-          badge: "Acompañamiento"
-        },
-        {
-          name: "1/2 porción de papas",
-          description: "Media porción de papas fritas.",
-          price: 6100,
-          image: ""
-        },
-        {
-          name: "Arroz chaufa",
-          description: "Porción individual de chaufa.",
-          price: 5300,
-          image: ""
-        },
-        {
-          name: "Fideos al pesto",
-          description: "Porción de fideos al pesto.",
-          price: 5300,
-          image: "img/porcion de fideo.png"
-        },
-        {
-          name: "Ensalada familiar",
-          description: "Ensalada surtida tamaño familiar.",
-          price: 5400,
-          image: ""
-        },
-        {
-          name: "Ensalada personal",
-          description: "Ensalada surtida individual.",
-          price: 3700,
-          image: ""
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
         }
-      ]
-    };
 
-    // Meta de categorías
-    const categoriesMeta = {
-      "ofertas-familiares": {
-        title: "Ofertas Familiares",
-        short: "Combos con pollo entero y acompañamientos para 3 a 5 personas.",
-        tagline: "Perfectas para compartir.",
-        coverImage: "img/oferton mas chaufa.png",
-        emoji: "👨‍👩‍👧‍👦"
-      },
-      "ofertas-dos": {
-        title: "Ofertas para Dos",
-        short: "Platos ideales para compartir entre dos.",
-        tagline: "Parejas y amigos.",
-        coverImage: "img/medio combo chaufa.png",
-        emoji: "👫"
-      },
-      "ofertas-personales": {
-        title: "Ofertas Personales",
-        short: "Porciones individuales con sabor a la brasa.",
-        tagline: "Tu plato personal.",
-        coverImage: "img/personal combo.png",
-        emoji: "🧑"
-      },
-      "platos-extras": {
-        title: "Platos Extras",
-        short: "Lomo, tallarines, bistec, chuleta y más.",
-        tagline: "Más opciones de cocina.",
-        coverImage: "img/lomo saltado con chaufa.png",
-        emoji: "🍽️"
-      },
-      "agregados": {
-        title: "Agregados",
-        short: "Pollos solos, papas, arroces y ensaladas.",
-        tagline: "Suma extra sabor.",
-        coverImage: "img/porcion de papa.png",
-        emoji: "➕"
-      }
-    };
-
-    const categoriesSection = document.getElementById('categories-section');
-    const categoriesGrid   = document.getElementById('categories-grid');
-    const productsSection  = document.getElementById('products-section');
-    const productsGrid     = document.getElementById('products-grid');
-    const currentCategoryTitle = document.getElementById('current-category-title');
-    const currentCategoryDescription = document.getElementById('current-category-description');
-    const backBtn = document.getElementById('back-to-categories');
-
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenuClose = document.getElementById('mobile-menu-close');
-
-    let currentCategory = 'ofertas-familiares';
-
-    function createCategoryCard(catKey){
-      const meta = categoriesMeta[catKey];
-      if(!meta) return document.createElement('div');
-
-      const card = document.createElement('article');
-      card.className = 'category-card rounded-2xl p-3 sm:p-4 flex flex-col gap-3 shadow-soft';
-
-      card.innerHTML = `
-        <div class="relative overflow-hidden rounded-xl">
-          <img
-            src="${meta.coverImage}"
-            alt="${meta.title}"
-            class="category-cover"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-          />
-          <div class="product-img-fallback hidden">
-            <span>${meta.emoji || '🍗'}</span>
-          </div>
-          <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent rounded-b-xl"></div>
-          <div class="absolute left-3 bottom-3 px-3 py-1 rounded-full bg-black/75 text-[0.65rem] uppercase tracking-[0.16em] text-amber-200 font-semibold badge-pill">
-            ${meta.emoji} ${meta.title}
-          </div>
-        </div>
-        <div class="flex-1 flex flex-col gap-2">
-          <h4 class="text-base sm:text-lg font-bold text-amber-50">
-            ${meta.title}
-          </h4>
-          <p class="text-[13px] sm:text-sm text-amber-100/95">
-            ${meta.short}
-          </p>
-          <p class="text-[0.7rem] uppercase tracking-[0.2em] text-orange-200/90 mt-1">
-            ${meta.tagline}
-          </p>
-        </div>
-        <div class="mt-2 flex justify-between items-center">
-          <span class="text-[0.7rem] text-amber-100/90 flex items-center gap-1">
-            <span>👀</span>
-            <span>Ver platos</span>
-          </span>
-          <button
-            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600 hover:bg-red-500 text-amber-50 border border-red-300/60 shadow-md transition"
-            data-open-category="${catKey}"
-          >
-            <span>Ver</span>
-            <span>→</span>
-          </button>
-        </div>
-      `;
-
-      const btn = card.querySelector('button[data-open-category]');
-      btn.addEventListener('click', ()=>{
-        openCategoryPage(catKey, {pushState:true});
-      });
-
-      return card;
-    }
-
-    function createProductCard(product){
-      const desc = product.description && product.description.trim().length > 0
-        ? product.description
-        : 'Plato especial de la casa.';
-
-      const card = document.createElement('article');
-      card.className = 'glass-card shadow-soft rounded-2xl p-3 sm:p-4 flex flex-col gap-3 hover:-translate-y-1 hover:shadow-2xl transition-transform duration-200';
-
-      let mediaHtml = '';
-      if(product.image && product.image.trim().length > 0){
-        mediaHtml = `
-          <div class="relative overflow-hidden rounded-2xl">
-            <img
-              src="${product.image}"
-              alt="${product.name}"
-              class="product-img"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-            />
-            <div class="product-img-fallback hidden">
-              <span>🍗</span>
-            </div>
-            <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/75 to-transparent rounded-b-2xl"></div>
-            <div class="absolute left-3 bottom-3 px-3 py-1 rounded-full bg-black/75 text-[0.65rem] uppercase tracking-[0.16em] text-amber-200 font-semibold badge-pill">
-              El Pollón · Iquique
-            </div>
-            ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
-          </div>
-        `;
-      }else{
-        mediaHtml = `
-          <div class="product-img-fallback">
-            <span>🍗</span>
-          </div>
-        `;
-      }
-
-      card.innerHTML = `
-        ${mediaHtml}
-        <div class="flex flex-col gap-2">
-          <div class="flex items-start justify-between gap-3">
-            <h4 class="text-[0.95rem] sm:text-lg font-semibold text-slate-50 leading-snug">
-              ${product.name}
-            </h4>
-            <div class="text-right">
-              <p class="text-[0.6rem] uppercase tracking-[0.18em] text-slate-400 mb-1">
-                Precio
-              </p>
-              <p class="text-sm sm:text-base font-extrabold text-amber-300">
-                ${moneyCL.format(product.price)}
-              </p>
-            </div>
-          </div>
-          <p class="text-[13px] sm:text-sm leading-relaxed text-slate-200/90">
-            ${desc}
-          </p>
-        </div>
-      `;
-      return card;
-    }
-
-    function renderCategory(catKey){
-      currentCategory = catKey;
-      const list = products[catKey] || [];
-      productsGrid.innerHTML = '';
-
-      const meta = categoriesMeta[catKey];
-      if(meta){
-        currentCategoryTitle.textContent = meta.title;
-        currentCategoryDescription.textContent = meta.short;
-      }
-
-      if(list.length === 0){
-        productsGrid.innerHTML = `
-          <p class="text-sm text-slate-200/80 col-span-full">
-            No hay platos disponibles en esta categoría por el momento.
-          </p>
-        `;
-        return;
-      }
-
-      list.forEach(prod=>{
-        productsGrid.appendChild(createProductCard(prod));
-      });
-    }
-
-    function openCategoryPage(catKey, {pushState=false} = {}){
-      renderCategory(catKey);
-      categoriesSection.classList.add('hidden');
-      productsSection.classList.remove('hidden');
-      productsSection.scrollIntoView({behavior:'smooth',block:'start'});
-      if(pushState && history.pushState){
-        history.pushState({cat:catKey,view:'detail'},'',`#${catKey}`);
-      }
-      closeMobileMenu();
-    }
-
-    function backToCategories(){
-      productsSection.classList.add('hidden');
-      categoriesSection.classList.remove('hidden');
-      window.scrollTo({top:0,behavior:'smooth'});
-      if(history.pushState){
-        history.pushState({view:'home'},'',window.location.pathname);
-      }
-    }
-
-    function renderCategoriesOverview(){
-      categoriesGrid.innerHTML = '';
-      Object.keys(categoriesMeta).forEach(catKey=>{
-        categoriesGrid.appendChild(createCategoryCard(catKey));
-      });
-    }
-
-    // Carrusel hero
-    const heroTrack = document.getElementById('hero-carousel-track');
-    if(heroTrack){
-      const totalSlides = heroTrack.children.length;
-      let heroIndex = 0;
-      setInterval(()=>{
-        heroIndex = (heroIndex + 1) % totalSlides;
-        heroTrack.style.transform = `translateX(-${heroIndex * 100}%)`;
-      }, 3500);
-    }
-
-    // Botón volver
-    if(backBtn){
-      backBtn.addEventListener('click', backToCategories);
-    }
-
-    // Menú móvil
-    function openMobileMenu(){
-      if(mobileMenu) mobileMenu.classList.remove('hidden');
-    }
-    function closeMobileMenu(){
-      if(mobileMenu) mobileMenu.classList.add('hidden');
-    }
-
-    if(mobileMenuToggle){
-      mobileMenuToggle.addEventListener('click', openMobileMenu);
-    }
-    if(mobileMenuClose){
-      mobileMenuClose.addEventListener('click', closeMobileMenu);
-    }
-    if(mobileMenu){
-      mobileMenu.addEventListener('click', (e)=>{
-        if(e.target === mobileMenu){
-          closeMobileMenu();
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["restaurant_name", config.restaurant_name || defaultConfig.restaurant_name],
+                ["menu_title", config.menu_title || defaultConfig.menu_title],
+                ["category_1", config.category_1 || defaultConfig.category_1],
+                ["category_2", config.category_2 || defaultConfig.category_2],
+                ["category_3", config.category_3 || defaultConfig.category_3],
+                ["category_4", config.category_4 || defaultConfig.category_4],
+                ["category_5", config.category_5 || defaultConfig.category_5]
+            ]);
         }
-      });
-    }
 
-    // Click en categorías del menú móvil
-    const mobileMenuCategoryButtons = document.querySelectorAll('[data-menu-category]');
-    mobileMenuCategoryButtons.forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const catKey = btn.dataset.menuCategory;
-        if(!catKey) return;
-        openCategoryPage(catKey, {pushState:true});
-      });
-    });
-
-    // Historial navegador
-    window.addEventListener('popstate',(e)=>{
-      const state = e.state || {};
-      if(state.view === 'detail' && state.cat){
-        openCategoryPage(state.cat,{pushState:false});
-      }else{
-        backToCategories();
-      }
-    });
-
-    // Inicio
-    renderCategoriesOverview();
-  </script>
-</body>
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99fd3b285687e7a4',t:'MTc2MzM2MTU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

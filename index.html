@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, #fdfcfc 0%, #f3f2f1 100%);
             min-height: 100%;
         }
 
@@ -21,13 +21,13 @@
 
         /* Header */
         .header {
-            background: #2c1810;
-            color: white;
+            background: #970303;
+            color: rgb(255, 255, 255);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(233, 17, 17, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -44,7 +44,7 @@
             height: 50px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid #ff6b35;
+            border: 2px solid #fd660f;
         }
 
         .logo img {
@@ -61,7 +61,7 @@
 
         .restaurant-name {
             font-size: 14px;
-            color: #ff6b35;
+            color: #daba9d;
             margin: 0;
         }
 
@@ -76,7 +76,7 @@
         .hamburger-line {
             width: 25px;
             height: 3px;
-            background: white;
+            background: rgb(255, 254, 254);
             transition: all 0.3s ease;
         }
 
@@ -98,12 +98,12 @@
             top: 80px;
             right: -300px;
             width: 280px;
-            height: calc(100% - 80px);
-            background: #2c1810;
+            height: calc(50% - 80px);
+            background: #ffffff;
             transition: right 0.3s ease;
             z-index: 999;
             padding: 20px;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            box-shadow: -5px 0 15px rgb(240, 232, 232);
         }
 
         .mobile-menu.active {
@@ -111,17 +111,17 @@
         }
 
         .menu-item {
-            color: white;
+            color: rgb(0, 0, 0);
             text-decoration: none;
             display: block;
             padding: 15px 0;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #000000;
             font-weight: 500;
             transition: color 0.3s ease;
         }
 
         .menu-item:hover {
-            color: #ff6b35;
+            color: #f01010;
         }
 
         /* Carousel */
@@ -186,10 +186,10 @@
         }
 
         .category-card {
-            background: white;
+            background: rgb(255, 254, 254);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.384);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -229,21 +229,21 @@
         }
 
         .view-more-btn {
-            background: linear-gradient(135deg, #ff6b35, #f7931e);
-            color: white;
+            background: linear-gradient(135deg, #bd2828, #d10c0c);
+            color: rgb(243, 242, 242);
             border: none;
-            padding: 12px 25px;
+            padding: 10px 25px;
             border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .view-more-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,107,53,0.4);
+            box-shadow: 0 5px 15px rgba(240, 237, 237, 0.973);
         }
 
         /* Dishes Section */
@@ -259,10 +259,10 @@
         .section-title {
             font-size: 28px;
             font-weight: bold;
-            color: white;
+            color: rgb(14, 13, 13);
             text-align: center;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.801);
         }
 
         .dishes-grid {
@@ -275,7 +275,7 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             transition: transform 0.3s ease;
         }
 
@@ -285,7 +285,7 @@
 
         .dish-image {
             width: 100%;
-            height: 180px;
+            height: 200px;
             background-size: cover;
             background-position: center;
         }
@@ -350,7 +350,7 @@
 
         /* Video Section */
         .video-section {
-            background: linear-gradient(135deg, #2c1810 0%, #1a0f08 100%);
+            background: linear-gradient(135deg, #f7f6f6 0%, #fdfdfd80 100%);
             padding: 40px 20px;
             margin-top: 0;
         }
@@ -371,7 +371,7 @@
 
         .video-description {
             font-size: 16px;
-            color: white;
+            color: rgb(20, 19, 19);
             margin: 0 0 20px 0;
             line-height: 1.6;
         }
@@ -398,7 +398,7 @@
 
         /* Payment and Delivery Section */
         .payment-delivery-section {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
             padding: 50px 20px;
             margin-top: 0;
         }
@@ -446,7 +446,7 @@
             align-items: center;
             gap: 15px;
             padding: 15px 20px;
-            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            background: linear-gradient(135deg, #ec0101, #ce1e11);
             border-radius: 15px;
             color: white;
             font-weight: 500;
@@ -484,7 +484,7 @@
         }
 
         .website-btn {
-            background: linear-gradient(135deg, #2c1810, #3d2318);
+            background: linear-gradient(135deg, #1098aa, #1fa5a5);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -501,7 +501,7 @@
         }
 
         .website-btn:hover {
-            background: linear-gradient(135deg, #3d2318, #4e2d1f);
+            background: linear-gradient(135deg, #50d6b9, #82bec9);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(44,24,16,0.3);
         }

@@ -23,11 +23,11 @@
         .header {
             background: #970303;
             color: rgb(255, 255, 255);
-            padding: 15px 20px;
+            padding: 5px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(233, 17, 17, 0.3);
+            box-shadow: 0 1px 10px rgba(255, 255, 255, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -36,7 +36,7 @@
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap:15px;
         }
 
         .logo {
@@ -44,7 +44,7 @@
             height: 50px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid #fd660f;
+            border: 2px solid #ff840a;
         }
 
         .logo img {
@@ -54,7 +54,7 @@
         }
 
         .menu-title {
-            font-size: 20px;
+            font-size: 25px;
             font-weight: bold;
             margin: 0;
         }
@@ -170,6 +170,48 @@
             80%, 90% { transform: translateX(-80%); }
             90%, 100% { transform: translateX(-90%); }
         }
+
+
+
+                /* NUEVO PANEL DELGADO DELIVERY DEBAJO DEL CARRUSEL */
+        .delivery-strip {
+            background: linear-gradient(135deg, #111827, #be0404);
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+        }
+
+        .delivery-strip-text {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .delivery-strip-btn {
+            border: none;
+            border-radius: 9999px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f97316, #fbbf24);
+            color: #111827;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .delivery-strip-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(0,0,0,0.35);
+            opacity: 0.95;
+        }
+
 
         /* Main Content */
         .main-content {
@@ -565,6 +607,13 @@
                 font-size: 14px;
                 padding: 12px 25px;
             }
+
+                        .delivery-strip-text {
+                font-size: 14px;
+            }
+
+            .delivery-strip {
+                padding: 10px 12px;
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -605,6 +654,20 @@
     <div class="carousel-slide" style="background-image: url('img/tallarin\ saltado\ de\ carne.png')"></div>
    </div>
   </div><!-- Main Content -->
+
+
+    <!-- NUEVO PANEL DELGADO DELIVERY -->
+  <section class="delivery-strip">
+    <span class="delivery-strip-text">🚚 DELIVERY · Pedidos con entrega a domicilio</span>
+    <button class="delivery-strip-btn" onclick="window.open('https://elpolloniquique.github.io/el-pollon-iquique/', '_blank', 'noopener,noreferrer')">
+      Ir a la página de pedidos
+    </button>
+  </section>
+
+
+
+
+
   <main class="main-content"><!-- Categories Section -->
    <section class="categories-section" id="categories-section">
     <div class="categories-grid">

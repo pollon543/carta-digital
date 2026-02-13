@@ -242,6 +242,7 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
+    box-shadow: none;
 }
 
 .hero-slide {
@@ -253,12 +254,15 @@ body {
     visibility: hidden;
     transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
     z-index: 0;
+    box-shadow: none;
+    filter: none;
 }
 
 .hero-slide.active {
     opacity: 1;
     visibility: visible;
     z-index: 1;
+    box-shadow: none;
 }
 
 .hero-slide img {
@@ -267,6 +271,8 @@ body {
     object-fit: cover;
     object-position: center;
     display: block;
+    box-shadow: none;
+    filter: none;
 }
 
 .hero-overlay {

@@ -229,8 +229,70 @@ function closeCategoryModal() {
 // EVENT LISTENERS
 // ============================================
 
+// ============================================
+// CARRUSEL HERO (panel publicitario)
+// ============================================
+const HERO_INTERVAL_MS = 2000;
+const HERO_SLIDE_COUNT = 10;
+
+function initHeroCarousel() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dotsContainer = document.getElementById('heroDots');
+    if (!slides.length || !dotsContainer) return;
+
+    let currentIndex = 0;
+    let carouselTimer = null;
+
+    function goToSlide(index) {
+        currentIndex = (index + HERO_SLIDE_COUNT) % HERO_SLIDE_COUNT;
+        slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
+        dotsContainer.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    function nextSlide() {
+        goToSlide(currentIndex + 1);
+    }
+
+    function startTimer() {
+        stopTimer();
+        carouselTimer = setInterval(nextSlide, HERO_INTERVAL_MS);
+    }
+
+    function stopTimer() {
+        if (carouselTimer) {
+            clearInterval(carouselTimer);
+            carouselTimer = null;
+        }
+    }
+
+    // Crear puntos de navegación
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < HERO_SLIDE_COUNT; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Ir a imagen ${i + 1}`);
+        dot.addEventListener('click', () => {
+            goToSlide(i);
+            startTimer();
+        });
+        dotsContainer.appendChild(dot);
+    }
+
+    // Pausar al pasar el mouse (solo en pantallas que usan hover)
+    const carousel = document.querySelector('.hero-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', stopTimer);
+        carousel.addEventListener('mouseleave', startTimer);
+    }
+
+    startTimer();
+}
+
 // Cargar productos iniciales
 document.addEventListener('DOMContentLoaded', () => {
+    initHeroCarousel();
+
     const productsGrid = document.getElementById('productsGrid');
     const goHome = document.getElementById('goHome');
 

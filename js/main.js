@@ -31,16 +31,16 @@ const productsData = {
   ],
 
   "platos-extras": [
-    { name: "Lomo saltado de carne con chaufa", description: "", price: 12200, image: "img/lomo saltado con arroz chaufa.png", rating: 5 },
-    { name: "Lomo saltado de carne con arroz blanco", description: "", price: 11700, image: "img/lomo saltado de carne con arroz blanco.png", rating: 5 },
-    { name: "Lomo saltado de pollo con arroz blanco", description: "", price: 11700, image: "img/lomo saltado de pollo con arroz blanco.png", rating: 5 },
-    { name: "Tallarin saltado", description: "", price: 11700, image: "img/tallarin saltado de carne 01.png", rating: 5 },
-    { name: "Bistec a lo pobre", description: "", price: 10700, image: "img/bistec a lo pobre.png", rating: 5 },
-    { name: "Bistec con fideos al pesto", description: "", price: 10700, image: "", rating: 5 },
-    { name: "Chuleta de cerdo", description: "", price: 10700, image: "img/chuleta de cerdo.png", rating: 5 },
-    { name: "Pechuga a la plancha", description: "", price: 10200, image: "img/pechuga a la plancha.png", rating: 5 },
-    { name: "Combo nuggets", description: "", price: 6700, image: "img/nugget.png", rating: 5 },
-    { name: "Salchipapas", description: "", price: 6700, image: "img/salchipapa.png", rating: 5 }
+    { name: "Lomo saltado de carne con chaufa", description: "Plato extra con chaufa.", price: 12200, image: "img/lomo saltado con arroz chaufa.png", rating: 5 },
+    { name: "Lomo saltado de carne con arroz blanco", description: "Plato extra con arroz blanco.", price: 11700, image: "img/lomo saltado de carne con arroz blanco.png", rating: 5 },
+    { name: "Lomo saltado de pollo con arroz blanco", description: "Plato extra con arroz blanco.", price: 11700, image: "img/lomo saltado de pollo con arroz blanco.png", rating: 5 },
+    { name: "Tallarin saltado", description: "Tallarín saltado de carne.", price: 11700, image: "img/tallarin saltado de carne 01.png", rating: 5 },
+    { name: "Bistec a lo pobre", description: "Bistec a lo pobre.", price: 10700, image: "img/bistec a lo pobre.png", rating: 5 },
+    { name: "Bistec con fideos al pesto", description: "Bistec con fideos al pesto.", price: 10700, image: "", rating: 5 },
+    { name: "Chuleta de cerdo", description: "Chuleta de cerdo.", price: 10700, image: "img/chuleta de cerdo.png", rating: 5 },
+    { name: "Pechuga a la plancha", description: "Pechuga a la plancha.", price: 10200, image: "img/pechuga a la plancha.png", rating: 5 },
+    { name: "Combo nuggets", description: "Combo nuggets.", price: 6700, image: "img/nugget.png", rating: 5 },
+    { name: "Salchipapas", description: "Salchipapas.", price: 6700, image: "img/salchipapa.png", rating: 5 }
   ],
 
   "agregados": [
@@ -56,22 +56,22 @@ const productsData = {
   ],
 
   "bebidas": [
-    { name: "Coca Cola", description: "", price: 3800, image: "img/coca cola.png", rating: 5 },
-    { name: "Coca Cola Cero", description: "", price: 3800, image: "img/coca cola cero.png", rating: 5 },
-    { name: "Inca Kola", description: "", price: 3800, image: "img/inca kola.png", rating: 5 },
-    { name: "Fanta", description: "", price: 3800, image: "img/fanta.png", rating: 5 },
-    { name: "Sprite", description: "", price: 3800, image: "img/sprite.png", rating: 5 },
-    { name: "Sprite Cero", description: "", price: 3800, image: "img/sprite cero.png", rating: 5 },
-    { name: "Agua Sin Gas", description: "", price: 1200, image: "img/agua sin gas.png", rating: 5 },
-    { name: "Agua Con Gas", description: "", price: 1200, image: "img/agua con gas.png", rating: 5 }
+    { name: "Coca Cola", description: "Bebida 350ml.", price: 3800, image: "img/coca cola.png", rating: 5 },
+    { name: "Coca Cola Cero", description: "Bebida 350ml.", price: 3800, image: "img/coca cola cero.png", rating: 5 },
+    { name: "Inca Kola", description: "Bebida 350ml.", price: 3800, image: "img/inca kola.png", rating: 5 },
+    { name: "Fanta", description: "Bebida 350ml.", price: 3800, image: "img/fanta.png", rating: 5 },
+    { name: "Sprite", description: "Bebida 350ml.", price: 3800, image: "img/sprite.png", rating: 5 },
+    { name: "Sprite Cero", description: "Bebida 350ml.", price: 3800, image: "img/sprite cero.png", rating: 5 },
+    { name: "Agua Sin Gas", description: "500ml.", price: 1200, image: "img/agua sin gas.png", rating: 5 },
+    { name: "Agua Con Gas", description: "500ml.", price: 1200, image: "img/agua con gas.png", rating: 5 }
   ],
 
   "descartables": [
-    { name: "Aluza CT5", description: "", price: 300, image: "img/aluza ct5.png", rating: 5 },
-    { name: "Aluza CT3", description: "", price: 400, image: "img/aluza ct3.png", rating: 5 },
-    { name: "Tenedor descartable", description: "", price: 200, image: "img/servicio descartable.png", rating: 5 },
-    { name: "Bolsa ecológica", description: "", price: 200, image: "img/bolsa ecologica.png", rating: 5 },
-    { name: "Vaso descartable", description: "", price: 50, image: "img/vaso.png", rating: 5 }
+    { name: "Aluza CT5", description: "Para llevar.", price: 300, image: "img/aluza ct5.png", rating: 5 },
+    { name: "Aluza CT3", description: "Para llevar.", price: 400, image: "img/aluza ct3.png", rating: 5 },
+    { name: "Tenedor descartable", description: "Servicio descartable.", price: 200, image: "img/servicio descartable.png", rating: 5 },
+    { name: "Bolsa ecológica", description: "Para llevar.", price: 200, image: "img/bolsa ecologica.png", rating: 5 },
+    { name: "Vaso descartable", description: "Unidad.", price: 50, image: "img/vaso.png", rating: 5 }
   ]
 };
 

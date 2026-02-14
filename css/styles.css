@@ -877,7 +877,7 @@ body.landing-visible {
     gap: 18px;
 }
 
-/* Tarjeta vertical: imagen arriba, nombre, descripción, precio (referencia) */
+/* Tarjeta vertical: imagen arriba, nombre, descripción, precio (siempre visibles) */
 .product-card-vertical {
     flex-direction: column;
     align-items: stretch;
@@ -902,38 +902,45 @@ body.landing-visible {
     background: #fef3c7;
 }
 
+/* Zona de texto: fondo blanco, siempre visible */
 .product-card-vertical-info {
-    padding: 16px 14px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: center;
     text-align: center;
-    min-height: 100px;
+    padding: 16px 14px;
+    min-height: 90px;
+    background: #ffffff;
+    flex: 1 1 auto;
+    box-sizing: border-box;
 }
 
 .product-card-vertical-name {
+    display: block;
     font-family: 'Playfair Display', serif;
     font-size: 15px;
     font-weight: 700;
-    color: var(--stone-700);
+    color: #44403c;
     margin: 0;
     line-height: 1.3;
+    word-wrap: break-word;
 }
 
 .product-card-vertical-desc {
+    display: block;
     font-family: 'Lato', sans-serif;
     font-size: 13px;
-    color: var(--stone-500);
+    color: #78716c;
     line-height: 1.35;
     margin: 0;
-    flex: 1;
 }
 
 .product-card-vertical-price {
+    display: block;
     font-family: 'Lato', sans-serif;
     font-weight: 700;
-    color: var(--wine-800);
+    color: #8b1e3c;
     font-size: 16px;
     margin: 0;
     margin-top: 4px;

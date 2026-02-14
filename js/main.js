@@ -138,19 +138,29 @@ function createProductCard(product) {
     `;
 }
 
+/** Escapa HTML para evitar que nombres/descripciones rompan el DOM */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 /** Tarjeta vertical: imagen arriba, nombre, descripción y precio (Platos Extras, Agregados, Bebidas, Descartables) */
 function createProductCardVertical(product) {
     const imgSrc = product.image && product.image.trim() ? product.image : 'img/sin-foto.png';
+    const name = escapeHtml(product.name || '');
     const desc = (product.description || '').trim();
+    const descSafe = escapeHtml(desc);
     const priceFormatted = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(product.price);
     return `
         <div class="product-card product-card-vertical menu-card card-shine">
             <div class="product-card-vertical-image">
-                <img src="${imgSrc}" alt="${product.name}" class="product-image" loading="lazy">
+                <img src="${escapeHtml(imgSrc)}" alt="${name}" class="product-image" loading="lazy">
             </div>
             <div class="product-card-vertical-info">
-                <h3 class="product-card-vertical-name">${product.name}</h3>
-                ${desc ? `<p class="product-card-vertical-desc">${desc}</p>` : ''}
+                <h3 class="product-card-vertical-name">${name}</h3>
+                ${descSafe ? `<p class="product-card-vertical-desc">${descSafe}</p>` : ''}
                 <div class="product-card-vertical-price">${priceFormatted}</div>
             </div>
         </div>

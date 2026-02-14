@@ -138,6 +138,24 @@ function createProductCard(product) {
     `;
 }
 
+/** Tarjeta vertical (icono/imagen arriba, nombre, descripción, precio) para Platos Extras, Agregados, Bebidas, Descartables */
+function createProductCardVertical(product) {
+    const imgSrc = product.image && product.image.trim() ? product.image : 'img/sin-foto.png';
+    const desc = product.description || '';
+    return `
+        <div class="product-card product-card-vertical menu-card card-shine">
+            <div class="product-card-vertical-image">
+                <img src="${imgSrc}" alt="${product.name}" class="product-image">
+            </div>
+            <div class="product-card-vertical-info">
+                <h3 class="product-name">${product.name}</h3>
+                ${desc ? `<p class="product-description">${desc}</p>` : ''}
+                <div class="product-price">${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(product.price)}</div>
+            </div>
+        </div>
+    `;
+}
+
 /**
  * Renderiza los productos en el grid (para modal u otros contenedores)
  */
@@ -160,12 +178,17 @@ const sectionMeta = {
 
 /**
  * Genera el HTML de una sección (título con icono, subtítulo, grid de platos)
+ * @param {string} categoryId
+ * @param {Object} opts - { limit, verticalCards, gridCols2 } para estilo referencia (tarjeta vertical, 2 columnas)
  */
-function renderMenuSection(categoryId, limit = null) {
+function renderMenuSection(categoryId, opts = {}) {
+    const { limit = null, verticalCards = false, gridCols2 = false } = typeof opts === 'number' ? { limit: opts } : opts;
     const meta = sectionMeta[categoryId] || { title: modalCategoryTitles[categoryId] || categoryId, subtitle: "", icon: "🍽️" };
     const products = productsData[categoryId] || [];
     const list = limit ? products.slice(0, limit) : products;
-    const cardsHtml = list.map(p => createProductCard(p)).join('');
+    const cardFn = verticalCards ? createProductCardVertical : createProductCard;
+    const cardsHtml = list.map(p => cardFn(p)).join('');
+    const gridClass = gridCols2 ? 'menu-section-grid menu-section-grid-cols-2' : 'products-grid menu-section-grid';
     return `
         <div class="menu-section" data-category="${categoryId}">
             <div class="menu-section-header">
@@ -175,7 +198,7 @@ function renderMenuSection(categoryId, limit = null) {
                     ${meta.subtitle ? `<p class="menu-section-subtitle">${meta.subtitle}</p>` : ''}
                 </div>
             </div>
-            <div class="products-grid menu-section-grid">${cardsHtml}</div>
+            <div class="${gridClass}">${cardsHtml}</div>
         </div>
     `;
 }
@@ -187,11 +210,21 @@ function renderProductsBySections(category) {
     const container = document.getElementById('productsSectionContent');
     if (!container) return;
 
+    const verticalOpts = { verticalCards: true, gridCols2: true };
+    const verticalCategories = ['platos-extras', 'agregados', 'bebidas', 'descartables'];
+
     if (category === 'todo-menu') {
-        container.innerHTML = renderMenuSection('ofertas-familiares') + renderMenuSection('ofertas-dos');
+        container.innerHTML =
+            renderMenuSection('ofertas-familiares') +
+            renderMenuSection('ofertas-dos') +
+            renderMenuSection('ofertas-personales') +
+            renderMenuSection('platos-extras', verticalOpts) +
+            renderMenuSection('agregados', verticalOpts) +
+            renderMenuSection('bebidas', verticalOpts) +
+            renderMenuSection('descartables', verticalOpts);
         return;
     }
-    container.innerHTML = renderMenuSection(category);
+    container.innerHTML = renderMenuSection(category, verticalCategories.includes(category) ? verticalOpts : {});
 }
 
 /**

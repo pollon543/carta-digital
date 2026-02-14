@@ -119,21 +119,19 @@ function generateStars(rating) {
  * @returns {string} HTML de la tarjeta
  */
 function createProductCard(product) {
+    const imgSrc = product.image && product.image.trim() ? product.image : 'img/sin-foto.png';
+    const desc = product.description || '';
     return `
-        <div class="product-card">
-            <img src="${product.image && product.image.trim() ? product.image : 'img/sin-foto.png'}" alt="${product.name}" class="product-image">
-
+        <div class="product-card menu-card card-shine">
+            <div class="product-card-image-wrap">
+                <img src="${imgSrc}" alt="${product.name}" class="product-image">
+            </div>
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
-                <p class="product-description">${product.description}</p>
+                ${desc ? `<p class="product-description">${product.description}</p>` : ''}
                 <div class="product-footer">
-                    <div class="product-rating">
-                        ${generateStars(product.rating)}
-                    </div>
-                    <div class="product-price">
-                   ${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(product.price)}
-                   </div>
-
+                    <div class="product-rating">${generateStars(product.rating)}</div>
+                    <div class="product-price">${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(product.price)}</div>
                 </div>
             </div>
         </div>

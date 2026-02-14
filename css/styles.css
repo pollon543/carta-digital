@@ -870,11 +870,11 @@ body.landing-visible {
     gap: 16px;
 }
 
-/* Grid 2 columnas (Platos Extras, Agregados, Bebidas, Descartables - diseño referencia) */
-.menu-section-grid-cols-2 {
+/* Grid 3 columnas (Platos Extras, Agregados, Bebidas, Descartables) */
+.menu-section-grid-cols-3 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
 }
 
 /* Tarjeta vertical: imagen arriba, nombre, descripción, precio (referencia) */
@@ -903,29 +903,39 @@ body.landing-visible {
 }
 
 .product-card-vertical-info {
-    padding: 14px 12px;
+    padding: 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
+    text-align: center;
+    min-height: 100px;
 }
 
-.product-card-vertical .product-name {
-    font-size: 16px;
+.product-card-vertical-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--stone-700);
     margin: 0;
-    line-height: 1.25;
+    line-height: 1.3;
 }
 
-.product-card-vertical .product-description {
+.product-card-vertical-desc {
+    font-family: 'Lato', sans-serif;
     font-size: 13px;
+    color: var(--stone-500);
+    line-height: 1.35;
     margin: 0;
-    flex: none;
+    flex: 1;
 }
 
-.product-card-vertical .product-price {
+.product-card-vertical-price {
+    font-family: 'Lato', sans-serif;
     font-weight: 700;
     color: var(--wine-800);
-    font-size: 15px;
+    font-size: 16px;
+    margin: 0;
     margin-top: 4px;
 }
 
@@ -1270,8 +1280,9 @@ body.landing-visible {
         padding: 0 16px;
     }
 
-    .menu-section-grid-cols-2 {
-        grid-template-columns: 1fr;
+    .menu-section-grid-cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
     }
 
     .product-card-image-wrap {
@@ -1307,6 +1318,10 @@ body.landing-visible {
 }
 
 @media (max-width: 480px) {
+    .menu-section-grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+
     .hero-content {
         padding: 14px;
         padding-bottom: 44px;

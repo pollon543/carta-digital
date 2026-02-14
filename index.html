@@ -268,20 +268,23 @@
   </footer>
     </div><!-- fin #main-content -->
 
-    <!-- Modal para ver todos los platos de una categoría -->
+    <!-- Modal: categorías del menú o lista de productos -->
     <div class="modal" id="categoryModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Platos</h2>
+                <h2 class="modal-title" id="modalTitle">Categorías</h2>
                 <button class="modal-close" id="modalClose">&times;</button>
-                    </div>
+            </div>
             <div class="modal-body">
-                <div class="products-grid" id="modalProductsGrid">
-                    <!-- Los productos se cargarán aquí -->
-                        </div>
-                    </div>
-                        </div>
-                    </div>
+                <div class="modal-categories-list" id="modalCategoriesList" role="list">
+                    <!-- Categorías del menú hamburguesa (se rellena con JS) -->
+                </div>
+                <div class="modal-products-wrap" id="modalProductsWrap" style="display: none;">
+                    <div class="products-grid" id="modalProductsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

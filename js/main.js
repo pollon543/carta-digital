@@ -425,10 +425,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Click en tarjetas de categoría
     document.querySelectorAll('.category-card').forEach(card => {
         card.addEventListener('click', (e) => {
-            // Si se hace click en "Ver todos" / "Ver más platos" → misma ventana que menú hamburguesa (categorías)
+            // Si se hace click en "Ver todos" / "Ver más platos" → abrir modal con productos de esa categoría
             if (e.target.classList.contains('btn-view-more')) {
                 e.stopPropagation();
-                openCategoriesModal();
+                const category = card.dataset.category;
+                openCategoryModal(category);
                 return;
             }
             
@@ -447,11 +448,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Botones "Ver todos" / "Ver más platos" → abren la misma ventana de categorías que el menú hamburguesa
+    // Botones "Ver todos" / "Ver más platos" → abren modal con productos de esa categoría
     document.querySelectorAll('.btn-view-more').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            openCategoriesModal();
+            const card = btn.closest('.category-card');
+            const category = card ? card.dataset.category : null;
+            if (category) openCategoryModal(category);
         });
     });
     

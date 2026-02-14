@@ -384,7 +384,6 @@ function initLanding() {
 document.addEventListener('DOMContentLoaded', () => {
     initLanding();
     initLandingCarousel();
-    initHeroCarousel();
 
     const productsGrid = document.getElementById('productsGrid');
     const goHome = document.getElementById('goHome');

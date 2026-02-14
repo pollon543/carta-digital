@@ -189,6 +189,63 @@ function setActiveCategory(category) {
     }
 }
 
+const modalCategoryTitles = {
+    "todo-menu": "Todo el Menú",
+    "ofertas-familiares": "Ofertas Familiares",
+    "ofertas-dos": "Ofertas para Dos",
+    "ofertas-personales": "Ofertas Personales",
+    "platos-extras": "Platos Extras",
+    "agregados": "Agregados",
+    "bebidas": "Bebidas",
+    "descartables": "Descartables"
+};
+
+const categoryIdsOrder = [
+    "todo-menu",
+    "ofertas-familiares",
+    "ofertas-dos",
+    "ofertas-personales",
+    "platos-extras",
+    "agregados",
+    "bebidas",
+    "descartables"
+];
+
+/**
+ * Abre el modal con las categorías del menú (misma lista que el menú hamburguesa)
+ */
+function openCategoriesModal() {
+    const modal = document.getElementById('categoryModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const categoriesList = document.getElementById('modalCategoriesList');
+    const productsWrap = document.getElementById('modalProductsWrap');
+    if (!modal || !categoriesList || !productsWrap) return;
+
+    modalTitle.textContent = "Categorías";
+    productsWrap.style.display = "none";
+    categoriesList.style.display = "block";
+
+    categoriesList.innerHTML = categoryIdsOrder.map(catId => {
+        const label = modalCategoryTitles[catId] || catId;
+        return `<button type="button" class="modal-category-btn" data-category="${catId}">${label}</button>`;
+    }).join('');
+
+    categoriesList.querySelectorAll('.modal-category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.dataset.category;
+            closeCategoryModal();
+            currentCategory = category;
+            const productsGrid = document.getElementById('productsGrid');
+            if (productsGrid) renderProducts(category, productsGrid, ITEMS_PER_PAGE);
+            updateSectionTitle(category);
+            setActiveCategory(category);
+            document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    modal.classList.add('active');
+}
+
 /**
  * Abre el modal con todos los productos de una categoría
  * @param {string} category - Categoría a mostrar
@@ -197,20 +254,13 @@ function openCategoryModal(category) {
     const modal = document.getElementById('categoryModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalGrid = document.getElementById('modalProductsGrid');
-    
-    const titles = {
-        "todo-menu": "Todo el Menú",
-        "ofertas-familiares": "Ofertas Familiares",
-        "ofertas-dos": "Ofertas para Dos",
-        "ofertas-personales": "Ofertas Personales",
-        "platos-extras": "Platos Extras",
-        "agregados": "Agregados",
-        "bebidas": "Bebidas",
-        "descartables": "Descartables"
+    const categoriesList = document.getElementById('modalCategoriesList');
+    const productsWrap = document.getElementById('modalProductsWrap');
+    if (!modal || !modalGrid) return;
 
-    };
-    
-    modalTitle.textContent = titles[category] || "Platos";
+    modalTitle.textContent = modalCategoryTitles[category] || "Platos";
+    if (categoriesList) categoriesList.style.display = "none";
+    if (productsWrap) productsWrap.style.display = "block";
     renderProducts(category, modalGrid, null);
     modal.classList.add('active');
 }
@@ -441,31 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuToggle && hamburgerMenu && productsGrid) {
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            hamburgerMenu.classList.toggle('open');
-        });
-
-        hamburgerMenu.querySelectorAll('.hamburger-item').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const category = btn.dataset.category;
-                currentCategory = category;
-                renderProducts(category, productsGrid, ITEMS_PER_PAGE);
-                updateSectionTitle(category);
-                setActiveCategory(category);
-                hamburgerMenu.classList.remove('open');
-                document.querySelector('.products-section').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            const clickedOutside = !hamburgerMenu.contains(e.target) && !menuToggle.contains(e.target);
-            if (clickedOutside) hamburgerMenu.classList.remove('open');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') hamburgerMenu.classList.remove('open');
+            openCategoriesModal();
         });
     }
 

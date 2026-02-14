@@ -1034,6 +1034,34 @@ body.landing-visible {
     padding: 24px;
 }
 
+.modal-categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-category-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 14px 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wine-900);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f6f4 100%);
+    border: 1px solid var(--stone-200);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-category-btn:hover {
+    background: var(--wine-50);
+    border-color: var(--gold-500);
+    color: var(--wine-900);
+}
+
 /* ============================================
    FOOTER
    ============================================ */

@@ -431,68 +431,47 @@ document.addEventListener('DOMContentLoaded', () => {
             closeCategoryModal();
         }
     });
-    
-    // Menú toggle (para futuras funcionalidades)
+
     // ============================================
-// MENÚ HAMBURGUESA FUNCIONAL
-// ============================================
-const menuToggle = document.getElementById('menuToggle');
-const hamburgerMenu = document.getElementById('hamburgerMenu');
+    // MENÚ HAMBURGUESA: misma función que los botones de cada categoría
+    // ============================================
+    const menuToggle = document.getElementById('menuToggle');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
 
-function openHamburger() {
-    hamburgerMenu.classList.add('open');
-}
+    if (menuToggle && hamburgerMenu && productsGrid) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburgerMenu.classList.toggle('open');
+        });
 
-function closeHamburger() {
-    hamburgerMenu.classList.remove('open');
-}
-
-function toggleHamburger() {
-    hamburgerMenu.classList.toggle('open');
-}
-
-if (menuToggle && hamburgerMenu) {
-    // Abrir/cerrar al hacer click en el icono
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleHamburger();
-    });
-
-    // Click en una categoría del menú
-    hamburgerMenu.querySelectorAll('.hamburger-item').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const category = btn.dataset.category;
-
-            currentCategory = category;
-            renderProducts(category, productsGrid, ITEMS_PER_PAGE);
-            updateSectionTitle(category);
-            setActiveCategory(category);
-
-            closeHamburger();
-
-            document.querySelector('.products-section').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+        hamburgerMenu.querySelectorAll('.hamburger-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                renderProducts(category, productsGrid, ITEMS_PER_PAGE);
+                updateSectionTitle(category);
+                setActiveCategory(category);
+                hamburgerMenu.classList.remove('open');
+                document.querySelector('.products-section').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             });
         });
-    });
 
-    // Cerrar si hago click fuera
-    document.addEventListener('click', (e) => {
-        const clickedOutside = !hamburgerMenu.contains(e.target) && !menuToggle.contains(e.target);
-        if (clickedOutside) closeHamburger();
-    });
+        document.addEventListener('click', (e) => {
+            const clickedOutside = !hamburgerMenu.contains(e.target) && !menuToggle.contains(e.target);
+            if (clickedOutside) hamburgerMenu.classList.remove('open');
+        });
 
-    // Cerrar con ESC
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeHamburger();
-    });
-}
-
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hamburgerMenu.classList.remove('open');
+        });
+    }
 
     // ============================================
-// VOLVER AL INICIO AL HACER CLICK EN LOGO
-// ============================================
+    // VOLVER AL INICIO AL HACER CLICK EN LOGO
+    // ============================================
 // ============================================
 // VOLVER AL INICIO (LOGO / TÍTULO) - PC + CELULAR
 // ============================================

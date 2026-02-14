@@ -139,38 +139,68 @@ function createProductCard(product) {
 }
 
 /**
- * Renderiza los productos en el grid
- * @param {string} category - Categoría a mostrar
- * @param {HTMLElement} container - Contenedor donde renderizar
- * @param {number} limit - Límite de productos a mostrar (null = todos)
+ * Renderiza los productos en el grid (para modal u otros contenedores)
  */
 function renderProducts(category, container, limit = null) {
     const products = productsData[category] || [];
     const productsToShow = limit ? products.slice(0, limit) : products;
-    
     container.innerHTML = productsToShow.map(product => createProductCard(product)).join('');
 }
 
+/** Metadatos de sección: título, subtítulo e icono (diseño referencia) */
+const sectionMeta = {
+    "ofertas-familiares": { title: "Ofertas Familiares", subtitle: "Perfectos para compartir en familia", icon: "👨‍👩‍👧‍👦" },
+    "ofertas-dos": { title: "Ofertas para Dos", subtitle: "Ideal para compartir en pareja", icon: "👫" },
+    "ofertas-personales": { title: "Ofertas Personales", subtitle: "Para disfrutar solo", icon: "🍽️" },
+    "platos-extras": { title: "Platos Extras", subtitle: "Más opciones para acompañar", icon: "🍗" },
+    "agregados": { title: "Agregados", subtitle: "Complementos para tu pedido", icon: "➕" },
+    "bebidas": { title: "Bebidas", subtitle: "Refrescantes y variadas", icon: "🥤" },
+    "descartables": { title: "Descartables", subtitle: "Servicio para llevar", icon: "🛍️" }
+};
+
 /**
- * Actualiza el título de la sección
- * @param {string} category - Categoría actual
+ * Genera el HTML de una sección (título con icono, subtítulo, grid de platos)
+ */
+function renderMenuSection(categoryId, limit = null) {
+    const meta = sectionMeta[categoryId] || { title: modalCategoryTitles[categoryId] || categoryId, subtitle: "", icon: "🍽️" };
+    const products = productsData[categoryId] || [];
+    const list = limit ? products.slice(0, limit) : products;
+    const cardsHtml = list.map(p => createProductCard(p)).join('');
+    return `
+        <div class="menu-section" data-category="${categoryId}">
+            <div class="menu-section-header">
+                <div class="menu-section-icon">${meta.icon}</div>
+                <div>
+                    <h3 class="menu-section-title">${meta.title}</h3>
+                    ${meta.subtitle ? `<p class="menu-section-subtitle">${meta.subtitle}</p>` : ''}
+                </div>
+            </div>
+            <div class="products-grid menu-section-grid">${cardsHtml}</div>
+        </div>
+    `;
+}
+
+/**
+ * Renderiza la zona principal de platos: "Todo el Menú" = Ofertas Familiares + Ofertas para Dos (diseño referencia)
+ */
+function renderProductsBySections(category) {
+    const container = document.getElementById('productsSectionContent');
+    if (!container) return;
+
+    if (category === 'todo-menu') {
+        container.innerHTML = renderMenuSection('ofertas-familiares') + renderMenuSection('ofertas-dos');
+        return;
+    }
+    container.innerHTML = renderMenuSection(category);
+}
+
+/**
+ * Actualiza el título de la sección (ya no hay un solo título; se usa en categoría activa)
  */
 function updateSectionTitle(category) {
-    const titles = {
-        "todo-menu": "Todo el Menú",
-        "ofertas-familiares": "Ofertas Familiares",
-        "ofertas-dos": "Ofertas para Dos",
-        "ofertas-personales": "Ofertas Personales",
-        "platos-extras": "Platos Extras",
-        "agregados": "Agregados",
-        "bebidas": "Bebidas",
-        "descartables": "Descartables"
-
-    };
-    
     const sectionTitle = document.getElementById('sectionTitle');
     if (sectionTitle) {
-        sectionTitle.textContent = titles[category] || "Nuestro Menú";
+        sectionTitle.textContent = modalCategoryTitles[category] || "Nuestro Menú";
     }
 }
 
@@ -235,8 +265,7 @@ function openCategoriesModal() {
             const category = btn.dataset.category;
             closeCategoryModal();
             currentCategory = category;
-            const productsGrid = document.getElementById('productsGrid');
-            if (productsGrid) renderProducts(category, productsGrid, ITEMS_PER_PAGE);
+            renderProductsBySections(category);
             updateSectionTitle(category);
             setActiveCategory(category);
             document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -385,13 +414,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initLanding();
     initLandingCarousel();
 
-    const productsGrid = document.getElementById('productsGrid');
     const goHome = document.getElementById('goHome');
-
     const goToOrdersBtn = document.getElementById('goToOrders');
     
-    // Renderizar productos iniciales
-    renderProducts(currentCategory, productsGrid, ITEMS_PER_PAGE);
+    // Renderizar secciones (Ofertas Familiares + Ofertas para Dos en diseño referencia)
+    renderProductsBySections(currentCategory);
     updateSectionTitle(currentCategory);
     setActiveCategory(currentCategory);
     // ============================================
@@ -436,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Si se hace click en la tarjeta, cambiar categoría
             const category = card.dataset.category;
             currentCategory = category;
-            renderProducts(category, productsGrid, ITEMS_PER_PAGE);
+            renderProductsBySections(category);
             updateSectionTitle(category);
             setActiveCategory(category);
             
@@ -487,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menuToggle');
     const hamburgerMenu = document.getElementById('hamburgerMenu');
 
-    if (menuToggle && hamburgerMenu && productsGrid) {
+    if (menuToggle && hamburgerMenu) {
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             openCategoriesModal();
@@ -506,7 +533,7 @@ if (goHome) {
 
         // Volver a categoría principal
         currentCategory = "todo-menu";
-        renderProducts(currentCategory, productsGrid, ITEMS_PER_PAGE);
+        renderProductsBySections(currentCategory);
         updateSectionTitle(currentCategory);
         setActiveCategory(currentCategory);
 

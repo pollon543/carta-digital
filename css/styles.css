@@ -813,6 +813,63 @@ body.landing-visible {
     margin: 0 auto;
 }
 
+/* Secciones del menú (Ofertas Familiares / Ofertas para Dos - diseño referencia) */
+.container-menu-sections {
+    width: 100%;
+    max-width: 896px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.menu-section {
+    margin-bottom: 48px;
+}
+
+.menu-section:last-child {
+    margin-bottom: 0;
+}
+
+.menu-section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.menu-section-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-300) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--wine-800);
+    margin: 0 0 4px 0;
+}
+
+.menu-section-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    color: var(--stone-500);
+    margin: 0;
+}
+
+.menu-section-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
 .product-card {
     display: flex;
     flex-direction: row;

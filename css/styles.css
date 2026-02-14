@@ -99,20 +99,64 @@ body.landing-visible {
     display: none;
 }
 
+/* Carrusel de fondo: 10 fotos autodesplazables */
+.landing-carousel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.landing-slides {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.landing-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    z-index: 0;
+}
+
+.landing-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+.landing-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Overlay wine para legibilidad y efecto premium */
 .landing-bg {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(118, 28, 56, 0.95) 0%, rgba(66, 10, 26, 0.98) 100%);
-    z-index: 0;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, rgba(118, 28, 56, 0.72) 0%, rgba(66, 10, 26, 0.88) 50%, rgba(42, 10, 26, 0.94) 100%);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .landing-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(212, 160, 23, 0.12) 1px, transparent 1px);
-    background-size: 28px 28px;
-    z-index: 0;
+    background-image: radial-gradient(circle, rgba(212, 160, 23, 0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
 }
 
 .landing-illustration {
@@ -120,7 +164,7 @@ body.landing-visible {
     bottom: 18%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
 }
 
@@ -135,6 +179,7 @@ body.landing-visible {
     z-index: 2;
     text-align: center;
     max-width: 420px;
+    pointer-events: auto;
 }
 
 .landing-badge {

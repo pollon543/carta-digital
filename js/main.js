@@ -287,8 +287,24 @@ function initHeroCarousel() {
     startTimer();
 }
 
+// Pantalla de entrada: al hacer clic en "Ver Menú" se oculta la landing y se muestra la carta
+function initLanding() {
+    const landingSection = document.getElementById('landing-section');
+    const mainContent = document.getElementById('main-content');
+    const btnVerMenu = document.getElementById('landingVerMenu');
+    if (!landingSection || !mainContent || !btnVerMenu) return;
+    document.body.classList.add('landing-visible');
+    btnVerMenu.addEventListener('click', () => {
+        landingSection.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        document.body.classList.remove('landing-visible');
+        window.scrollTo(0, 0);
+    });
+}
+
 // Cargar productos iniciales
 document.addEventListener('DOMContentLoaded', () => {
+    initLanding();
     initHeroCarousel();
 
     const productsGrid = document.getElementById('productsGrid');

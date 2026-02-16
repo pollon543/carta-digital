@@ -554,15 +554,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================================
-    // MENÚ HAMBURGUESA: misma función que los botones de cada categoría
+    // MENÚ HAMBURGUESA: panel lateral (abrir/cerrar, categorías funcionales)
     // ============================================
     const menuToggle = document.getElementById('menuToggle');
     const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const hamburgerOverlay = document.getElementById('hamburgerOverlay');
+
+    function closeHamburgerMenu() {
+        if (hamburgerMenu) hamburgerMenu.classList.remove('open');
+        if (hamburgerOverlay) hamburgerOverlay.classList.remove('open');
+        document.body.classList.remove('hamburger-open');
+    }
+
+    function openHamburgerMenu() {
+        if (hamburgerMenu) hamburgerMenu.classList.add('open');
+        if (hamburgerOverlay) hamburgerOverlay.classList.add('open');
+        document.body.classList.add('hamburger-open');
+    }
 
     if (menuToggle && hamburgerMenu) {
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            openCategoriesModal();
+            const isOpen = hamburgerMenu.classList.contains('open');
+            if (isOpen) closeHamburgerMenu();
+            else openHamburgerMenu();
+        });
+    }
+
+    if (hamburgerOverlay) {
+        hamburgerOverlay.addEventListener('click', closeHamburgerMenu);
+    }
+
+    // Clic en una categoría del menú lateral: cerrar panel y navegar
+    if (hamburgerMenu) {
+        hamburgerMenu.querySelectorAll('.hamburger-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.dataset.category;
+                closeHamburgerMenu();
+                currentCategory = category;
+                renderProductsBySections(category);
+                updateSectionTitle(category);
+                setActiveCategory(category);
+                const productsSection = document.querySelector('.products-section');
+                if (productsSection) productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
         });
     }
 
@@ -585,9 +620,12 @@ if (goHome) {
         // Cerrar modal si está abierto
         closeCategoryModal();
 
-        // Cerrar menú hamburguesa si está abierto
+        // Cerrar menú hamburguesa y overlay si están abiertos
         const hm = document.getElementById('hamburgerMenu');
+        const ho = document.getElementById('hamburgerOverlay');
         if (hm) hm.classList.remove('open');
+        if (ho) ho.classList.remove('open');
+        document.body.classList.remove('hamburger-open');
 
         // Scroll suave arriba
         window.scrollTo({ top: 0, behavior: 'smooth' });

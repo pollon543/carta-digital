@@ -416,37 +416,63 @@ body.landing-visible {
 
 
 /* ============================================
-   MENÚ HAMBURGUESA (DROPDOWN COMO LA FOTO)
+   MENÚ HAMBURGUESA - PANEL LATERAL (REFERENCIA)
+   Desliza desde la derecha, fondo borgoña, texto blanco
    ============================================ */
+.hamburger-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.hamburger-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
 .hamburger-menu {
-    position: absolute;
-    top: 60px;
-    left: 82%;
-    transform: translateX(-50%);
-    width: 180px;
-    background: var(--color-white);
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 111, 0, 0.25);
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 72%;
+    max-width: 320px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--wine-900) 0%, var(--wine-950) 100%);
     z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.25);
 }
-
-/* ============================================
-   MENÚ HAMBURGUESA CENTRADO SOLO EN PC
-   ============================================ */
-@media (min-width: 992px) {
-    .hamburger-menu {
-        right: auto;               /* quitamos alineación derecha */
-        left: 98%;                  /* lo movemos al centro */
-         width: 220px;               
-        transform: translateX(-50%); /* centrado perfecto */
-    }
-}
-
 
 .hamburger-menu.open {
-    display: block;
+    transform: translateX(0);
+}
+
+.hamburger-menu-header {
+    padding: 24px 20px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-white);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.hamburger-menu-list {
+    flex: 1;
+    padding: 12px 0 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .hamburger-item {
@@ -454,23 +480,77 @@ body.landing-visible {
     text-align: left;
     background: transparent;
     border: none;
-    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 16px 20px;
+    font-family: 'Lato', sans-serif;
     font-size: 15px;
     font-weight: 500;
-    letter-spacing: 0.5px;
-    color: var(--color-dark);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    letter-spacing: 0.04em;
+    color: var(--color-white);
+    text-transform: uppercase;
     cursor: pointer;
     outline: none;
+    transition: background 0.2s ease;
 }
 
-.hamburger-item:last-child {
-    border-bottom: none;
+.hamburger-item:hover,
+.hamburger-item:focus {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.hamburger-item:hover {
-    background: var(--color-light);
-    color: var(--color-primary);
+.hamburger-item:active {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.hamburger-menu-contact {
+    padding: 24px 20px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.hamburger-contact-line {
+    color: var(--color-white);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.hamburger-contact-line:last-of-type {
+    margin-bottom: 18px;
+}
+
+.hamburger-contact-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.hamburger-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #25D366;
+    color: var(--color-white);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hamburger-whatsapp:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+.hamburger-whatsapp svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* Evitar scroll del fondo cuando el menú lateral está abierto (móvil) */
+body.hamburger-open {
+    overflow: hidden;
 }
 
 
@@ -629,6 +709,19 @@ body.landing-visible {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--gold-500) var(--stone-200);
+}
+
+/* ============================================
+   PC: solo 5 cuadros visibles, centrado, resto con scroll
+   ============================================ */
+@media (min-width: 992px) {
+    .categories-scroll {
+        max-width: 864px; /* 5 tarjetas visibles (5×160px + 4×16px gap) */
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 24px 14px 24px;
+        border-radius: var(--border-radius-lg);
+    }
 }
 
 /* ============================================

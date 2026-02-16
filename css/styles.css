@@ -503,6 +503,7 @@ body.landing-visible {
 
 .hamburger-menu-list {
     flex: 1;
+    min-height: 0;
     padding: 12px 0 0;
     display: flex;
     flex-direction: column;
@@ -536,8 +537,9 @@ body.landing-visible {
 }
 
 .hamburger-menu-contact {
-    padding: 18px 16px 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    margin-top: auto;
+    margin-bottom: 56px;
+    padding: 24px 16px 24px;
     flex-shrink: 0;
 }
 

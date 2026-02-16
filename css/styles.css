@@ -504,7 +504,9 @@ body.landing-visible {
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.3s ease, visibility 0s linear 0.3s;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     box-shadow: -4px 0 24px rgba(0, 0, 0, 0.25);
@@ -549,6 +551,9 @@ body.landing-visible {
 
 .hamburger-menu.open {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.3s ease, visibility 0s linear 0s;
 }
 
 .hamburger-menu-header {

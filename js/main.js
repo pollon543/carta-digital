@@ -585,6 +585,11 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburgerOverlay.addEventListener('click', closeHamburgerMenu);
     }
 
+    const hamburgerClose = document.getElementById('hamburgerClose');
+    if (hamburgerClose) {
+        hamburgerClose.addEventListener('click', closeHamburgerMenu);
+    }
+
     // Clic en una categoría del menú lateral: cerrar panel y navegar
     if (hamburgerMenu) {
         hamburgerMenu.querySelectorAll('.hamburger-item').forEach(btn => {

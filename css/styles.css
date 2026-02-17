@@ -269,30 +269,34 @@ body.landing-visible {
     line-height: 1.2;
 }
 
-/* IQUIQUE - CHILE con líneas amarillas a cada lado */
+/* IQUIQUE - CHILE: líneas blancas delgadas a ambos lados (igual a la foto) */
 .landing-location-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(12px, 3vw, 18px);
+    gap: clamp(10px, 2.5vw, 16px);
     margin-bottom: clamp(24px, 6vw, 36px);
+    width: 100%;
+    max-width: 100%;
 }
 
 .landing-location-line {
     flex: 1;
-    max-width: 70px;
-    height: 2px;
-    background: #ffd700;
+    min-width: 40px;
+    max-width: 100px;
+    height: 1px;
+    background: #fff;
 }
 
 .landing-location-text {
     font-family: var(--font-body);
-    font-size: clamp(0.72rem, 2.6vw, 0.88rem);
+    font-size: clamp(0.75rem, 2.8vw, 0.9rem);
     font-weight: 400;
     color: #fff;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Botón Ver Menú ovalado con barras decorativas delgadas */

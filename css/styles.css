@@ -354,6 +354,10 @@ body.landing-visible {
    HEADER
    ============================================ */
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
@@ -363,11 +367,14 @@ body.landing-visible {
     padding: 14px max(20px, var(--safe-left)) 14px 20px;
     padding-right: max(20px, var(--safe-right));
     padding-top: max(14px, var(--safe-top));
-    position: sticky;
-    top: 0;
     z-index: 100;
     box-shadow: var(--shadow-sm);
     border-bottom: 1px solid var(--stone-200);
+}
+
+/* Espacio para que el contenido no quede bajo el header fijo */
+.header + .categories-section {
+    padding-top: 78px;
 }
 
 .header-container {

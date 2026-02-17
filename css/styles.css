@@ -706,8 +706,19 @@ body.landing-visible {
 .hamburger-menu-contact {
     margin-top: auto;
     margin-bottom: 56px;
-    padding: 24px 16px 24px;
+    padding: 24px 12px 24px;
     flex-shrink: 0;
+    /* Centrar todo el bloque de contacto (texto + ícono) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Hacer el bloque más angosto que el ancho del menú y bien centrado */
+    width: 100%;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
 }
 
 .hamburger-contact-line {
@@ -738,6 +749,10 @@ body.landing-visible {
     color: var(--color-white);
     box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Asegurar que el botón quede perfectamente centrado bajo el texto */
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hamburger-whatsapp:hover {

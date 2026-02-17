@@ -153,11 +153,11 @@ body.landing-visible {
     display: none;
 }
 
-/* Fondo rojo sólido (fucsia/carmesí - igual a la imagen) */
 .landing-bg-solid {
     position: absolute;
     inset: 0;
-    background: #cb274a;
+    /* Fondo vino-negro moderno */
+    background: radial-gradient(circle at top, #5b0b26 0%, #240112 42%, #05010a 100%);
     z-index: 0;
 }
 

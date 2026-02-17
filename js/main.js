@@ -561,14 +561,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburgerOverlay = document.getElementById('hamburgerOverlay');
 
     function closeHamburgerMenu() {
-        if (hamburgerMenu) hamburgerMenu.classList.remove('open');
-        if (hamburgerOverlay) hamburgerOverlay.classList.remove('open');
+        if (hamburgerMenu) {
+            hamburgerMenu.classList.remove('open');
+            hamburgerMenu.setAttribute('aria-hidden', 'true');
+        }
+        if (hamburgerOverlay) {
+            hamburgerOverlay.classList.remove('open');
+            hamburgerOverlay.setAttribute('aria-hidden', 'true');
+        }
         document.body.classList.remove('hamburger-open');
     }
 
     function openHamburgerMenu() {
-        if (hamburgerMenu) hamburgerMenu.classList.add('open');
-        if (hamburgerOverlay) hamburgerOverlay.classList.add('open');
+        if (hamburgerMenu) {
+            hamburgerMenu.classList.add('open');
+            hamburgerMenu.setAttribute('aria-hidden', 'false');
+        }
+        if (hamburgerOverlay) {
+            hamburgerOverlay.classList.add('open');
+            hamburgerOverlay.setAttribute('aria-hidden', 'false');
+        }
         document.body.classList.add('hamburger-open');
     }
 

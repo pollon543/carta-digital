@@ -493,24 +493,27 @@ body.landing-visible {
 .hamburger-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.45);
     z-index: 9998;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.28s ease, visibility 0s linear 0.3s;
 }
 
 .hamburger-overlay.open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.28s ease, visibility 0s linear 0s;
 }
 
 .hamburger-menu {
     position: fixed;
     top: 0;
     right: 0;
-    width: 48%;
-    max-width: 260px;
+    width: 72%;
+    max-width: 300px;
     height: 100vh;
     height: 100dvh;
     padding-right: var(--safe-right);
@@ -522,14 +525,20 @@ body.landing-visible {
     transform: translateX(100%);
     visibility: hidden;
     pointer-events: none;
-    transition: transform 0.3s ease, visibility 0s linear 0.3s;
+    transition: transform 0.28s ease-out, visibility 0s linear 0.3s;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.25);
+    box-shadow: -6px 0 32px rgba(0, 0, 0, 0.3);
     margin: 0;
     padding-left: 0;
     padding-bottom: var(--safe-bottom);
     box-sizing: border-box;
+}
+
+/* Cerrado: no oculto a la derecha, sino completamente fuera de vista e inactivo */
+.hamburger-menu:not(.open) {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .hamburger-close {
@@ -569,7 +578,7 @@ body.landing-visible {
     transform: translateX(0);
     visibility: visible;
     pointer-events: auto;
-    transition: transform 0.3s ease, visibility 0s linear 0s;
+    transition: transform 0.28s ease-out, visibility 0s linear 0s;
 }
 
 .hamburger-menu-header {
@@ -645,7 +654,7 @@ body.landing-visible {
 .hamburger-contact-label {
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
 }
 
 .hamburger-whatsapp {

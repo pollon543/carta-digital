@@ -162,7 +162,10 @@ function createProductCardVertical(product) {
         '<div class="product-card-vertical-info">' +
         '<h3 class="product-card-vertical-name">' + name + '</h3>' +
         descHtml +
-        '<div class="product-card-vertical-price">' + priceFormatted + '</div>' +
+        '<div class="product-card-vertical-footer">' +
+        '<div class="product-rating">' + generateStars(product.rating) + '</div>' +
+        '<div class="product-price">' + priceFormatted + '</div>' +
+        '</div>' +
         '</div>' +
         '</div>'
     );
@@ -200,7 +203,7 @@ function renderMenuSection(categoryId, opts = {}) {
     const list = limit ? products.slice(0, limit) : products;
     const cardFn = verticalCards ? createProductCardVertical : createProductCard;
     const cardsHtml = list.map(p => cardFn(p)).join('');
-    const gridClass = gridCols3 ? 'menu-section-grid menu-section-grid-cols-3' : 'products-grid menu-section-grid';
+    const gridClass = 'products-grid menu-section-grid';
     return `
         <div class="menu-section" data-category="${categoryId}">
             <div class="menu-section-header">
@@ -222,21 +225,20 @@ function renderProductsBySections(category) {
     const container = document.getElementById('productsSectionContent');
     if (!container) return;
 
-    const verticalOpts = { verticalCards: true, gridCols3: true };
-    const verticalCategories = ['platos-extras', 'agregados', 'bebidas', 'descartables'];
+    const verticalOpts = { verticalCards: true };
 
     if (category === 'todo-menu') {
         container.innerHTML =
-            renderMenuSection('ofertas-familiares') +
-            renderMenuSection('ofertas-dos') +
-            renderMenuSection('ofertas-personales') +
+            renderMenuSection('ofertas-familiares', verticalOpts) +
+            renderMenuSection('ofertas-dos', verticalOpts) +
+            renderMenuSection('ofertas-personales', verticalOpts) +
             renderMenuSection('platos-extras', verticalOpts) +
             renderMenuSection('agregados', verticalOpts) +
             renderMenuSection('bebidas', verticalOpts) +
             renderMenuSection('descartables', verticalOpts);
         return;
     }
-    container.innerHTML = renderMenuSection(category, verticalCategories.includes(category) ? verticalOpts : {});
+    container.innerHTML = renderMenuSection(category, verticalOpts);
 }
 
 /**

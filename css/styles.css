@@ -998,6 +998,23 @@ body.hamburger-open {
     
 }
 
+/* PC: distribución tipo vitrina con hasta 7 tarjetas por fila */
+@media (min-width: 992px) {
+    .products-grid.menu-section-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1400px) {
+    .container-menu-sections {
+        max-width: 1400px;
+    }
+
+    .products-grid.menu-section-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+}
+
 
 
 .categories-scroll::-webkit-scrollbar {
@@ -1124,16 +1141,16 @@ body.hamburger-open {
 .products-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
     padding: 0 20px;
-    max-width: 896px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 /* Secciones del menú (Ofertas Familiares / Ofertas para Dos - diseño referencia) */
 .container-menu-sections {
     width: 100%;
-    max-width: min(896px, 100vw);
+    max-width: min(1200px, 100vw);
     margin: 0 auto;
     padding: 0 max(20px, var(--safe-left));
     padding-right: max(20px, var(--safe-right));
@@ -1189,7 +1206,7 @@ body.hamburger-open {
 .menu-section-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
 }
 
 /* Grid 3 columnas (Platos Extras, Agregados, Bebidas, Descartables) */
@@ -1204,8 +1221,8 @@ body.hamburger-open {
 .product-card-vertical {
     flex-direction: column;
     align-items: stretch;
-    text-align: center;
-    min-height: 280px;
+    text-align: left;
+    min-height: 0;
 }
 
 .product-card-vertical-image {
@@ -1213,7 +1230,8 @@ body.hamburger-open {
     height: 140px;
     flex-shrink: 0;
     overflow: hidden;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    /* Banda superior tipo foto con fondo vino oscuro */
+    background: linear-gradient(180deg, #7a1119 0%, #400307 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1232,14 +1250,14 @@ body.hamburger-open {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-    text-align: center;
+    text-align: left;
     padding: 14px 12px 16px;
-    min-height: 110px;
+    min-height: 120px;
     background: #ffffff;
     box-sizing: border-box;
-    border-top: 1px solid #e7e5e4;
+    border-top: none;
 }
 
 .product-card-vertical-name {
@@ -1248,7 +1266,7 @@ body.hamburger-open {
     font-family: var(--font-display);
     font-size: var(--text-base);
     font-weight: 700;
-    color: var(--stone-700);
+    color: #7a1119;
     margin: 0;
     line-height: var(--leading-snug);
     word-wrap: break-word;
@@ -1259,7 +1277,7 @@ body.hamburger-open {
     width: 100%;
     font-family: var(--font-body);
     font-size: var(--text-sm);
-    color: var(--stone-500);
+    color: var(--stone-600);
     line-height: var(--leading-relaxed);
     margin: 0;
 }
@@ -1269,10 +1287,20 @@ body.hamburger-open {
     width: 100%;
     font-family: var(--font-body);
     font-weight: 700;
-    color: var(--wine-800);
+    color: var(--wine-900);
     font-size: var(--text-base);
     margin: 0;
     margin-top: 2px;
+}
+
+/* Pie de la tarjeta vertical: estrellas + precio alineados como en referencia */
+.product-card-vertical-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
 }
 
 /* Forzar que nombre, descripción y precio se vean siempre (Platos Extras, etc.) */
@@ -1287,11 +1315,11 @@ body.hamburger-open {
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    background: linear-gradient(135deg, #ffffff 0%, #f8f6f4 100%);
-    border-radius: var(--border-radius-lg);
+    background: #ffffff;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--stone-100);
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.2);
+    border: none;
     transition: all 0.3s ease;
 }
 
@@ -1301,12 +1329,12 @@ body.hamburger-open {
 }
 
 .product-card-image-wrap {
-    width: 128px;
-    min-width: 128px;
-    height: 128px;
+    width: 100%;
+    min-width: 100%;
+    height: 170px;
     flex-shrink: 0;
     overflow: hidden;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    background: linear-gradient(180deg, #7a1119 0%, #400307 100%);
     display: flex;
     align-items: center;
     justify-content: center;

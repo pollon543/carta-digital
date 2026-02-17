@@ -411,34 +411,6 @@ function initHeroCarousel() {
     startTimer();
 }
 
-// Carrusel de fondo en la pantalla de entrada (10 fotos, autodesplazable cada 2 s)
-const LANDING_INTERVAL_MS = 2000;
-const LANDING_SLIDE_COUNT = 10;
-
-function initLandingCarousel() {
-    const slides = document.querySelectorAll('.landing-slide');
-    if (!slides.length) return;
-
-    let currentIndex = 0;
-    let timer = null;
-
-    function goToSlide(index) {
-        currentIndex = (index + LANDING_SLIDE_COUNT) % LANDING_SLIDE_COUNT;
-        slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
-    }
-
-    function nextSlide() {
-        goToSlide(currentIndex + 1);
-    }
-
-    function startTimer() {
-        if (timer) clearInterval(timer);
-        timer = setInterval(nextSlide, LANDING_INTERVAL_MS);
-    }
-
-    startTimer();
-}
-
 // Pantalla de entrada: al hacer clic en "Ver Menú" se oculta la landing y se muestra la carta
 function initLanding() {
     const landingSection = document.getElementById('landing-section');
@@ -457,7 +429,6 @@ function initLanding() {
 // Cargar productos iniciales
 document.addEventListener('DOMContentLoaded', () => {
     initLanding();
-    initLandingCarousel();
 
     const goHome = document.getElementById('goHome');
     const goToOrdersBtn = document.getElementById('goToOrders');

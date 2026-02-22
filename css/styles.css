@@ -128,9 +128,8 @@ body.landing-visible {
 }
 
 /* ============================================
-   PANTALLA DE ENTRADA - Diseño fiel a imagen de referencia
-   Fondo rojo sólido, líneas diagonales, logo, CARTA DIGITAL, botón, pollo
-   100% adaptable a celular
+   PANTALLA DE ENTRADA - Diseño referencia (fondo claro, dorados, botón gradiente)
+   Fondo off-white, formas curvas y bokeh, logo con borde dorado, CARTA DIGITAL con líneas, Ver Menú, pollo
    ============================================ */
 .landing {
     position: fixed;
@@ -153,73 +152,59 @@ body.landing-visible {
     display: none;
 }
 
+/* Fondo claro + formas curvas suaves + bokeh dorado */
 .landing-bg-solid {
     position: absolute;
     inset: 0;
-    /* Fondo vino-negro moderno */
-    background: radial-gradient(circle at top, #5b0b26 0%, #240112 42%, #05010a 100%);
+    background: #f7f7f7;
     z-index: 0;
 }
 
-/* Esquina superior izquierda: dos líneas blancas diagonales paralelas */
+.landing-bg-solid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 70% 45% at 15% 5%, rgba(200, 210, 220, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 70% at 88% 8%, rgba(250, 220, 180, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 45% at 92% 88%, rgba(255, 230, 200, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 25% 55%, rgba(255, 220, 150, 0.14) 0%, transparent 22%),
+        radial-gradient(circle at 72% 68%, rgba(255, 210, 120, 0.18) 0%, transparent 20%),
+        radial-gradient(circle at 50% 85%, rgba(255, 230, 180, 0.12) 0%, transparent 18%);
+    pointer-events: none;
+}
+
+/* Formas curvas esquinas (complemento visual) */
 .landing-decor-tl {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 140px;
-    height: 140px;
+    top: -80px;
+    left: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(190, 200, 215, 0.3) 0%, transparent 65%);
     z-index: 1;
-    overflow: hidden;
+    pointer-events: none;
 }
 
 .landing-decor-tl .landing-line {
-    position: absolute;
-    width: 100px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.7);
-    transform-origin: left center;
+    display: none;
 }
 
-.landing-decor-tl .landing-line:nth-child(1) {
-    top: 28px;
-    left: 20px;
-    transform: rotate(-45deg);
-}
-
-.landing-decor-tl .landing-line:nth-child(2) {
-    top: 44px;
-    left: 20px;
-    transform: rotate(-45deg);
-}
-
-/* Esquina inferior derecha: dos líneas blancas diagonales paralelas */
 .landing-decor-br {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 140px;
-    height: 140px;
+    top: -60px;
+    right: -100px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245, 220, 180, 0.35) 0%, transparent 60%);
     z-index: 1;
-    overflow: hidden;
+    pointer-events: none;
 }
 
 .landing-decor-br .landing-line {
-    position: absolute;
-    width: 100px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.7);
-    right: 20px;
-    transform-origin: right center;
-}
-
-.landing-decor-br .landing-line:nth-child(1) {
-    bottom: 44px;
-    transform: rotate(135deg);
-}
-
-.landing-decor-br .landing-line:nth-child(2) {
-    bottom: 28px;
-    transform: rotate(135deg);
+    display: none;
 }
 
 .landing-content {
@@ -234,20 +219,22 @@ body.landing-visible {
     pointer-events: auto;
 }
 
-/* Logo circular: borde amarillo brillante, fondo blanco (igual a la imagen) */
+/* Logo circular: borde dorado degradado, fondo blanco, sombra suave */
 .landing-logo-wrap {
     width: clamp(110px, 30vw, 150px);
     height: clamp(110px, 30vw, 150px);
     border-radius: 50%;
-    border: 4px solid #ffd700;
-    background: #fff;
+    border: 4px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, #f7e5b5 0%, #eac387 50%, #e0b870 100%) border-box;
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     padding: clamp(6px, 1.5vw, 10px);
     margin-bottom: clamp(14px, 3.5vw, 22px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .landing-logo-img {
@@ -257,49 +244,53 @@ body.landing-visible {
     object-position: center;
 }
 
-/* CARTA DIGITAL - texto blanco, negrita, mayúsculas */
-.landing-carta-title {
-    font-family: var(--font-body);
-    font-size: clamp(1.5rem, 6vw, 2rem);
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0 0 clamp(10px, 2.5vw, 16px);
-    line-height: 1.2;
-}
-
-/* IQUIQUE - CHILE: líneas blancas delgadas a ambos lados (igual a la foto) */
-.landing-location-wrap {
+/* CARTA DIGITAL con líneas doradas a los lados */
+.landing-title-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(10px, 2.5vw, 16px);
-    margin-bottom: clamp(24px, 6vw, 36px);
+    gap: clamp(12px, 3vw, 20px);
     width: 100%;
-    max-width: 100%;
+    margin-bottom: clamp(8px, 2vw, 12px);
 }
 
-.landing-location-line {
+.landing-title-line {
     flex: 1;
-    min-width: 40px;
-    max-width: 100px;
-    height: 1px;
-    background: #fff;
+    min-width: 30px;
+    max-width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #eac387);
 }
 
-.landing-location-text {
+.landing-title-wrap .landing-title-line:last-child {
+    background: linear-gradient(90deg, #eac387, transparent);
+}
+
+.landing-carta-title {
     font-family: var(--font-body);
-    font-size: clamp(0.75rem, 2.8vw, 0.9rem);
-    font-weight: 400;
-    color: #fff;
-    letter-spacing: 0.2em;
+    font-size: clamp(1.4rem, 5.5vw, 1.9rem);
+    font-weight: 700;
+    color: #4a4a4a;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    white-space: nowrap;
+    margin: 0;
+    line-height: 1.2;
     flex-shrink: 0;
 }
 
-/* Botón Ver Menú ovalado con barras decorativas delgadas */
+/* IQUIQUE · CHILE - gris claro, centrado */
+.landing-location-text {
+    font-family: var(--font-body);
+    font-size: clamp(0.7rem, 2.6vw, 0.85rem);
+    font-weight: 400;
+    color: #888888;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 clamp(22px, 5.5vw, 34px);
+    line-height: 1.3;
+}
+
+/* Botón Ver Menú: degradado amarillo-naranja, texto gris oscuro, muy redondeado */
 .landing-btn-wrap {
     display: flex;
     align-items: center;
@@ -311,7 +302,7 @@ body.landing-visible {
 .landing-btn-bar {
     width: 5px;
     height: clamp(40px, 11vw, 52px);
-    background: #ffd700;
+    background: linear-gradient(180deg, #eac387 0%, #e0b870 100%);
     border-radius: 3px;
 }
 
@@ -322,23 +313,22 @@ body.landing-visible {
     gap: 10px;
     min-height: var(--touch-min);
     padding: clamp(14px, 3.5vw, 18px) clamp(32px, 8vw, 48px);
-    font-size: clamp(1.05rem, 4.2vw, 1.2rem);
+    font-size: clamp(1rem, 4vw, 1.15rem);
     font-weight: 700;
     font-family: var(--font-body);
-    color: #000;
-    background: #ffd700;
+    color: #333333;
+    background: linear-gradient(90deg, #ffd700 0%, #fbc02d 45%, #ffa500 100%);
     border: none;
-    border-radius: 9999px;
+    border-radius: 28px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
 .landing-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(255, 215, 0, 0.45);
-    background: #ffeb3b;
+    box-shadow: 0 6px 20px rgba(220, 160, 0, 0.3);
 }
 
 .landing-btn:active {
@@ -346,12 +336,13 @@ body.landing-visible {
 }
 
 .landing-btn-arrow {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+    color: #4a4a4a;
 }
 
-/* Imagen del pollo en plato + puntos decorativos blancos a los lados */
+/* Imagen del pollo en plato: sombra suave, ligeramente a la izquierda */
 .landing-chicken-wrap {
     display: flex;
     align-items: center;
@@ -361,10 +352,10 @@ body.landing-visible {
 }
 
 .landing-dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: #fff;
+    background: rgba(234, 195, 135, 0.6);
     flex-shrink: 0;
 }
 
@@ -373,7 +364,7 @@ body.landing-visible {
     height: auto;
     object-fit: contain;
     object-position: center;
-    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
 }
 
 /* Responsive móvil - espaciado ajustado */
@@ -381,11 +372,11 @@ body.landing-visible {
     .landing-logo-wrap {
         margin-bottom: 12px;
     }
-    .landing-carta-title {
-        margin-bottom: 10px;
+    .landing-title-wrap {
+        margin-bottom: 6px;
     }
-    .landing-location-wrap {
-        margin-bottom: 20px;
+    .landing-location-text {
+        margin-bottom: 22px;
     }
     .landing-btn-wrap {
         margin-bottom: 18px;

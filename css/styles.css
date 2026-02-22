@@ -1050,7 +1050,7 @@ body.hamburger-open {
 .category-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-xl);
-    border-color: var(--gold-400);
+    border-color: var(--wine-700);
 }
 
 .category-image {
@@ -1089,7 +1089,7 @@ body.hamburger-open {
 }
 
 .btn-view-more {
-    background: var(--color-primary);
+    background: var(--wine-800);
     color: var(--color-white);
     border: none;
     min-height: 36px;
@@ -1110,12 +1110,12 @@ body.hamburger-open {
 }
 
 .btn-view-more:hover {
-    background: var(--gold-700);
+    background: var(--wine-900);
     transform: scale(1.03);
 }
 
 .category-card.active {
-    border: 3px solid var(--color-primary);
+    border: 3px solid var(--wine-800);
 }
 
 /* ============================================

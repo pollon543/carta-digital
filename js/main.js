@@ -44,7 +44,7 @@ const productsData = {
   ],
 
   "agregados": [
-    { name: "1 Pollo entero solo", description: "1 pollo entero.", price: 15000, image: "img/pollo solo.png", rating: 5 },
+    { name: "1 Pollo entero solo", description: "1 pollo entero.", price: 15000, image: "img/pollo solo01.png", rating: 5 },
     { name: "1/2 Pollo solo", description: "1/2 pollo - parte truto y pechuga.", price: 9900, image: "img/medio pollo solo.png", rating: 5 },
     { name: "1/4 pollo solo", description: "1/4 de pollo -- truto o pechuga según stock.", price: 5800, image: "", rating: 5 },
     { name: "Porcion de papas fritas familiar", description: "Porción grande de papas crujientes.", price: 9000, image: "img/porcion de papa.png", rating: 5 },

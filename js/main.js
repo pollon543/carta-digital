@@ -89,7 +89,7 @@ const productsData = {
     { name: "Ofertón sin ensalada", description: "Pollo entero, papas fritas, arroz chaufa y bebidas 1.5lt.", price: 24500, image: "img/oferton sin ensalada.png", rating: 5 },
     { name: "Ofertón pura papa", description: "Pollo entero, papas fritas, 1/2 porción de papa frita y bebidas 1.5lt.", price: 24500, image: "img/oferton pura papa.png", rating: 5 },
     { name: "Ofertón familiar", description: "Pollo entero, papas fritas, ensalada y bebidas 1.5lt.", price: 23500, image: "img/oferton familiar.png", rating: 5 },
-    { name: "Ofertón solo ensalada", description: "Pollo entero, 2 ensaladas familiar y bebida 1.5lt.", price: 23500, image: "img/oferton familiar.png", rating: 5 }
+    { name: "Ofertón solo ensalada", description: "Pollo entero, 2 ensaladas familiar y bebida 1.5lt.", price: 24500, image: "img/oferton familiar.png", rating: 5 }
   ],
 
   "ofertas-dos": [
@@ -102,8 +102,8 @@ const productsData = {
 
   "ofertas-personales": [
     { name: "Chaufa brasa c/ papa + ensalada", description: "1/4 pollo, arroz chaufa, papas fritas personales y ensalada personal.", price: 10500, image: "img/chaufa brasa con papas fritas.png", rating: 5 },
-    { name: "1/4 combo", description: "1/4 pollo, papas fritas personales, ensalada personal.", price: 8400, image: "img/personal combo.png", rating: 5 },
-    { name: "1/4 combo pura papa", description: "1/4 pollo, papas fritas personales más cantidad.", price: 8400, image: "img/personal pura papa.png", rating: 5 },
+    { name: "1/4 combo", description: "1/4 pollo, papas fritas personales, ensalada personal.", price: 8600, image: "img/personal combo.png", rating: 5 },
+    { name: "1/4 combo pura papa", description: "1/4 pollo, papas fritas personales más cantidad.", price: 8600, image: "img/personal pura papa.png", rating: 5 },
     { name: "Chaufa brasa", description: "1/4 pollo, arroz chaufa.", price: 8500, image: "img/chaufa brasa.png", rating: 5 },
     { name: "1/4 de pollo c/ fideos al pesto", description: "1/4 pollo, fideos al pesto.", price: 8400, image: "img/personal pesto con pollo.png", rating: 5 },
     { name: "Chaufa brasa c/ ensalada", description: "1/4 pollo, arroz chaufa y ensalada personal.", price: 9500, image: "img/chaufa brasa.png", rating: 5 },
@@ -130,7 +130,7 @@ const productsData = {
   ],
 
   "agregados": [
-    { name: "1 Pollo entero solo", description: "1 pollo entero.", price: 16000, image: "img/pollo solo01.png", rating: 5 },
+    { name: "1 Pollo entero solo", description: "1 pollo entero.", price: 17000, image: "img/pollo solo01.png", rating: 5 },
     { name: "1/2 Pollo solo", description: "1/2 pollo - parte truto y pechuga.", price: 10400, image: "img/medio pollo solo.png", rating: 5 },
     { name: "1/4 pollo solo", description: "1/4 de pollo - truto o pechuga, según el stock.", price: 6100, image: "", rating: 5 },
     { name: "Porción de papas fritas familiar", description: "Porción grande de papas crujientes.", price: 9500, image: "img/porcion de papa.png", rating: 5 },

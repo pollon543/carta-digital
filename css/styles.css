@@ -8,32 +8,32 @@
 }
 
 :root {
-    /* Paleta */
-    --wine-50: #fdf2f4;
-    --wine-100: #fce7eb;
-    --wine-500: #df4d71;
-    --wine-700: #a82347;
-    --wine-800: #8b1e3c;
-    --wine-900: #761c38;
-    --wine-950: #420a1a;
-    --gold-100: #faf2c7;
-    --gold-300: #f0d04f;
-    --gold-400: #ebbc24;
-    --gold-500: #d4a017;
-    --gold-700: #925911;
-    --stone-50: #fafaf9;
-    --stone-100: #f5f5f4;
-    --stone-200: #e7e5e4;
-    --stone-400: #a8a29e;
-    --stone-500: #78716c;
-    --stone-700: #44403c;
-    --color-primary: #d4a017;
-    --color-accent: #761c38;
-    --color-secondary: #ffffff;
-    --color-dark: #44403c;
-    --color-darker: #761c38;
-    --color-light: #fafaf9;
-    --color-gray: #78716c;
+    /* Paleta corporativa El Pollón: naranjas + negro + blanco */
+    --wine-50: #fff7ec;      /* naranja muy claro (fondos suaves) */
+    --wine-100: #ffe8cc;     /* naranja claro */
+    --wine-500: #ff9800;     /* naranja principal */
+    --wine-700: #f57c00;     /* naranja intenso */
+    --wine-800: #e65100;     /* naranja muy oscuro */
+    --wine-900: #1a1a1a;     /* casi negro para textos fuertes */
+    --wine-950: #000000;     /* negro sólido (fondos y contrastes) */
+    --gold-100: #fff3e0;     /* naranja pastel */
+    --gold-300: #ffb74d;     /* naranja medio */
+    --gold-400: #ffa726;     /* naranja vivo (detalles) */
+    --gold-500: #ff9800;     /* naranja corporativo (botones/bordes) */
+    --gold-700: #e65100;     /* naranja oscuro (hover/headers) */
+    --stone-50: #ffffff;     /* blanco puro */
+    --stone-100: #fffaf2;    /* blanco cálido muy suave */
+    --stone-200: #f2f2f2;    /* gris muy claro (de negro) */
+    --stone-400: #999999;    /* gris medio */
+    --stone-500: #666666;    /* gris texto secundario */
+    --stone-700: #222222;    /* gris muy oscuro casi negro */
+    --color-primary: #ff9800;     /* naranja principal */
+    --color-accent: #e65100;      /* naranja oscuro */
+    --color-secondary: #ffffff;   /* blanco */
+    --color-dark: #111111;        /* negro suave */
+    --color-darker: #000000;      /* negro */
+    --color-light: #ffffff;       /* blanco */
+    --color-gray: #666666;        /* gris desde el negro */
     --color-white: #ffffff;
     --color-black: #000000;
     /* Tipografía: escalas legibles y modernas */

@@ -41,7 +41,12 @@ export const getPublicMenuData = cache(async (): Promise<MenuPayload> => {
     const [settingsResult, categoriesResult, productsResult] = await Promise.all([
       supabase.from("site_settings").select("*").eq("id", 1).maybeSingle(),
       supabase.from("categories").select("*").order("sort_order", { ascending: true }),
-      supabase.from("products").select("*").eq("is_active", true).order("created_at", { ascending: true }),
+      supabase
+        .from("products")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true }),
     ]);
 
     if (categoriesResult.error || productsResult.error) {
@@ -66,6 +71,7 @@ export const getPublicMenuData = cache(async (): Promise<MenuPayload> => {
       products: productsResult.data.map((product) => ({
         id: String(product.id),
         categorySlug: String(product.category_slug),
+        sortOrder: Number(product.sort_order ?? 0),
         name: String(product.name),
         description: String(product.description ?? ""),
         price: Number(product.price ?? 0),

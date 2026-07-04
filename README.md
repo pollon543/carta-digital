@@ -24,7 +24,9 @@ Proyecto nuevo reconstruido con `Next.js`, `React`, `Tailwind CSS` y `Supabase`,
   - editar configuracion general
   - editar categorias
   - crear, editar y eliminar productos
+  - ordenar platos con numero de posicion
   - subir fotos a Supabase Storage
+  - usar URL de imagen o subir archivo desde tu PC
 - Fallback local:
   - si todavia no conectas Supabase, la app publica carga los datos semilla del proyecto para que el diseño ya funcione.
 
@@ -109,6 +111,14 @@ Como este proyecto usa `Supabase Auth`, crea tu usuario admin asi:
 3. Define correo y contrasena.
 4. Ese mismo correo y contrasena los usaras en `/admin`.
 
+### Acceso desde la carta digital
+
+En el menu lateral rojo de la app ahora existe un acceso pequeno llamado:
+
+- `Iniciar sesion`
+
+Ese boton lleva al panel `/admin` y desde ahi solo podra entrar personal autorizado con su correo y contrasena creados en Supabase Auth.
+
 ## 5. Importar el menu actual al panel
 
 Cuando Supabase ya este conectado:
@@ -137,6 +147,12 @@ El flujo quedo preparado asi:
 
 La carta publica leerá esa nueva imagen automaticamente desde Supabase.
 
+Tambien puedes:
+
+- pegar una `URL de imagen`
+- subir una imagen directamente desde tu `PC`
+- cambiar nombre, descripcion, precio, categoria y orden del plato
+
 ## 7. Mientras aun no tengas fotos finales
 
 El proyecto ya viene con imagenes de internet como placeholder para que el diseño se vea listo desde ahora.
@@ -155,8 +171,12 @@ Sube este proyecto a GitHub.
 ### Paso B. Importar en Vercel
 
 1. Ve a [Vercel](https://vercel.com/)
-2. Importa el repositorio
-3. En `Environment Variables` agrega:
+2. Inicia sesion
+3. Pulsa `Add New > Project`
+4. Importa el repositorio
+5. Si Vercel te pregunta por la carpeta del proyecto, selecciona `carta-digital`
+6. Verifica que el framework detectado sea `Next.js`
+7. En `Environment Variables` agrega:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=tu_project_url
@@ -166,6 +186,62 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
 ### Paso C. Deploy
 
 Vercel detecta `Next.js` automaticamente. Solo debes desplegar.
+
+### Paso D. Conectar bien Vercel con Supabase
+
+Haz esto para que la carta publicada pueda leer la base de datos:
+
+1. En Vercel entra a tu proyecto.
+2. Ve a `Settings`.
+3. Ve a `Environment Variables`.
+4. Agrega:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=tu_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+```
+
+5. Guarda.
+6. Luego ve a `Deployments`.
+7. Pulsa `Redeploy` para reconstruir el proyecto con esas variables.
+
+### Paso E. Probar panel admin publicado
+
+Cuando Vercel termine, abre tu sitio publicado y entra a:
+
+```text
+https://tu-proyecto.vercel.app/admin
+```
+
+o abre el acceso `Iniciar sesion` desde el menu lateral rojo.
+
+Desde ahi podras:
+
+- iniciar sesion con Supabase Auth
+- importar los datos base
+- cambiar fotos
+- cambiar precios
+- cambiar nombres
+- cambiar descripciones
+- ordenar platos
+- editar WhatsApp, URL web, direccion y textos generales
+
+## 9. Si ya ejecutaste un SQL anterior en Supabase
+
+No pasa nada. Solo vuelve a abrir:
+
+`supabase/sql/setup.sql`
+
+y vuelve a pegarlo en `SQL Editor`.
+
+Ese archivo ya incluye la estructura necesaria para:
+
+- productos
+- categorias
+- ajustes generales
+- bucket de imagenes
+- permisos
+- campo `sort_order` para ordenar platos desde el panel
 
 ## Estructura importante
 

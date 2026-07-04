@@ -12,6 +12,7 @@ export type Category = {
 export type Product = {
   id: string;
   categorySlug: string;
+  sortOrder?: number;
   name: string;
   description: string;
   price: number;

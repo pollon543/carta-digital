@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ChefHat,
@@ -12,6 +13,7 @@ import {
   Heart,
   HeartHandshake,
   Home,
+  LogIn,
   MapPin,
   Menu,
   MessageCircle,
@@ -109,6 +111,7 @@ function matchesSmartSearch(query: string, product: Product, categoryName: strin
 }
 
 export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
+  const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [globalSearchQuery, setGlobalSearchQuery] = useState("");
@@ -549,16 +552,39 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
           }`}
         >
           <div className="border-b border-white/10 bg-brand-gradient px-5 pb-6 pt-5">
-            <div className="mb-4 flex items-center justify-between">
-              <div className="flex size-24 items-center justify-center rounded-full bg-white shadow-lg">
-                <div className="text-center leading-none">
-                  <div className="font-[var(--font-display)] text-3xl font-bold text-[var(--brand-red)]">
-                    Pollon
-                  </div>
-                  <div className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.28em] text-neutral-500">
-                    Pollo a la brasa
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex size-24 items-center justify-center rounded-full bg-white shadow-lg">
+                  <div className="text-center leading-none">
+                    <div className="font-[var(--font-display)] text-3xl font-bold text-[var(--brand-red)]">
+                      Pollon
+                    </div>
+                    <div className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.28em] text-neutral-500">
+                      Pollo a la brasa
+                    </div>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    router.push("/admin");
+                  }}
+                  className="max-w-[140px] rounded-[1.2rem] border border-white/20 bg-black/20 px-3 py-3 text-left text-white backdrop-blur"
+                >
+                  <div className="flex items-start gap-2">
+                    <LogIn className="mt-0.5 size-4 shrink-0 text-white" />
+                    <div>
+                      <p className="text-[0.72rem] font-black uppercase tracking-[0.16em]">
+                        Iniciar sesion
+                      </p>
+                      <p className="mt-1 text-[0.64rem] leading-4 text-white/80">
+                        Solo personal autorizado con correo y contrasena.
+                      </p>
+                    </div>
+                  </div>
+                </button>
               </div>
 
               <button

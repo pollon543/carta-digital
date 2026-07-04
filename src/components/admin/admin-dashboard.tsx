@@ -24,6 +24,7 @@ const emptyCategory: Category = {
 const emptyProduct: Product = {
   id: "",
   categorySlug: "ofertas-familiares",
+  sortOrder: 0,
   name: "",
   description: "",
   price: 0,
@@ -65,7 +66,12 @@ export function AdminDashboard() {
   const [uploading, setUploading] = useState(false);
 
   const sortedProducts = useMemo(
-    () => [...products].sort((a, b) => a.name.localeCompare(b.name)),
+    () =>
+      [...products].sort((a, b) => {
+        const orderDifference = (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+        if (orderDifference !== 0) return orderDifference;
+        return a.name.localeCompare(b.name);
+      }),
     [products],
   );
 
@@ -82,7 +88,11 @@ export function AdminDashboard() {
       const [settingsResult, categoriesResult, productsResult] = await Promise.all([
         supabase.from("site_settings").select("*").eq("id", 1).maybeSingle(),
         supabase.from("categories").select("*").order("sort_order", { ascending: true }),
-        supabase.from("products").select("*").order("created_at", { ascending: true }),
+        supabase
+          .from("products")
+          .select("*")
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: true }),
       ]);
 
       if (settingsResult.data) {
@@ -117,6 +127,7 @@ export function AdminDashboard() {
         (productsResult.data ?? []).map((product) => ({
           id: String(product.id),
           categorySlug: String(product.category_slug),
+          sortOrder: Number(product.sort_order ?? 0),
           name: String(product.name),
           description: String(product.description ?? ""),
           price: Number(product.price ?? 0),
@@ -226,9 +237,10 @@ export function AdminDashboard() {
       if (categoriesError) throw categoriesError;
 
       const { error: productsError } = await supabase.from("products").upsert(
-        seedProducts.map((product) => ({
+        seedProducts.map((product, index) => ({
           id: product.id,
           category_slug: product.categorySlug,
+          sort_order: product.sortOrder ?? index + 1,
           name: product.name,
           description: product.description,
           price: product.price,
@@ -344,6 +356,7 @@ export function AdminDashboard() {
       const payload = {
         id: generatedId,
         category_slug: productForm.categorySlug,
+        sort_order: Number(productForm.sortOrder ?? 0),
         name: productForm.name,
         description: productForm.description,
         price: Number(productForm.price),
@@ -731,6 +744,20 @@ export function AdminDashboard() {
                         required
                       />
                     </label>
+                    <label className="block">
+                      <span className="mb-1 block text-sm font-semibold text-neutral-300">Orden del plato</span>
+                      <input
+                        value={productForm.sortOrder ?? 0}
+                        onChange={(event) =>
+                          setProductForm((current) => ({
+                            ...current,
+                            sortOrder: Number(event.target.value),
+                          }))
+                        }
+                        type="number"
+                        className="w-full rounded-2xl border border-white/10 bg-neutral-900 px-4 py-3 text-white outline-none"
+                      />
+                    </label>
                     <label className="block md:col-span-2">
                       <span className="mb-1 block text-sm font-semibold text-neutral-300">Descripcion</span>
                       <textarea
@@ -866,7 +893,9 @@ export function AdminDashboard() {
                           <p className="text-lg font-bold text-white">{product.name}</p>
                           <p className="line-clamp-2 text-sm text-neutral-400">{product.description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-neutral-500">{product.categorySlug}</span>
+                            <span className="text-sm text-neutral-500">
+                              #{product.sortOrder ?? 0} · {product.categorySlug}
+                            </span>
                             <span className="text-sm font-black text-red-300">${product.price.toLocaleString("es-CL")}</span>
                           </div>
                         </div>

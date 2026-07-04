@@ -15,6 +15,7 @@ create table if not exists public.categories (
 create table if not exists public.products (
   id text primary key,
   category_slug text not null references public.categories(slug) on update cascade on delete restrict,
+  sort_order integer not null default 0,
   name text not null,
   description text default '',
   price integer not null default 0,
@@ -27,6 +28,9 @@ create table if not exists public.products (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table if exists public.products
+add column if not exists sort_order integer not null default 0;
 
 create table if not exists public.site_settings (
   id integer primary key default 1,

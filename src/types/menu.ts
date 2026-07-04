@@ -21,6 +21,7 @@ export type Product = {
   tag?: string;
   isFeatured?: boolean;
   isPopular?: boolean;
+  isActive?: boolean;
 };
 
 export type SiteSettings = {

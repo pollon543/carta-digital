@@ -155,3 +155,56 @@ on storage.objects
 for delete
 to authenticated
 using (bucket_id = 'product-images');
+
+create table if not exists public.analytics_visits (
+  id uuid primary key default gen_random_uuid(),
+  session_id text not null,
+  visited_at timestamptz not null default now()
+);
+
+create index if not exists analytics_visits_visited_at_idx
+on public.analytics_visits (visited_at desc);
+
+create table if not exists public.product_likes (
+  id uuid primary key default gen_random_uuid(),
+  product_id text not null references public.products(id) on delete cascade,
+  session_id text not null,
+  created_at timestamptz not null default now(),
+  unique (product_id, session_id)
+);
+
+create index if not exists product_likes_product_id_idx
+on public.product_likes (product_id);
+
+alter table public.analytics_visits enable row level security;
+alter table public.product_likes enable row level security;
+
+drop policy if exists "Public can insert visits" on public.analytics_visits;
+create policy "Public can insert visits"
+on public.analytics_visits
+for insert
+to public
+with check (true);
+
+drop policy if exists "Authenticated can read visits" on public.analytics_visits;
+create policy "Authenticated can read visits"
+on public.analytics_visits
+for select
+to authenticated
+using (true);
+
+drop policy if exists "Public can manage own likes" on public.product_likes;
+create policy "Public can manage own likes"
+on public.product_likes
+for all
+to public
+using (true)
+with check (true);
+
+drop policy if exists "Authenticated can read likes" on public.product_likes;
+create policy "Authenticated can read likes"
+on public.product_likes
+for select
+to authenticated
+using (true);
+

@@ -30,6 +30,12 @@ import {
 } from "lucide-react";
 
 import { formatCurrency } from "@/lib/utils";
+import {
+  fetchPublicTopLikes,
+  fetchUserLikedProductIds,
+  trackPageVisit,
+  trackProductLike,
+} from "@/lib/analytics";
 import type { Category, MenuPayload, Product } from "@/types/menu";
 
 const categoryIconMap: Record<string, ComponentType<{ className?: string }>> = {
@@ -131,6 +137,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
     return storedTheme === "dark" ? "dark" : "light";
   });
   const [exploreTick, setExploreTick] = useState(0);
+  const [topLikesMap, setTopLikesMap] = useState<Map<string, number>>(new Map());
 
   const categories = initialData.categories;
   const visibleCategories = useMemo(
@@ -206,9 +213,37 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
   const isDark = theme === "dark";
 
+  const topLikedProducts = useMemo(() => {
+    return [...topLikesMap.entries()]
+      .map(([productId, likes]) => {
+        const product = initialData.products.find((item) => item.id === productId);
+        return product ? { product, likes } : null;
+      })
+      .filter((item): item is { product: Product; likes: number } => Boolean(item));
+  }, [initialData.products, topLikesMap]);
+
   useEffect(() => {
     window.localStorage.setItem("pollon-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    void trackPageVisit();
+    void fetchUserLikedProductIds().then(setFavoriteIds);
+  }, []);
+
+  useEffect(() => {
+    async function refreshTopLikes() {
+      const likes = await fetchPublicTopLikes(6);
+      setTopLikesMap(likes);
+    }
+
+    void refreshTopLikes();
+    const timer = window.setInterval(() => {
+      void refreshTopLikes();
+    }, 20000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -237,11 +272,11 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
   }
 
   function toggleFavorite(productId: string) {
-    setFavoriteIds((current) =>
-      current.includes(productId)
-        ? current.filter((id) => id !== productId)
-        : [...current, productId],
-    );
+    setFavoriteIds((current) => {
+      const isLiked = current.includes(productId);
+      void trackProductLike(productId, !isLiked);
+      return isLiked ? current.filter((id) => id !== productId) : [...current, productId];
+    });
   }
 
   function openProductFromSearch(product: Product) {
@@ -450,6 +485,52 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               })}
             </div>
           </section>
+
+          {topLikedProducts.length > 0 ? (
+            <section className="mt-8">
+              <div className="mb-4 flex items-center justify-between">
+                <div
+                  className={`text-[1.55rem] font-black uppercase tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}
+                >
+                  Favoritos de clientes
+                </div>
+                <span className="rounded-full bg-[var(--brand-red)]/10 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-[var(--brand-red)]">
+                  En vivo
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {topLikedProducts.map(({ product, likes }) => (
+                  <button
+                    key={`top-like-${product.id}`}
+                    type="button"
+                    onClick={() => setSelectedProduct(product)}
+                    className={`flex w-full items-center gap-3 overflow-hidden rounded-[1.4rem] border p-3 text-left ${
+                      isDark
+                        ? "border-white/10 bg-white/5"
+                        : "border-black/8 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
+                    }`}
+                  >
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="size-16 rounded-xl object-cover"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-bold leading-5">{product.name}</p>
+                      <p className="mt-1 text-sm font-black text-[var(--brand-red)]">
+                        {formatCurrency(product.price)}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--brand-red)]/10 px-3 py-1.5 text-sm font-black text-[var(--brand-red)]">
+                      <Heart className="size-3.5 fill-current" />
+                      {likes}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
 
         <nav
@@ -820,6 +901,23 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                         alt={product.name}
                         className="h-32 w-full object-cover"
                       />
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleFavorite(product.id);
+                        }}
+                        className={`absolute right-2 top-2 flex size-8 items-center justify-center rounded-full backdrop-blur ${
+                          isDark ? "bg-black/45 text-white" : "bg-white/90 text-[var(--brand-red)]"
+                        }`}
+                        aria-label="Marcar favorito"
+                      >
+                        <Heart
+                          className={`size-4 ${
+                            favoriteIds.includes(product.id) ? "fill-current" : ""
+                          }`}
+                        />
+                      </button>
                       <span className="absolute left-2 top-2 rounded-full bg-[var(--brand-red)] px-2 py-1 text-[0.55rem] font-black uppercase tracking-[0.15em] text-white">
                         {product.tag?.toUpperCase() ?? "Oferta"}
                       </span>

@@ -210,7 +210,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
   useEffect(() => {
     const timer = window.setInterval(() => {
       setExploreTick((current) => current + 1);
-    }, 1000);
+    }, 2000);
 
     return () => window.clearInterval(timer);
   }, []);
@@ -393,7 +393,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               EXPLORE
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 px-0.5">
               {visibleCategories.map((category, categoryIndex) => {
                 const products = initialData.products.filter(
                   (product) => product.categorySlug === category.slug,
@@ -412,7 +412,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                     key={`explore-${category.id}`}
                     type="button"
                     onClick={() => openCategory(category.slug, true)}
-                    className={`product-card-shadow overflow-hidden rounded-[2rem] border text-left ${
+                    className={`product-card-shadow mx-auto block w-full overflow-hidden rounded-[2rem] border text-left ${
                       isDark
                         ? "border-white/10 bg-white/5"
                         : "border-black/8 bg-white"
@@ -425,9 +425,6 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                         className="h-[230px] w-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <span className="absolute left-4 top-4 rounded-full bg-brand-gradient px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.18em] text-white">
-                        {category.name}
-                      </span>
                       <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                         <div className="mb-2 flex items-center gap-2">
                           <Icon className="size-5 text-white" />
@@ -439,9 +436,6 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                           {currentProduct.name}
                         </p>
                         <div className="mt-3 flex items-center justify-between">
-                          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-white/80">
-                            Fotos auto deslizables
-                          </span>
                           <span className="rounded-full bg-white px-3 py-1 text-sm font-black text-[var(--brand-red)]">
                             {formatCurrency(currentProduct.price)}
                           </span>

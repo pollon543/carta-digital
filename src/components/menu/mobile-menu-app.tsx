@@ -25,19 +25,28 @@ import {
   Star,
   Store,
   SunMedium,
+  ThumbsUp,
   UtensilsCrossed,
   Users,
   X,
 } from "lucide-react";
 
 import { formatCurrency } from "@/lib/utils";
+import { trackPageVisit } from "@/lib/analytics";
 import {
-  fetchPublicTopLikes,
-  fetchUserLikedProductIds,
-  trackPageVisit,
-  trackProductLike,
-} from "@/lib/analytics";
+  fetchProductReactionsMap,
+  fetchPublicTopReactions,
+  fetchUserReactions,
+  getProductReactionCounts,
+  subscribeProductReactions,
+  trackProductReaction,
+} from "@/lib/reactions";
 import type { Category, MenuPayload, Product } from "@/types/menu";
+import type { ProductReactionCounts, ReactionType } from "@/types/reactions";
+import { getVisibleReactionTypes } from "@/types/reactions";
+
+import { ProductCard } from "./product-card";
+import { ProductReactionBar } from "./product-reaction-bar";
 
 const categoryIconMap: Record<string, ComponentType<{ className?: string }>> = {
   Home,
@@ -169,7 +178,8 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
   const [categoryScreenOpen, setCategoryScreenOpen] = useState(false);
   const [categorySearchOpen, setCategorySearchOpen] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [userReactions, setUserReactions] = useState<Record<string, ReactionType>>({});
+  const [reactionsMap, setReactionsMap] = useState<Map<string, ProductReactionCounts>>(new Map());
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     if (typeof window === "undefined") {
@@ -217,12 +227,12 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
       : baseProducts;
 
     return showFavoritesOnly
-      ? searchedProducts.filter((product) => favoriteIds.includes(product.id))
+      ? searchedProducts.filter((product) => Boolean(userReactions[product.id]))
       : searchedProducts;
   }, [
     activeCategory,
     categoryNameBySlug,
-    favoriteIds,
+    userReactions,
     initialData.products,
     search,
     showFavoritesOnly,
@@ -276,22 +286,34 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
   useEffect(() => {
     void trackPageVisit();
-    void fetchUserLikedProductIds().then(setFavoriteIds);
+
+    void Promise.all([fetchUserReactions(), fetchProductReactionsMap()]).then(
+      ([reactions, map]) => {
+        setUserReactions(reactions);
+        setReactionsMap(map);
+      },
+    );
+
+    const unsubscribe = subscribeProductReactions(setReactionsMap);
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
     async function refreshTopLikes() {
-      const likes = await fetchPublicTopLikes(6);
+      const likes = await fetchPublicTopReactions(6);
       setTopLikesMap(likes);
     }
 
     void refreshTopLikes();
     const timer = window.setInterval(() => {
       void refreshTopLikes();
-    }, 20000);
+    }, 15000);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [reactionsMap]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -330,12 +352,46 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
     setGlobalSearchQuery("");
   }
 
-  function toggleFavorite(productId: string) {
-    setFavoriteIds((current) => {
-      const isLiked = current.includes(productId);
-      void trackProductLike(productId, !isLiked);
-      return isLiked ? current.filter((id) => id !== productId) : [...current, productId];
+  function handleProductReaction(productId: string, reaction: ReactionType | null) {
+    const previousReaction = userReactions[productId] ?? null;
+
+    setUserReactions((current) => {
+      const next = { ...current };
+      if (reaction) {
+        next[productId] = reaction;
+      } else {
+        delete next[productId];
+      }
+      return next;
     });
+
+    setReactionsMap((current) => {
+      const next = new Map(current);
+      const counts = { ...getProductReactionCounts(current, productId) };
+
+      if (previousReaction === "like") {
+        counts.likes = Math.max(0, counts.likes - 1);
+      }
+      if (previousReaction === "love") {
+        counts.loves = Math.max(0, counts.loves - 1);
+      }
+      if (reaction === "like") {
+        counts.likes += 1;
+      }
+      if (reaction === "love") {
+        counts.loves += 1;
+      }
+
+      if (counts.likes === 0 && counts.loves === 0) {
+        next.delete(productId);
+      } else {
+        next.set(productId, counts);
+      }
+
+      return next;
+    });
+
+    void trackProductReaction(productId, reaction);
   }
 
   function openProductFromSearch(product: Product) {
@@ -693,9 +749,28 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                         {formatCurrency(product.price)}
                       </p>
                     </div>
-                    <div className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--brand-red)]/10 px-3 py-1.5 text-sm font-black text-[var(--brand-red)]">
-                      <Heart className="size-3.5 fill-current" />
-                      {likes}
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <div className="product-reaction-badges">
+                        {getVisibleReactionTypes(
+                          getProductReactionCounts(reactionsMap, product.id),
+                        ).map((type) => (
+                          <span
+                            key={`top-${product.id}-${type}`}
+                            className={`product-reaction-badge ${
+                              type === "like"
+                                ? "product-reaction-badge-like"
+                                : "product-reaction-badge-love"
+                            }`}
+                          >
+                            {type === "like" ? (
+                              <ThumbsUp className="size-3 fill-current" strokeWidth={0} />
+                            ) : (
+                              <Heart className="size-3 fill-current" strokeWidth={0} />
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-sm font-black text-neutral-700">{likes}</span>
                     </div>
                   </button>
                 ))}
@@ -1130,56 +1205,15 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
               <div className="desktop-product-grid grid grid-cols-2 gap-3 md:gap-4 md:p-1">
                 {filteredProducts.map((product) => (
-                  <button
+                  <ProductCard
                     key={`screen-${product.id}`}
-                    type="button"
-                    onClick={() => setSelectedProduct(product)}
-                    className={`overflow-hidden rounded-[1.55rem] border text-left shadow-[0_8px_24px_rgba(15,23,42,0.12)] ${
-                      isDark
-                        ? "border-white/10 bg-[#1b1b1b] text-white"
-                        : "border-black/10 bg-white text-neutral-900"
-                    }`}
-                  >
-                    <div className="relative">
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="h-32 w-full object-cover md:h-40"
-                      />
-                      <button
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          toggleFavorite(product.id);
-                        }}
-                        className={`absolute right-2 top-2 flex size-8 items-center justify-center rounded-full backdrop-blur ${
-                          isDark ? "bg-black/45 text-white" : "bg-white/90 text-[var(--brand-red)]"
-                        }`}
-                        aria-label="Marcar favorito"
-                      >
-                        <Heart
-                          className={`size-4 ${
-                            favoriteIds.includes(product.id) ? "fill-current" : ""
-                          }`}
-                        />
-                      </button>
-                      <span className="absolute left-2 top-2 rounded-full bg-[var(--brand-red)] px-2 py-1 text-[0.55rem] font-black uppercase tracking-[0.15em] text-white">
-                        {product.tag?.toUpperCase() ?? "Oferta"}
-                      </span>
-                    </div>
-
-                    <div className="space-y-1 p-3 pt-2">
-                      <p className={`line-clamp-3 min-h-[2.7rem] text-center text-[0.95rem] font-medium leading-5 ${isDark ? "text-white" : "text-neutral-900"}`}>
-                        {product.name}
-                      </p>
-
-                      <div className="flex justify-center">
-                        <span className="rounded-[0.7rem] bg-brand-gradient px-4 py-1.5 text-[1.02rem] font-black text-white shadow-sm">
-                          {formatCurrency(product.price)}
-                        </span>
-                      </div>
-                    </div>
-                  </button>
+                    product={product}
+                    counts={getProductReactionCounts(reactionsMap, product.id)}
+                    userReaction={userReactions[product.id] ?? null}
+                    onReact={handleProductReaction}
+                    onOpen={setSelectedProduct}
+                    isDark={isDark}
+                  />
                 ))}
               </div>
 
@@ -1271,23 +1305,14 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                     {selectedProduct.description}
                   </p>
 
-                  <div className="grid grid-cols-[64px_1fr] gap-3 md:grid-cols-[72px_1fr]">
-                    <button
-                      type="button"
-                      onClick={() => toggleFavorite(selectedProduct.id)}
-                      className={`flex h-16 items-center justify-center rounded-2xl border ${
-                        isDark
-                          ? "border-white/10 bg-white/5 text-[var(--brand-red)]"
-                          : "border-black/10 bg-white text-[var(--brand-red)]"
-                      }`}
-                    >
-                      <Heart
-                        className={`size-6 ${
-                          favoriteIds.includes(selectedProduct.id) ? "fill-current" : ""
-                        }`}
-                      />
-                    </button>
-                    <div className="flex h-16 items-center justify-center rounded-2xl bg-brand-gradient px-6 text-[2rem] font-black text-white shadow-lg">
+                  <div className="flex items-center justify-between gap-3">
+                    <ProductReactionBar
+                      productId={selectedProduct.id}
+                      counts={getProductReactionCounts(reactionsMap, selectedProduct.id)}
+                      userReaction={userReactions[selectedProduct.id] ?? null}
+                      onReact={handleProductReaction}
+                    />
+                    <div className="flex h-16 min-w-[9rem] flex-1 items-center justify-center rounded-2xl bg-brand-gradient px-6 text-[1.65rem] font-black text-white shadow-lg md:text-[2rem]">
                       {formatCurrency(selectedProduct.price)}
                     </div>
                   </div>

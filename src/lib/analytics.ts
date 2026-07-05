@@ -66,37 +66,8 @@ export async function trackPageVisit() {
 }
 
 export async function trackProductLike(productId: string, liked: boolean) {
-  const sessionId = getSessionId();
-  const currentIds = readLocalLikedIds();
-  const nextIds = liked
-    ? Array.from(new Set([...currentIds, productId]))
-    : currentIds.filter((id) => id !== productId);
-
-  writeLocalLikedIds(nextIds);
-
-  if (!hasSupabaseEnv()) return;
-
-  try {
-    const supabase = createSupabaseBrowserClient();
-
-    if (liked) {
-      await supabase.from("product_likes").upsert(
-        {
-          product_id: productId,
-          session_id: sessionId,
-        },
-        { onConflict: "product_id,session_id" },
-      );
-    } else {
-      await supabase
-        .from("product_likes")
-        .delete()
-        .eq("product_id", productId)
-        .eq("session_id", sessionId);
-    }
-  } catch {
-    // fallback local only
-  }
+  const { trackProductReaction } = await import("@/lib/reactions");
+  await trackProductReaction(productId, liked ? "love" : null);
 }
 
 export async function fetchUserLikedProductIds(): Promise<string[]> {

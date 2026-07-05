@@ -169,9 +169,20 @@ create table if not exists public.product_likes (
   id uuid primary key default gen_random_uuid(),
   product_id text not null references public.products(id) on delete cascade,
   session_id text not null,
+  reaction_type text not null default 'love' check (reaction_type in ('like', 'love')),
   created_at timestamptz not null default now(),
   unique (product_id, session_id)
 );
+
+alter table if exists public.product_likes
+add column if not exists reaction_type text not null default 'love';
+
+alter table if exists public.product_likes
+drop constraint if exists product_likes_reaction_type_check;
+
+alter table if exists public.product_likes
+add constraint product_likes_reaction_type_check
+check (reaction_type in ('like', 'love'));
 
 create index if not exists product_likes_product_id_idx
 on public.product_likes (product_id);
@@ -207,4 +218,6 @@ on public.product_likes
 for select
 to authenticated
 using (true);
+
+alter table public.product_likes replica identity full;
 

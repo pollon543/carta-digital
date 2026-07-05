@@ -598,3 +598,153 @@ img {
 .admin-table tbody tr:hover {
   background: rgba(239, 43, 45, 0.03);
 }
+
+.product-reaction-bar {
+  position: relative;
+  min-width: 0;
+}
+
+.product-reaction-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.product-reaction-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.product-reaction-badges {
+  display: flex;
+  align-items: center;
+}
+
+.product-reaction-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.product-reaction-badge + .product-reaction-badge {
+  margin-left: -0.35rem;
+}
+
+.product-reaction-badge-like {
+  background: #1877f2;
+  z-index: 2;
+}
+
+.product-reaction-badge-love {
+  background: var(--brand-red);
+  z-index: 1;
+}
+
+.product-reaction-count {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #4b5563;
+}
+
+.product-reaction-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.product-reaction-trigger-compact {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.product-reaction-trigger:hover {
+  transform: scale(1.05);
+  border-color: #d1d5db;
+}
+
+.product-reaction-trigger.is-like {
+  border-color: #1877f2;
+  background: #eff6ff;
+  color: #1877f2;
+}
+
+.product-reaction-trigger.is-love {
+  border-color: var(--brand-red);
+  background: rgba(239, 43, 45, 0.08);
+  color: var(--brand-red);
+}
+
+.product-reaction-picker {
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  animation: reaction-picker-in 0.18s ease;
+}
+
+@keyframes reaction-picker-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.product-reaction-picker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: none;
+  border-radius: 9999px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.product-reaction-picker-btn:hover {
+  transform: scale(1.12);
+}
+
+.product-reaction-picker-btn-like {
+  background: #1877f2;
+}
+
+.product-reaction-picker-btn-love {
+  background: var(--brand-red);
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+}

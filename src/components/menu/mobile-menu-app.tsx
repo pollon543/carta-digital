@@ -13,12 +13,13 @@ import {
   Heart,
   HeartHandshake,
   Home,
-  LogIn,
+  UserCircle,
   MapPin,
   Menu,
   MessageCircle,
   MoonStar,
   Package,
+  Phone,
   Plus,
   Search,
   Star,
@@ -114,6 +115,48 @@ function matchesSmartSearch(query: string, product: Product, categoryName: strin
   const queryTokens = normalizedQuery.split(/\s+/).filter(Boolean);
 
   return queryTokens.every((token) => words.some((word) => word.startsWith(token)));
+}
+
+function splitHeroCategoryLabel(name: string) {
+  const words = name.trim().split(/\s+/);
+
+  if (words.length <= 1) {
+    return words;
+  }
+
+  if (words.length === 2) {
+    return words;
+  }
+
+  return [words.slice(0, 2).join(" "), words.slice(2).join(" ")];
+}
+
+function formatWhatsAppDisplay(url: string) {
+  const match = url.match(/wa\.me\/(\d+)/i);
+  if (!match) {
+    return url;
+  }
+
+  const digits = match[1];
+  if (digits.startsWith("56") && digits.length >= 11) {
+    return `+56 ${digits.slice(2, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+  }
+
+  return `+${digits}`;
+}
+
+function HeroCategoryLabel({ name }: { name: string }) {
+  const lines = splitHeroCategoryLabel(name);
+
+  return (
+    <span className="hero-category-label">
+      {lines.map((line) => (
+        <span key={line} className="hero-category-label-line">
+          {line}
+        </span>
+      ))}
+    </span>
+  );
 }
 
 export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
@@ -213,6 +256,11 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
   const isDark = theme === "dark";
 
+  const [locationCity, locationCountry] = useMemo(() => {
+    const parts = initialData.settings.locationLabel.split(",").map((part) => part.trim());
+    return [parts[0] ?? "Iquique", parts[1] ?? "Chile"];
+  }, [initialData.settings.locationLabel]);
+
   const topLikedProducts = useMemo(() => {
     return [...topLikesMap.entries()]
       .map(([productId, likes]) => {
@@ -271,6 +319,17 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
     setShowFavoritesOnly(false);
   }
 
+  function goHomeFromDrawer() {
+    setDrawerOpen(false);
+    setCategoryScreenOpen(false);
+    setCategorySearchOpen(false);
+    setActiveCategory("todo-menu");
+    setSearch("");
+    setShowFavoritesOnly(false);
+    setGlobalSearchOpen(false);
+    setGlobalSearchQuery("");
+  }
+
   function toggleFavorite(productId: string) {
     setFavoriteIds((current) => {
       const isLiked = current.includes(productId);
@@ -291,17 +350,105 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
   }
 
   return (
-    <main className={`desktop-frame ${isDark ? "bg-[#050505]" : ""}`}>
+    <main className={`desktop-frame ${isDark ? "dark-surface bg-[#050505]" : ""}`}>
       <div
         className={`mobile-shell transition-colors ${
           isDark
-            ? "border-white/10 bg-gradient-to-b from-[#0f0f0f] to-[#171717] text-white shadow-none"
-            : "border-black/10 bg-gradient-to-b from-[#fffdfa] to-[#f5f1ea] text-neutral-900"
+            ? "border-white/10 bg-gradient-to-b from-[#0f0f0f] to-[#171717] text-white shadow-none md:border-none md:bg-[#111] md:from-[#111] md:to-[#111]"
+            : "border-black/10 bg-gradient-to-b from-[#fffdfa] to-[#f5f1ea] text-neutral-900 md:border-none md:bg-white md:from-white md:to-white"
         }`}
       >
-        <div className="px-3 pb-28 pt-4">
+        <nav
+          className={`wide-top-nav sticky top-0 z-40 items-center gap-5 border-b px-5 py-4 lg:gap-8 lg:px-8 ${
+            isDark
+              ? "border-white/10 bg-[#111]/95 text-white backdrop-blur-xl"
+              : "border-black/8 bg-white/95 text-neutral-900 backdrop-blur-xl"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${
+              isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-neutral-50"
+            }`}
+            aria-label="Abrir menu"
+          >
+            <Menu className="size-5" />
+          </button>
+
+          <p className="shrink-0 text-[1.35rem] font-black uppercase tracking-[0.04em] lg:text-[1.55rem]">
+            El Pollon
+          </p>
+
+          <div className="hidden min-w-0 flex-1 flex-col items-center text-center sm:flex">
+            <p className="text-[1.05rem] font-black uppercase tracking-[0.08em] lg:text-[1.15rem]">
+              Carta <span className="text-[var(--brand-red)]">Digital</span>
+            </p>
+            <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.28em] lg:text-[0.68rem]">
+              <span className="text-[var(--brand-red)]">{locationCity}</span>
+              <span className={isDark ? "text-white/70" : "text-neutral-800"}> · {locationCountry}</span>
+            </p>
+          </div>
+
+          <div className="ml-auto flex shrink-0 items-center gap-3">
+            <label
+              className={`hidden min-w-[220px] items-center gap-3 rounded-full border px-4 py-2.5 lg:flex lg:min-w-[320px] ${
+                isDark ? "border-white/10 bg-white/5" : "border-neutral-200 bg-white shadow-sm"
+              }`}
+            >
+              <Search className="size-4 shrink-0 text-neutral-400" />
+              <input
+                value={globalSearchQuery}
+                onChange={(event) => {
+                  setGlobalSearchQuery(event.target.value);
+                  setGlobalSearchOpen(true);
+                }}
+                onFocus={() => setGlobalSearchOpen(true)}
+                placeholder="Buscar platos..."
+                className={`w-full border-none bg-transparent text-sm outline-none ${
+                  isDark ? "text-white placeholder:text-white/40" : "text-neutral-800 placeholder:text-neutral-400"
+                }`}
+              />
+            </label>
+
+            <button
+              type="button"
+              onClick={() => setGlobalSearchOpen(true)}
+              className={`flex size-11 items-center justify-center rounded-xl border lg:hidden ${
+                isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-neutral-50"
+              }`}
+              aria-label="Buscar platos"
+            >
+              <Search className="size-5" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
+              className={`inline-flex h-11 items-center gap-2 rounded-full border px-3 ${
+                isDark
+                  ? "border-white/15 bg-white/5 text-white"
+                  : "border-amber-200 bg-amber-50 text-neutral-900"
+              }`}
+              aria-label="Cambiar tema"
+            >
+              <span className="text-[0.62rem] font-black uppercase tracking-[0.18em]">
+                {isDark ? "Night" : "Day"}
+              </span>
+              <span
+                className={`flex size-6 items-center justify-center rounded-full ${
+                  isDark ? "bg-[var(--brand-red)] text-white" : "bg-amber-400 text-white"
+                }`}
+              >
+                {isDark ? <MoonStar className="size-3.5" /> : <SunMedium className="size-3.5" />}
+              </span>
+            </button>
+          </div>
+        </nav>
+
+        <div className="desktop-content-wrap px-3 pb-28 pt-4 md:px-0 md:pb-10 md:pt-0">
           <header
-            className={`sticky top-3 z-30 mb-4 rounded-[2rem] border px-4 py-3 backdrop-blur-xl transition-colors ${
+            className={`sticky top-3 z-30 mb-4 rounded-[2rem] border px-4 py-3 backdrop-blur-xl transition-colors md:hidden ${
               isDark
                 ? "border-white/10 bg-black/80"
                 : "border-black/10 bg-white/90"
@@ -362,44 +509,36 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
             </div>
           </header>
 
-          <section className="relative overflow-hidden rounded-[2.25rem] border border-black/10">
+          <section className="wide-hero-banner relative overflow-hidden rounded-[2.25rem] border border-black/10 md:rounded-none md:border-none">
             <img
               src={HERO_BACKGROUND}
               alt="Local de El Pollon"
-              className="h-[455px] w-full object-cover"
+              className="h-[455px] w-full object-cover md:h-[min(62vh,680px)] lg:h-[min(68vh,760px)]"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/45 to-black/75" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/70" />
 
-            <div className="absolute inset-x-0 top-0 p-5 text-center text-white">
-              <div className="mx-auto max-w-[220px] rounded-full bg-black/35 px-4 py-2 backdrop-blur">
-                <p className="font-[var(--font-display)] text-[2rem] font-bold leading-none text-[var(--brand-red)]">
+            <div className="absolute inset-x-0 top-0 p-5 text-center text-white md:inset-x-auto md:left-10 md:top-10 md:p-0 md:text-left lg:left-14 lg:top-12">
+              <div className="mx-auto max-w-[220px] rounded-full bg-black/35 px-4 py-2 backdrop-blur md:mx-0 md:max-w-none md:rounded-[1.75rem] md:bg-black/72 md:px-8 md:py-6 md:shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+                <p className="font-[var(--font-display)] text-[2rem] font-bold leading-none text-[var(--brand-red)] md:text-[2.75rem] lg:text-[3rem]">
                   El Pollon
                 </p>
-                <p className="mt-1 text-[0.62rem] font-black uppercase tracking-[0.24em] text-white/90">
-                  Pollo a la brasa
+                <p className="mt-1 text-[0.62rem] font-black uppercase tracking-[0.24em] text-white/90 md:mt-2 md:text-[0.7rem] md:tracking-[0.22em]">
+                  Pollo a la brasa · {locationCity}, {locationCountry}
                 </p>
               </div>
             </div>
 
-            <div className="absolute inset-x-3 bottom-5">
+            <div className="absolute inset-x-3 bottom-5 md:hidden">
               <div className="mb-3 flex justify-center">
-                {homeHeroCategories
-                  .filter((category) => category.slug === "todo-menu")
-                  .map((category) => {
-                    const Icon = getCategoryIcon(category.icon);
-
-                    return (
-                      <button
-                        key={category.id}
-                        type="button"
-                        onClick={() => openCategory(category.slug, true)}
-                        className="inline-flex items-center gap-2 rounded-[1rem] bg-brand-gradient px-5 py-3 text-sm font-black text-white shadow-[0_14px_32px_rgba(239,43,45,0.32)]"
-                      >
-                        <Icon className="size-4" />
-                        {category.name}
-                      </button>
-                    );
-                  })}
+                <button
+                  type="button"
+                  onClick={() => openCategory("todo-menu", true)}
+                  className="hero-all-menu-btn"
+                  aria-label="Ver todo el menu"
+                >
+                  <Home className="size-4 shrink-0" />
+                  <span className="hero-all-menu-label">Todo el menu</span>
+                </button>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -413,25 +552,57 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                         key={category.id}
                         type="button"
                         onClick={() => openCategory(category.slug, true)}
-                        className="rounded-[1.1rem] bg-brand-gradient px-2 py-4 text-center text-white shadow-[0_14px_32px_rgba(239,43,45,0.28)] transition hover:scale-[1.02]"
+                        className="hero-category-btn hero-category-btn-mobile bg-brand-gradient"
                       >
-                        <Icon className="mx-auto mb-2 size-6" />
-                        <span className="block text-[0.72rem] font-bold leading-4">
-                          {category.name}
-                        </span>
+                        <Icon className="hero-category-icon" />
+                        <HeroCategoryLabel name={category.name} />
                       </button>
                     );
                   })}
               </div>
             </div>
+
+            <div className="wide-hero-actions absolute inset-x-0 bottom-0 hidden flex-col items-center gap-4 px-6 pb-8 md:flex lg:gap-5 lg:px-14 lg:pb-10">
+              <button
+                type="button"
+                onClick={() => openCategory("todo-menu", true)}
+                className="hero-all-menu-btn"
+                aria-label="Ver todo el menu"
+              >
+                <Home className="size-4 shrink-0" />
+                <span className="hero-all-menu-label">Todo el menu</span>
+              </button>
+
+              <div className="wide-hero-category-row">
+              {homeHeroCategories
+                .filter((category) => category.slug !== "todo-menu")
+                .map((category) => {
+                  const Icon = getCategoryIcon(category.icon);
+
+                  return (
+                    <button
+                      key={`wide-hero-${category.id}`}
+                      type="button"
+                      onClick={() => openCategory(category.slug, true)}
+                      className="hero-category-btn hero-category-btn-wide bg-brand-gradient"
+                    >
+                      <Icon className="hero-category-icon" />
+                      <HeroCategoryLabel name={category.name} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </section>
 
-          <section className="mt-6">
-            <div className={`mb-4 text-[2rem] font-black uppercase tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
+          <section className="mt-6 md:mt-10">
+            <div
+              className={`mb-4 text-[2rem] font-black uppercase tracking-tight md:mb-5 md:text-[2.35rem] ${isDark ? "text-white" : "text-neutral-900"}`}
+            >
               EXPLORE
             </div>
 
-            <div className="space-y-4 px-0.5">
+            <div className="desktop-explore-grid space-y-4 px-0.5 md:space-y-0">
               {visibleCategories.map((category, categoryIndex) => {
                 const products = initialData.products.filter(
                   (product) => product.categorySlug === category.slug,
@@ -450,31 +621,31 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                     key={`explore-${category.id}`}
                     type="button"
                     onClick={() => openCategory(category.slug, true)}
-                    className={`product-card-shadow mx-auto block w-full overflow-hidden rounded-[2rem] border text-left ${
+                    className={`product-card-shadow mx-auto block w-full overflow-hidden rounded-[2rem] border text-left transition md:rounded-[1.75rem] md:hover:-translate-y-1 md:hover:shadow-[0_24px_48px_rgba(15,23,42,0.18)] ${
                       isDark
-                        ? "border-white/10 bg-white/5"
-                        : "border-black/8 bg-white"
+                        ? "border-white/10 bg-white/5 md:border-none"
+                        : "border-black/8 bg-white md:border-none"
                     }`}
                   >
                     <div className="relative">
                       <img
                         src={currentProduct.imageUrl}
                         alt={currentProduct.name}
-                        className="h-[230px] w-full object-cover"
+                        className="h-[230px] w-full object-cover md:h-[320px] lg:h-[360px]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white md:p-5 lg:p-6">
                         <div className="mb-2 flex items-center gap-2">
-                          <Icon className="size-5 text-white" />
-                          <p className="text-[1.05rem] font-black uppercase tracking-[0.08em]">
+                          <Icon className="size-5 text-white md:size-[1.35rem]" />
+                          <p className="text-[1.05rem] font-black uppercase tracking-[0.08em] md:text-[0.95rem] md:tracking-[0.12em]">
                             {category.name}
                           </p>
                         </div>
-                        <p className="line-clamp-2 text-[1.2rem] font-semibold leading-6">
+                        <p className="line-clamp-2 text-[1.2rem] font-semibold leading-6 md:text-[1.35rem] md:leading-7 lg:text-[1.45rem]">
                           {currentProduct.name}
                         </p>
-                        <div className="mt-3 flex items-center justify-between">
-                          <span className="rounded-full bg-white px-3 py-1 text-sm font-black text-[var(--brand-red)]">
+                        <div className="mt-3 flex items-center justify-between md:mt-4">
+                          <span className="rounded-full bg-white px-3 py-1 text-sm font-black text-[var(--brand-red)] md:px-4 md:py-1.5 md:text-[0.95rem]">
                             {formatCurrency(currentProduct.price)}
                           </span>
                         </div>
@@ -487,10 +658,10 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
           </section>
 
           {topLikedProducts.length > 0 ? (
-            <section className="mt-8">
+            <section className="mt-8 md:mt-10">
               <div className="mb-4 flex items-center justify-between">
                 <div
-                  className={`text-[1.55rem] font-black uppercase tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}
+                  className={`text-[1.55rem] font-black uppercase tracking-tight md:text-[2rem] ${isDark ? "text-white" : "text-neutral-900"}`}
                 >
                   Favoritos de clientes
                 </div>
@@ -499,7 +670,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="desktop-favorites-grid space-y-3 md:space-y-0">
                 {topLikedProducts.map(({ product, likes }) => (
                   <button
                     key={`top-like-${product.id}`}
@@ -531,10 +702,62 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               </div>
             </section>
           ) : null}
+
+          <footer
+            id="ubicacion"
+            className={`mt-8 hidden rounded-[2rem] border p-5 md:block md:mt-12 md:p-6 ${
+              isDark
+                ? "border-white/10 bg-white/5 text-white"
+                : "border-black/8 bg-white text-neutral-800 shadow-[0_8px_30px_rgba(15,23,42,0.06)]"
+            }`}
+          >
+            <div className="grid gap-6 md:grid-cols-3">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--brand-red)]">
+                  Ubicacion
+                </p>
+                <p className="mt-2 text-lg font-bold">{initialData.settings.restaurantName}</p>
+                <p className="mt-1 text-sm leading-7 text-neutral-500">{initialData.settings.address}</p>
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--brand-red)]">
+                  Horario
+                </p>
+                <p className="mt-2 text-sm leading-7 text-neutral-500">{initialData.settings.schedule}</p>
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--brand-red)]">
+                  Contacto
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <a
+                    href={initialData.settings.whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-4 py-2 text-sm font-bold text-white"
+                  >
+                    <MessageCircle className="size-4" />
+                    WhatsApp
+                  </a>
+                  <a
+                    href={initialData.settings.deliveryUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold ${
+                      isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-neutral-50"
+                    }`}
+                  >
+                    <Globe className="size-4" />
+                    Web
+                  </a>
+                </div>
+              </div>
+            </div>
+          </footer>
         </div>
 
         <nav
-          className={`fixed bottom-0 left-1/2 z-40 flex w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-t px-4 py-3 backdrop-blur-xl ${
+          className={`mobile-bottom-nav fixed bottom-0 left-1/2 z-40 flex w-full max-w-[430px] -translate-x-1/2 items-center justify-between border-t px-4 py-3 backdrop-blur-xl md:hidden ${
             isDark
               ? "border-white/10 bg-black/90"
               : "border-black/10 bg-white/92"
@@ -628,21 +851,17 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
         />
 
         <aside
-          className={`menu-drawer fixed left-0 top-0 z-[60] h-full w-[84%] max-w-[340px] transform text-white transition duration-300 ${
+          className={`menu-drawer fixed left-0 top-0 z-[60] flex h-full w-[min(88vw,300px)] max-w-[300px] flex-col bg-white text-neutral-900 transition duration-300 md:w-[min(360px,34vw)] md:max-w-[360px] ${
             drawerOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <div className="border-b border-white/10 bg-brand-gradient px-5 pb-6 pt-5">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="flex size-24 items-center justify-center rounded-full bg-white shadow-lg">
+          <div className="menu-drawer-header shrink-0 bg-brand-gradient">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <div className="flex size-[3.25rem] shrink-0 items-center justify-center rounded-full bg-white shadow-[0_8px_24px_rgba(0,0,0,0.22)]">
                   <div className="text-center leading-none">
-                    <div className="font-[var(--font-display)] text-3xl font-bold text-[var(--brand-red)]">
-                      Pollon
-                    </div>
-                    <div className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.28em] text-neutral-500">
-                      Pollo a la brasa
-                    </div>
+                    <div className="menu-drawer-logo-brand">Pollon</div>
+                    <div className="menu-drawer-logo-tagline">Pollo a la brasa</div>
                   </div>
                 </div>
 
@@ -652,88 +871,107 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                     setDrawerOpen(false);
                     router.push("/admin");
                   }}
-                  className="max-w-[140px] rounded-[1.2rem] border border-white/20 bg-black/20 px-3 py-3 text-left text-white backdrop-blur"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition hover:border-white/50 hover:bg-white/20"
+                  aria-label="Iniciar sesion"
+                  title="Iniciar sesion"
                 >
-                  <div className="flex items-start gap-2">
-                    <LogIn className="mt-0.5 size-4 shrink-0 text-white" />
-                    <div>
-                      <p className="text-[0.72rem] font-black uppercase tracking-[0.16em]">
-                        Iniciar sesion
-                      </p>
-                      <p className="mt-1 text-[0.64rem] leading-4 text-white/80">
-                        Solo personal autorizado con correo y contrasena.
-                      </p>
-                    </div>
-                  </div>
+                  <UserCircle className="size-5" strokeWidth={1.75} />
                 </button>
               </div>
 
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="flex size-11 items-center justify-center rounded-full border border-white/30 bg-white/10"
+                className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition hover:border-white/50 hover:bg-white/20"
                 aria-label="Cerrar menu"
               >
-                <X className="size-5" />
+                <X className="size-5" strokeWidth={2} />
               </button>
             </div>
           </div>
 
-          <div className="flex h-[calc(100%-152px)] flex-col overflow-y-auto px-5 py-6 hide-scrollbar">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-[1.8rem] font-black text-white">Categorias</h3>
-              <ChevronRight className="size-5 text-white/70" />
-            </div>
-
-            <div className="space-y-2">
-              {categories.map((category) => {
-                const Icon = getCategoryIcon(category.icon);
-                const active = activeCategory === category.slug;
-
-                return (
-                  <button
-                    key={category.id}
-                    type="button"
-                    onClick={() => openCategory(category.slug, true)}
-                    className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
-                      active
-                        ? "border-[var(--brand-red)] bg-white/10"
-                        : "border-white/10 bg-transparent"
-                    }`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <Icon className="size-5 text-[var(--brand-red)]" />
-                      <span className="text-lg font-medium text-white">{category.name}</span>
-                    </span>
-                    <ChevronRight className="size-4 text-white/40" />
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-auto pt-8">
-              <div className="mb-4 flex items-center gap-3">
-                <span className="h-px flex-1 bg-[var(--brand-red)]/70" />
-                <span className="text-2xl font-black uppercase tracking-wide text-[var(--brand-red)]">
-                  Delivery
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white px-5 py-6 hide-scrollbar">
+            <a
+              href={initialData.settings.whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="menu-drawer-phone-card mb-6 flex items-center gap-3"
+            >
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-white shadow-sm">
+                <Phone className="size-5" strokeWidth={2} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[0.95rem] font-bold leading-tight text-neutral-900">
+                  {formatWhatsAppDisplay(initialData.settings.whatsappUrl)}
                 </span>
-                <span className="h-px flex-1 bg-[var(--brand-red)]/70" />
-              </div>
+                <span className="mt-0.5 block text-[0.72rem] text-neutral-400">
+                  Llamanos o escribenos
+                </span>
+              </span>
+            </a>
+
+            <p className="menu-drawer-categories-label">Categorias</p>
+
+            <nav className="mt-4 flex w-full flex-col gap-1">
+              <button
+                type="button"
+                onClick={goHomeFromDrawer}
+                className={`menu-drawer-category-item${
+                  !categoryScreenOpen && !showFavoritesOnly ? " is-active" : ""
+                }`}
+              >
+                Inicio
+              </button>
+
+              <button
+                type="button"
+                onClick={() => openCategory("todo-menu", true)}
+                className={`menu-drawer-category-item${
+                  categoryScreenOpen && activeCategory === "todo-menu" && !showFavoritesOnly
+                    ? " is-active"
+                    : ""
+                }`}
+              >
+                Todo el menu
+              </button>
+
+              {categories
+                .filter((category) => category.slug !== "todo-menu")
+                .map((category) => {
+                  const active =
+                    categoryScreenOpen && activeCategory === category.slug && !showFavoritesOnly;
+
+                  return (
+                    <button
+                      key={category.id}
+                      type="button"
+                      onClick={() => openCategory(category.slug, true)}
+                      className={`menu-drawer-category-item${active ? " is-active" : ""}`}
+                    >
+                      {category.name}
+                    </button>
+                  );
+                })}
+            </nav>
+
+            <div className="mt-auto border-t border-neutral-200 pt-5">
               <a
                 href={initialData.settings.deliveryUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block rounded-[1.6rem] border border-white/10 bg-white/5 px-4 py-5 text-center"
+                className="menu-drawer-delivery-link"
               >
-                <p className="text-sm uppercase tracking-[0.25em] text-white/60">Web oficial</p>
-                <p className="mt-2 text-lg font-semibold text-white">{initialData.settings.deliveryUrl}</p>
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-white shadow-sm">
+                  <Globe className="size-5" strokeWidth={2} />
+                </span>
+                <span className="menu-drawer-delivery-title">Delivery</span>
               </a>
             </div>
           </div>
         </aside>
 
         {globalSearchOpen ? (
-          <div className="fixed inset-x-0 top-0 z-[65] mx-auto w-full max-w-[430px] px-3 pt-20">
+          <div className="wide-search-dropdown fixed inset-x-0 top-0 z-[65] mx-auto w-full max-w-[430px] px-3 pt-20 md:max-w-[720px] md:pt-28">
             <div
               className={`rounded-[2rem] border p-4 shadow-2xl ${
                 isDark
@@ -817,11 +1055,18 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
         {categoryScreenOpen ? (
           <div
-            className={`fixed inset-x-0 top-0 z-[45] mx-auto flex h-[calc(100dvh-74px)] w-full max-w-[430px] flex-col overflow-hidden ${
+            className={`wide-category-panel fixed inset-x-0 top-0 z-[45] mx-auto flex h-[calc(100dvh-74px)] w-full max-w-[430px] flex-col overflow-hidden md:inset-0 md:h-auto md:max-w-none md:bg-black/45 md:backdrop-blur-sm ${
               isDark ? "bg-[#111111]" : "bg-[#f7f4ef]"
             }`}
+            onClick={closeCategoryScreen}
           >
-            <div className="bg-brand-gradient px-4 pb-4 pt-5 text-white shadow-lg">
+            <div
+              className={`wide-category-panel-inner flex h-full w-full flex-col overflow-hidden md:mx-auto ${
+                isDark ? "bg-[#111111]" : "bg-[#f7f4ef]"
+              }`}
+              onClick={(event) => event.stopPropagation()}
+            >
+            <div className="bg-brand-gradient px-4 pb-4 pt-5 text-white shadow-lg md:rounded-t-[2rem]">
               <div className="flex items-center justify-between gap-3">
                 <button
                   type="button"
@@ -883,7 +1128,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="desktop-product-grid grid grid-cols-2 gap-3 md:gap-4 md:p-1">
                 {filteredProducts.map((product) => (
                   <button
                     key={`screen-${product.id}`}
@@ -899,7 +1144,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                       <img
                         src={product.imageUrl}
                         alt={product.name}
-                        className="h-32 w-full object-cover"
+                        className="h-32 w-full object-cover md:h-40"
                       />
                       <button
                         type="button"
@@ -950,17 +1195,18 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                 </div>
               ) : null}
             </div>
+            </div>
           </div>
         ) : null}
 
         {selectedProduct ? (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4">
+          <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 md:p-8">
             <div
-              className={`w-full max-w-[390px] overflow-hidden rounded-[2rem] shadow-2xl ${
+              className={`relative w-full max-w-[390px] overflow-hidden rounded-[2rem] shadow-2xl md:max-w-[920px] ${
                 isDark ? "bg-[#111111] text-white" : "bg-white text-neutral-900"
               }`}
             >
-              <div className="bg-brand-gradient px-5 py-5 text-white">
+              <div className="bg-brand-gradient px-5 py-5 text-white md:hidden">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.28em] text-white/75">
@@ -981,44 +1227,69 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                 </div>
               </div>
 
-              <div className="space-y-5 p-5">
+              <div className="md:grid md:grid-cols-2">
                 <img
                   src={selectedProduct.imageUrl}
                   alt={selectedProduct.name}
-                  className="h-[240px] w-full rounded-[1.7rem] object-cover"
+                  className="h-[240px] w-full object-cover md:h-full md:min-h-[420px]"
                 />
 
-                <div className="flex justify-center gap-1 text-[var(--brand-red)]">
-                  {Array.from({ length: selectedProduct.rating }).map((_, index) => (
-                    <Star
-                      key={`${selectedProduct.id}-modal-${index}`}
-                      className="size-4 fill-current"
-                    />
-                  ))}
-                </div>
-
-                <p className={`text-balance text-center text-[1.12rem] leading-8 ${isDark ? "text-white/80" : "text-neutral-600"}`}>
-                  {selectedProduct.description}
-                </p>
-
-                <div className="grid grid-cols-[64px_1fr] gap-3">
-                  <button
-                    type="button"
-                    onClick={() => toggleFavorite(selectedProduct.id)}
-                    className={`flex h-16 items-center justify-center rounded-2xl border ${
-                      isDark
-                        ? "border-white/10 bg-white/5 text-[var(--brand-red)]"
-                        : "border-black/10 bg-white text-[var(--brand-red)]"
-                    }`}
-                  >
-                    <Heart
-                      className={`size-6 ${
-                        favoriteIds.includes(selectedProduct.id) ? "fill-current" : ""
+                <div className="space-y-5 p-5 md:flex md:flex-col md:justify-center md:p-8">
+                  <div className="hidden items-start justify-between md:flex">
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.28em] text-[var(--brand-red)]">
+                        {selectedProduct.tag ?? "Especial"}
+                      </p>
+                      <h3 className="mt-2 text-[2rem] font-black leading-tight">
+                        {selectedProduct.name}
+                      </h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProduct(null)}
+                      className={`flex size-10 items-center justify-center rounded-full border ${
+                        isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-neutral-50"
                       }`}
-                    />
-                  </button>
-                  <div className="flex h-16 items-center justify-center rounded-2xl bg-brand-gradient px-6 text-[2rem] font-black text-white shadow-lg">
-                    {formatCurrency(selectedProduct.price)}
+                      aria-label="Cerrar producto"
+                    >
+                      <X className="size-5" />
+                    </button>
+                  </div>
+
+                  <div className="flex justify-center gap-1 text-[var(--brand-red)] md:justify-start">
+                    {Array.from({ length: selectedProduct.rating }).map((_, index) => (
+                      <Star
+                        key={`${selectedProduct.id}-modal-${index}`}
+                        className="size-4 fill-current"
+                      />
+                    ))}
+                  </div>
+
+                  <p
+                    className={`text-balance text-center text-[1.12rem] leading-8 md:text-left ${isDark ? "text-white/80" : "text-neutral-600"}`}
+                  >
+                    {selectedProduct.description}
+                  </p>
+
+                  <div className="grid grid-cols-[64px_1fr] gap-3 md:grid-cols-[72px_1fr]">
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorite(selectedProduct.id)}
+                      className={`flex h-16 items-center justify-center rounded-2xl border ${
+                        isDark
+                          ? "border-white/10 bg-white/5 text-[var(--brand-red)]"
+                          : "border-black/10 bg-white text-[var(--brand-red)]"
+                      }`}
+                    >
+                      <Heart
+                        className={`size-6 ${
+                          favoriteIds.includes(selectedProduct.id) ? "fill-current" : ""
+                        }`}
+                      />
+                    </button>
+                    <div className="flex h-16 items-center justify-center rounded-2xl bg-brand-gradient px-6 text-[2rem] font-black text-white shadow-lg">
+                      {formatCurrency(selectedProduct.price)}
+                    </div>
                   </div>
                 </div>
               </div>

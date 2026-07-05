@@ -36,8 +36,19 @@ export function AdminLogin({
 
         {!isConfigured ? (
           <div className="mb-4 rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm leading-7 text-amber-100">
-            Configura <code>NEXT_PUBLIC_SUPABASE_URL</code> y{" "}
-            <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> en tu archivo <code>.env</code>.
+            {typeof window !== "undefined" && window.location.hostname.includes("vercel.app") ? (
+              <>
+                Faltan las variables de Supabase en <strong>Vercel</strong>. Ve a tu proyecto →{" "}
+                <strong>Settings → Environment Variables</strong> y agrega{" "}
+                <code>NEXT_PUBLIC_SUPABASE_URL</code> y <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>.
+                Luego haz <strong>Redeploy</strong> del ultimo deployment.
+              </>
+            ) : (
+              <>
+                Configura <code>NEXT_PUBLIC_SUPABASE_URL</code> y{" "}
+                <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> en tu archivo <code>.env</code> local.
+              </>
+            )}
           </div>
         ) : null}
 

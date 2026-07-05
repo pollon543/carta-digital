@@ -68,6 +68,104 @@ img {
   overflow: hidden;
 }
 
+@media (max-width: 767px) {
+  .mobile-shell {
+    width: 100%;
+    max-width: 100%;
+    border-inline: none;
+    box-shadow: none;
+  }
+
+  .mobile-top-bar {
+    width: 100%;
+    margin: 0;
+    padding: 0.8rem 1rem 0.85rem;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .mobile-top-bar-light {
+    background: rgba(255, 255, 255, 0.97);
+  }
+
+  .mobile-top-bar-dark {
+    background: rgba(10, 10, 10, 0.96);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-header-title {
+    font-family: var(--font-category), var(--font-body), sans-serif;
+    font-size: 0.98rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .mobile-header-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .mobile-header-icon-btn:active {
+    opacity: 0.65;
+    transform: scale(0.96);
+  }
+
+  .mobile-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    height: 2.15rem;
+    padding: 0 0.7rem 0 0.55rem;
+    border: none;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #fdba74 0%, #f97316 45%, #ea580c 100%);
+    color: #ffffff;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 4px 14px rgba(234, 88, 12, 0.38);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .mobile-theme-toggle:active {
+    transform: scale(0.97);
+  }
+
+  .mobile-theme-toggle-icon {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22));
+  }
+
+  .mobile-theme-toggle-label {
+    font-family: var(--font-category), var(--font-body), sans-serif;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .mobile-hero-edge {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .mobile-hero-edge img {
+    display: block;
+    width: 100%;
+  }
+}
+
 .desktop-frame {
   position: relative;
   min-height: 100vh;

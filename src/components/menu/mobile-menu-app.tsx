@@ -24,6 +24,7 @@ import {
   Search,
   Star,
   Store,
+  Sun,
   SunMedium,
   ThumbsUp,
   UtensilsCrossed,
@@ -502,70 +503,58 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
           </div>
         </nav>
 
-        <div className="desktop-content-wrap px-3 pb-28 pt-4 md:px-0 md:pb-10 md:pt-0">
+        <div className="desktop-content-wrap pb-28 pt-0 md:px-0 md:pb-10 md:pt-0">
           <header
-            className={`sticky top-3 z-30 mb-4 rounded-[2rem] border px-4 py-3 backdrop-blur-xl transition-colors md:hidden ${
-              isDark
-                ? "border-white/10 bg-black/80"
-                : "border-black/10 bg-white/90"
+            className={`mobile-top-bar sticky top-0 z-30 md:hidden ${
+              isDark ? "mobile-top-bar-dark" : "mobile-top-bar-light"
             }`}
           >
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setDrawerOpen(true)}
-                className={`flex size-11 items-center justify-center rounded-2xl border ${
-                  isDark
-                    ? "border-white/15 bg-white/5 text-white"
-                    : "border-black/10 bg-white text-neutral-900"
-                }`}
+                className={`mobile-header-icon-btn ${isDark ? "text-white" : "text-neutral-900"}`}
                 aria-label="Abrir menu"
               >
-                <Menu className="size-6" />
+                <Menu className="size-7" strokeWidth={2.25} />
               </button>
 
               <div className="flex-1 text-center">
-                <div className={`text-[1.02rem] font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
+                <div
+                  className={`mobile-header-title ${isDark ? "text-white" : "text-neutral-900"}`}
+                >
                   CARTA <span className="text-[var(--brand-red)]">DIGITAL</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setGlobalSearchOpen(true)}
-                  className={`flex size-11 items-center justify-center rounded-2xl border ${
-                    isDark
-                      ? "border-white/15 bg-white/5 text-white"
-                      : "border-black/10 bg-white text-neutral-900"
-                  }`}
+                  className={`mobile-header-icon-btn ${isDark ? "text-white" : "text-neutral-900"}`}
                   aria-label="Buscar platos"
                 >
-                  <Search className="size-5" />
+                  <Search className="size-6" strokeWidth={2.25} />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
-                  className={`inline-flex h-11 items-center gap-2 rounded-full border px-3 ${
-                    isDark
-                      ? "border-white/15 bg-white/5 text-white"
-                      : "border-black/10 bg-white text-neutral-900"
-                  }`}
+                  className="mobile-theme-toggle"
                   aria-label="Cambiar tema"
                 >
-                  <span className="text-[0.62rem] font-black uppercase tracking-[0.18em]">
-                    {isDark ? "Night" : "Day"}
-                  </span>
-                  <span className="flex size-5 items-center justify-center rounded-full bg-[var(--brand-red)] text-white">
-                    {isDark ? <MoonStar className="size-3.5" /> : <SunMedium className="size-3.5" />}
-                  </span>
+                  {isDark ? (
+                    <MoonStar className="mobile-theme-toggle-icon size-[1.15rem] fill-white" strokeWidth={1.5} />
+                  ) : (
+                    <Sun className="mobile-theme-toggle-icon size-[1.15rem] fill-white/95 text-white" strokeWidth={1.75} />
+                  )}
+                  <span className="mobile-theme-toggle-label">{isDark ? "Night" : "Day"}</span>
                 </button>
               </div>
             </div>
           </header>
 
-          <section className="wide-hero-banner relative overflow-hidden rounded-[2.25rem] border border-black/10 md:rounded-none md:border-none">
+          <section className="wide-hero-banner mobile-hero-edge relative overflow-hidden md:rounded-none md:border-none">
             <img
               src={HERO_BACKGROUND}
               alt="Local de El Pollon"
@@ -651,6 +640,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
             </div>
           </section>
 
+          <div className="mobile-content-pad px-3 md:px-0">
           <section className="mt-6 md:mt-10">
             <div
               className={`mb-4 text-[2rem] font-black uppercase tracking-tight md:mb-5 md:text-[2.35rem] ${isDark ? "text-white" : "text-neutral-900"}`}
@@ -829,6 +819,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               </div>
             </div>
           </footer>
+          </div>
         </div>
 
         <nav

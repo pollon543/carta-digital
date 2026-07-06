@@ -587,11 +587,11 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
             </div>
           </header>
 
-          <section className="wide-hero-banner mobile-hero-edge relative overflow-hidden md:rounded-none md:border-none">
+          <section className="wide-hero-banner mobile-hero-edge hero-banner-stage relative overflow-hidden md:rounded-none md:border-none">
             <img
               src={heroBackgroundUrl}
               alt={`Local de ${restaurantName}`}
-              className="h-[455px] w-full object-cover md:h-[min(62vh,680px)] lg:h-[min(68vh,760px)]"
+              className="hero-banner-image"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/70" />
 

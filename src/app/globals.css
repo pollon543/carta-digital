@@ -166,6 +166,20 @@ img {
   }
 }
 
+.hero-banner-stage {
+  position: relative;
+  min-height: calc(100svh - 3.65rem);
+}
+
+.hero-banner-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .desktop-frame {
   position: relative;
   min-height: 100vh;
@@ -228,7 +242,12 @@ img {
     border: none;
   }
 
-  .wide-hero-banner img {
+  .hero-banner-stage {
+    min-height: calc(100vh - 4.75rem);
+  }
+
+  .wide-hero-banner img,
+  .hero-banner-image {
     width: 100%;
     object-fit: cover;
   }

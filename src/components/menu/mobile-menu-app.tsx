@@ -428,12 +428,12 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
   }
 
   return (
-    <main className={`desktop-frame ${isDark ? "dark-surface bg-[#050505]" : ""}`}>
+    <main className={`desktop-frame ${isDark ? "dark-surface bg-[#050505]" : "light-surface"}`}>
       <div
         className={`mobile-shell transition-colors ${
           isDark
             ? "border-white/10 bg-gradient-to-b from-[#0f0f0f] to-[#171717] text-white shadow-none md:border-none md:bg-[#111] md:from-[#111] md:to-[#111]"
-            : "border-black/10 bg-gradient-to-b from-[#fffdfa] to-[#f5f1ea] text-neutral-900 md:border-none md:bg-white md:from-white md:to-white"
+            : "light-surface border-black/10 text-neutral-900 shadow-none md:border-none"
         }`}
       >
         <nav

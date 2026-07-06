@@ -623,7 +623,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                         key={category.id}
                         type="button"
                         onClick={() => openCategory(category.slug, true)}
-                        className="hero-category-btn hero-category-btn-mobile bg-brand-gradient"
+                        className="hero-category-btn hero-category-btn-mobile"
                       >
                         <Icon className="hero-category-icon" />
                         <HeroCategoryLabel name={category.name} />
@@ -655,7 +655,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
                       key={`wide-hero-${category.id}`}
                       type="button"
                       onClick={() => openCategory(category.slug, true)}
-                      className="hero-category-btn hero-category-btn-wide bg-brand-gradient"
+                      className="hero-category-btn hero-category-btn-wide"
                     >
                       <Icon className="hero-category-icon" />
                       <HeroCategoryLabel name={category.name} />

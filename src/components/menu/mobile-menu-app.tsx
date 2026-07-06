@@ -546,18 +546,11 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               </button>
 
               <div className="flex-1 text-center">
-                <BrandLogo
-                  logoUrl={logoUrl}
-                  alt={restaurantName}
-                  className="mx-auto h-8 max-w-[150px] object-contain"
-                  fallback={
-                    <div
-                      className={`mobile-header-title ${isDark ? "text-white" : "text-neutral-900"}`}
-                    >
-                      CARTA <span className="text-[var(--brand-red)]">DIGITAL</span>
-                    </div>
-                  }
-                />
+                <div
+                  className={`mobile-header-title ${isDark ? "text-white" : "text-neutral-900"}`}
+                >
+                  CARTA <span className="text-[var(--brand-red)]">DIGITAL</span>
+                </div>
               </div>
 
               <div className="flex items-center gap-1.5">

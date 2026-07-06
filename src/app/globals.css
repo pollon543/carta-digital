@@ -168,7 +168,6 @@ img {
 
 .hero-banner-stage {
   position: relative;
-  min-height: calc(100svh - 3.65rem);
 }
 
 .hero-banner-image {
@@ -178,6 +177,18 @@ img {
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.hero-brand-badge {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 767px) {
+  .hero-banner-stage {
+    min-height: calc(78svh - 3.65rem);
+  }
 }
 
 .desktop-frame {
@@ -278,6 +289,15 @@ img {
 
   .wide-hero-actions {
     display: flex;
+    bottom: 5.5rem;
+    padding-bottom: 0;
+  }
+
+  .hero-brand-badge {
+    background: rgba(0, 0, 0, 0.34);
+    border-color: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
   }
 
   .wide-category-panel {

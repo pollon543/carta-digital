@@ -596,7 +596,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/70" />
 
             <div className="absolute inset-x-0 top-0 p-5 text-center text-white md:inset-x-auto md:left-10 md:top-10 md:p-0 md:text-left lg:left-14 lg:top-12">
-              <div className="mx-auto max-w-[220px] rounded-full bg-black/35 px-4 py-2 backdrop-blur md:mx-0 md:max-w-none md:rounded-[1.75rem] md:bg-black/72 md:px-8 md:py-6 md:shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+              <div className="hero-brand-badge mx-auto max-w-[220px] rounded-full px-4 py-2 md:mx-0 md:max-w-none md:rounded-[1.75rem] md:px-8 md:py-6">
                 <p className="font-[var(--font-display)] text-[2rem] font-bold leading-none text-[var(--brand-red)] md:text-[2.75rem] lg:text-[3rem]">
                   {restaurantName}
                 </p>
@@ -640,7 +640,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               </div>
             </div>
 
-            <div className="wide-hero-actions absolute inset-x-0 bottom-0 hidden flex-col items-center gap-4 px-6 pb-8 md:flex lg:gap-5 lg:px-14 lg:pb-10">
+            <div className="wide-hero-actions absolute inset-x-0 hidden flex-col items-center gap-4 px-6 md:flex lg:gap-5 lg:px-14">
               <button
                 type="button"
                 onClick={() => openCategory("todo-menu", true)}

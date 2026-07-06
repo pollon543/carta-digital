@@ -27,6 +27,8 @@ function mapSettingsRecord(record: Record<string, unknown> | null): SiteSettings
     schedule: String(record.schedule ?? defaultSettings.schedule),
     primaryColor: String(record.primary_color ?? defaultSettings.primaryColor),
     secondaryColor: String(record.secondary_color ?? defaultSettings.secondaryColor),
+    heroBackgroundUrl: String(record.hero_background_url ?? defaultSettings.heroBackgroundUrl),
+    logoUrl: String(record.logo_url ?? defaultSettings.logoUrl),
   };
 }
 

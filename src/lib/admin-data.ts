@@ -16,6 +16,8 @@ export function mapSettingsToDb(settings: SiteSettings) {
     schedule: settings.schedule,
     primary_color: settings.primaryColor,
     secondary_color: settings.secondaryColor,
+    hero_background_url: settings.heroBackgroundUrl,
+    logo_url: settings.logoUrl,
   };
 }
 
@@ -31,6 +33,8 @@ export function mapSettingsFromDb(row: Record<string, unknown>): SiteSettings {
     schedule: String(row.schedule ?? defaultSettings.schedule),
     primaryColor: String(row.primary_color ?? defaultSettings.primaryColor),
     secondaryColor: String(row.secondary_color ?? defaultSettings.secondaryColor),
+    heroBackgroundUrl: String(row.hero_background_url ?? defaultSettings.heroBackgroundUrl),
+    logoUrl: String(row.logo_url ?? defaultSettings.logoUrl),
   };
 }
 
@@ -156,9 +160,15 @@ export async function importSeedMenu() {
 }
 
 export async function uploadProductImage(file: File) {
+  return uploadSiteAsset(file, "products");
+}
+
+export async function uploadSiteAsset(file: File, folder: "hero" | "logo" | "products" = "products") {
   const supabase = createSupabaseBrowserClient();
   const extension = file.name.split(".").pop() || "jpg";
-  const path = `products/${Date.now()}-${slugify(file.name)}.${extension}`;
+  const fileName = `${Date.now()}-${slugify(file.name)}.${extension}`;
+  const path =
+    folder === "products" ? `products/${fileName}` : `site/${folder}/${fileName}`;
 
   const { error } = await supabase.storage.from("product-images").upload(path, file, {
     cacheControl: "3600",

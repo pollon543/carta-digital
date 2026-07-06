@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 
 import { formatCurrency } from "@/lib/utils";
+import { defaultSettings } from "@/data/seed";
 import { trackPageVisit } from "@/lib/analytics";
 import {
   fetchProductReactionsMap,
@@ -70,12 +71,27 @@ const HOME_HERO_BUTTONS = [
   "bebidas",
 ] as const;
 
-const HERO_BACKGROUND =
-  "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80";
-
 type MobileMenuAppProps = {
   initialData: MenuPayload;
 };
+
+function BrandLogo({
+  logoUrl,
+  alt,
+  className,
+  fallback,
+}: {
+  logoUrl: string;
+  alt: string;
+  className?: string;
+  fallback: ReactNode;
+}) {
+  if (logoUrl.trim()) {
+    return <img src={logoUrl} alt={alt} className={className} />;
+  }
+
+  return <>{fallback}</>;
+}
 
 function getCategoryIcon(iconName: string) {
   return categoryIconMap[iconName] ?? UtensilsCrossed;
@@ -272,6 +288,11 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
     return [parts[0] ?? "Iquique", parts[1] ?? "Chile"];
   }, [initialData.settings.locationLabel]);
 
+  const heroBackgroundUrl =
+    initialData.settings.heroBackgroundUrl || defaultSettings.heroBackgroundUrl;
+  const logoUrl = initialData.settings.logoUrl;
+  const restaurantName = initialData.settings.restaurantName;
+
   const topLikedProducts = useMemo(() => {
     return [...topLikesMap.entries()]
       .map(([productId, likes]) => {
@@ -434,7 +455,12 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
           </button>
 
           <p className="shrink-0 text-[1.35rem] font-black uppercase tracking-[0.04em] lg:text-[1.55rem]">
-            El Pollon
+            <BrandLogo
+              logoUrl={logoUrl}
+              alt={restaurantName}
+              className="h-9 max-w-[140px] object-contain lg:h-10 lg:max-w-[160px]"
+              fallback={restaurantName}
+            />
           </p>
 
           <div className="hidden min-w-0 flex-1 flex-col items-center text-center sm:flex">
@@ -520,11 +546,18 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
               </button>
 
               <div className="flex-1 text-center">
-                <div
-                  className={`mobile-header-title ${isDark ? "text-white" : "text-neutral-900"}`}
-                >
-                  CARTA <span className="text-[var(--brand-red)]">DIGITAL</span>
-                </div>
+                <BrandLogo
+                  logoUrl={logoUrl}
+                  alt={restaurantName}
+                  className="mx-auto h-8 max-w-[150px] object-contain"
+                  fallback={
+                    <div
+                      className={`mobile-header-title ${isDark ? "text-white" : "text-neutral-900"}`}
+                    >
+                      CARTA <span className="text-[var(--brand-red)]">DIGITAL</span>
+                    </div>
+                  }
+                />
               </div>
 
               <div className="flex items-center gap-1.5">
@@ -556,8 +589,8 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
 
           <section className="wide-hero-banner mobile-hero-edge relative overflow-hidden md:rounded-none md:border-none">
             <img
-              src={HERO_BACKGROUND}
-              alt="Local de El Pollon"
+              src={heroBackgroundUrl}
+              alt={`Local de ${restaurantName}`}
               className="h-[455px] w-full object-cover md:h-[min(62vh,680px)] lg:h-[min(68vh,760px)]"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/70" />
@@ -565,7 +598,7 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
             <div className="absolute inset-x-0 top-0 p-5 text-center text-white md:inset-x-auto md:left-10 md:top-10 md:p-0 md:text-left lg:left-14 lg:top-12">
               <div className="mx-auto max-w-[220px] rounded-full bg-black/35 px-4 py-2 backdrop-blur md:mx-0 md:max-w-none md:rounded-[1.75rem] md:bg-black/72 md:px-8 md:py-6 md:shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
                 <p className="font-[var(--font-display)] text-[2rem] font-bold leading-none text-[var(--brand-red)] md:text-[2.75rem] lg:text-[3rem]">
-                  El Pollon
+                  {restaurantName}
                 </p>
                 <p className="mt-1 text-[0.62rem] font-black uppercase tracking-[0.24em] text-white/90 md:mt-2 md:text-[0.7rem] md:tracking-[0.22em]">
                   Pollo a la brasa · {locationCity}, {locationCountry}
@@ -924,11 +957,18 @@ export function MobileMenuApp({ initialData }: MobileMenuAppProps) {
           <div className="menu-drawer-header shrink-0 bg-brand-gradient">
             <div className="flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-2.5">
-                <div className="flex size-[3.25rem] shrink-0 items-center justify-center rounded-full bg-white shadow-[0_8px_24px_rgba(0,0,0,0.22)]">
-                  <div className="text-center leading-none">
-                    <div className="menu-drawer-logo-brand">Pollon</div>
-                    <div className="menu-drawer-logo-tagline">Pollo a la brasa</div>
-                  </div>
+                <div className="flex size-[3.25rem] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_8px_24px_rgba(0,0,0,0.22)]">
+                  <BrandLogo
+                    logoUrl={logoUrl}
+                    alt={restaurantName}
+                    className="size-[2.6rem] object-contain"
+                    fallback={
+                      <div className="text-center leading-none">
+                        <div className="menu-drawer-logo-brand">Pollon</div>
+                        <div className="menu-drawer-logo-tagline">Pollo a la brasa</div>
+                      </div>
+                    }
+                  />
                 </div>
 
                 <button

@@ -105,6 +105,9 @@ export const defaultSettings: SiteSettings = {
   locationLabel: "Iquique, Chile",
   heroTitle: "Carta digital moderna",
   heroSubtitle: "Pollo a la brasa, combos, extras y bebidas en una experiencia movil pulida.",
+  heroBackgroundUrl:
+    "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+  logoUrl: "",
   whatsappUrl: "https://wa.me/56986925310",
   deliveryUrl: "https://www.el-pollon.cl",
   address: "Vivar 1086, Iquique",

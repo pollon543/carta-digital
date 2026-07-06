@@ -44,6 +44,8 @@ create table if not exists public.site_settings (
   schedule text not null default 'Lun - Dom | 11:00 - 23:00',
   primary_color text not null default '#ef4444',
   secondary_color text not null default '#111111',
+  hero_background_url text not null default '',
+  logo_url text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -51,6 +53,12 @@ create table if not exists public.site_settings (
 insert into public.site_settings (id)
 values (1)
 on conflict (id) do nothing;
+
+alter table if exists public.site_settings
+add column if not exists hero_background_url text not null default '';
+
+alter table if exists public.site_settings
+add column if not exists logo_url text not null default '';
 
 create or replace function public.set_updated_at()
 returns trigger

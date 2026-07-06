@@ -29,6 +29,8 @@ export type SiteSettings = {
   locationLabel: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroBackgroundUrl: string;
+  logoUrl: string;
   whatsappUrl: string;
   deliveryUrl: string;
   address: string;

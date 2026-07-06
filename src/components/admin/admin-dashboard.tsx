@@ -16,6 +16,7 @@ import {
   mapProductToDb,
   mapSettingsToDb,
   uploadProductImage,
+  uploadSiteAsset,
 } from "@/lib/admin-data";
 import { createSupabaseBrowserClient, hasSupabaseEnv } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils";
@@ -273,6 +274,8 @@ export function AdminDashboard() {
           onChange={setSettings}
           onSave={handleSaveSettings}
           onImportSeed={handleImportSeed}
+          onUploadHeroImage={(file) => uploadSiteAsset(file, "hero")}
+          onUploadLogoImage={(file) => uploadSiteAsset(file, "logo")}
         />
       ) : null}
     </AdminShell>

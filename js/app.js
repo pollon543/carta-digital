@@ -1,44 +1,40 @@
 (function () {
   "use strict";
 
-  const DISHES = [
-    {
-      src: "assets/dishes/pollo.png",
-      alt: "Pollo a la brasa",
-    },
-    {
-      src: "assets/dishes/chaufa.png",
-      alt: "Arroz chaufa",
-    },
-    {
-      src: "assets/dishes/papas.png",
-      alt: "Papas fritas",
-    },
-    {
-      src: "assets/dishes/ensalada.png",
-      alt: "Ensalada fresca",
-    },
-    {
-      src: "assets/dishes/combo.png",
-      alt: "Combo familiar",
-    },
-    {
-      src: "assets/dishes/nuggets.png",
-      alt: "Nuggets crocantes",
-    },
-    {
-      src: "assets/dishes/lomo.png",
-      alt: "Lomo saltado",
-    },
-    {
-      src: "assets/dishes/bebida.png",
-      alt: "Bebida refrescante",
-    },
-  ];
+  const config = window.CARTA_CONFIG || {};
+  const platos = Array.isArray(config.platos) ? config.platos : [];
+
+  const DISHES = platos
+    .filter(function (p) {
+      return p && typeof p.url === "string" && p.url.trim() !== "";
+    })
+    .map(function (p) {
+      return {
+        src: p.url.trim(),
+        alt: p.nombre || "Plato El Pollón",
+      };
+    });
+
+  /* Logo y botón INGRESAR desde config */
+  const logoEl = document.querySelector(".brand-logo");
+  if (logoEl && config.logoUrl) {
+    logoEl.src = config.logoUrl;
+  }
+
+  const btnIngresar = document.querySelector(".btn-ingresar");
+  if (btnIngresar && config.ingresarUrl) {
+    btnIngresar.href = config.ingresarUrl;
+  }
 
   const stage = document.getElementById("carousel-stage");
   const floor = document.getElementById("carousel-floor");
   if (!stage) return;
+
+  if (DISHES.length === 0) {
+    stage.innerHTML =
+      '<p class="carousel-empty">Agrega imágenes en <strong>js/config.js</strong></p>';
+    return;
+  }
 
   const total = DISHES.length;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -72,6 +68,12 @@
       img.loading = index < 3 ? "eager" : "lazy";
       img.decoding = "async";
       img.draggable = false;
+      img.referrerPolicy = "no-referrer-when-downgrade";
+
+      img.addEventListener("error", function () {
+        item.classList.add("is-broken");
+        img.alt = "Imagen no disponible: " + dish.alt;
+      });
 
       item.appendChild(img);
       fragment.appendChild(item);
@@ -97,7 +99,6 @@
       const z = Math.cos(angle) * radius;
       const lift = (depth - 0.5) * 34;
 
-      /* Zoom cinematográfico: el plato al frente domina la escena */
       const scale = 0.34 + Math.pow(depth, 1.35) * 0.98;
       const opacity = 0.28 + depth * 0.72;
       const blur = Math.pow(1 - depth, 1.8) * 2.2;

@@ -17,19 +17,49 @@ npx serve .
 
 Abre: http://localhost:3000
 
-O abre `index.html` directamente en el navegador.
+## Cambiar imágenes por URL
+
+Edita el archivo **`js/config.js`**:
+
+```javascript
+window.CARTA_CONFIG = {
+  logoUrl: "https://tu-link.com/logo-pollon.png",
+  ingresarUrl: "https://www.el-pollon.cl",
+  platos: [
+    {
+      url: "https://tu-link.com/pollo-brasa.png",
+      nombre: "Pollo a la brasa",
+    },
+    {
+      url: "https://tu-link.com/chaufa.png",
+      nombre: "Arroz chaufa",
+    },
+    // Agrega más platos...
+  ],
+};
+```
+
+### Recomendaciones para las imágenes
+
+- **Formato:** PNG con fondo transparente (mejor efecto 3D)
+- **Tamaño:** mínimo 500×500 px
+- **URL:** debe ser un enlace directo a la imagen (termina en `.png`, `.jpg`, `.webp`)
+- Puedes subir a: Imgur, Cloudinary, Supabase Storage, tu propio servidor, etc.
+
+### También puedes cambiar
+
+| Qué | Dónde |
+|-----|--------|
+| Logo | `logoUrl` en `js/config.js` |
+| Link del botón INGRESAR | `ingresarUrl` en `js/config.js` |
+| Platos del carrusel | array `platos` en `js/config.js` |
 
 ## Archivos
 
 ```
 index.html
 css/style.css
+js/config.js    ← edita aquí tus URLs
 js/app.js
-assets/logo-pollon.png
+assets/
 ```
-
-## Personalizar
-
-- **Logo:** reemplaza `assets/logo-pollon.png`
-- **Platos del carrusel:** edita el array `DISHES` en `js/app.js`
-- **Link del botón:** cambia el `href` en `index.html`

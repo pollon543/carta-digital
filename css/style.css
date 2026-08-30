@@ -7,7 +7,7 @@
   --white: #ffffff;
   --shadow-soft: 0 18px 50px rgba(17, 17, 17, 0.1);
   --shadow-plate: 0 14px 34px rgba(17, 17, 17, 0.22);
-  --font-display: "Montserrat", system-ui, sans-serif;
+  --font-display: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
   --tilt-x: 16deg;
 }
 
@@ -100,6 +100,7 @@ img {
   justify-content: center;
   min-height: 0;
   flex: 1;
+  contain: layout style;
 }
 
 .carousel-scene {
@@ -159,9 +160,9 @@ img {
   left: 50%;
   top: 50%;
   transform-style: preserve-3d;
-  will-change: transform, opacity, width, height;
   pointer-events: none;
   backface-visibility: hidden;
+  contain: layout style paint;
 }
 
 .carousel-item img {
@@ -169,7 +170,6 @@ img {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  will-change: transform, filter;
 }
 
 .carousel-item.is-hero {
@@ -263,6 +263,25 @@ img {
   .btn-ingresar {
     min-width: 340px;
     padding: 1.05rem 3rem;
+  }
+}
+
+/* Móvil: menos efectos pesados, más fluidez */
+@media (max-width: 767px) {
+  .carousel-glow {
+    opacity: 0.6;
+  }
+
+  .carousel-item.is-hero::after {
+    display: none;
+  }
+
+  .brand-logo {
+    filter: none;
+  }
+
+  .btn-ingresar {
+    box-shadow: 0 6px 18px rgba(239, 43, 45, 0.28);
   }
 }
 

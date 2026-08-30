@@ -26,6 +26,17 @@ window.CARTA_CONFIG = {
   ingresarUrl: "https://www.el-pollon.cl",
 
   /*
+   * Rendimiento móvil (no necesitas cambiar esto)
+   * Reduce peso de imágenes automáticamente en celular
+   */
+  rendimiento: {
+    optimizarImagenes: true,
+    anchoLogo: 320,
+    anchoPlato: 280,
+    calidad: 78,
+  },
+
+  /*
    * Platos del carrusel 3D
    * Puedes agregar o quitar platos. Mínimo recomendado: 4
    * Cada plato necesita: url (imagen) y nombre (texto alternativo)

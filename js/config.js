@@ -25,7 +25,7 @@ window.CARTA_CONFIG = {
   platos: [
     {
       url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/pechuga%20.png",
-      nombre: "Pollo a la brasa",
+      nombre: "Pechuga a la plancha",
     },
     {
       url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/pechuga%20.png?updatedAt=1788044935915",
@@ -33,27 +33,27 @@ window.CARTA_CONFIG = {
     },
     {
       url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/arroz%20chaufa.webp",
-      nombre: "Papas fritas",
+      nombre: "Arroz Chaufa",
     },
     {
       url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/fideo%20al%20pesto%20.webp",
-      nombre: "Ensalada fresca",
+      nombre: "Fideos al pesto",
     },
     {
       url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/bistec%20a%20lo%20pobre.webp",
-      nombre: "Combo familiar",
+      nombre: "Bistec a lo pobre",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_ht9rzfht9rzfht9r%20(1).png",
-      nombre: "Nuggets crocantes",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/bistec%20%20con%20fideo%20%20al%20pesto.webp",
+      nombre: "Bistec con fideos al pesto",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_dhec8xdhec8xdhec-Photoroom.png",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/saltado%20de%20pollo.webp",
       nombre: "Lomo saltado",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_turdurturdurturd-Photoroom.png",
-      nombre: "Bebida refrescante",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/chuleta%20de%20cerdo.webp",
+      nombre: "Chuleta de cerdo",
     },
 
     /* --- EJEMPLO: tus imágenes por URL (descomenta y pega tus links) --- */

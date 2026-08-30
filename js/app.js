@@ -105,7 +105,7 @@
   function getMetrics() {
     var w = window.innerWidth;
     radius = Math.min(w * 0.36, 185);
-    baseSize = Math.min(w * 0.26, 148);
+    baseSize = Math.min(w * (isMobile ? 0.3 : 0.28), isMobile ? 172 : 158);
   }
 
   function loadImageLazy(img, src) {
@@ -185,10 +185,11 @@
 
       var x = Math.sin(angle) * radius;
       var z = Math.cos(angle) * radius;
-      var lift = (depth - 0.5) * 34;
+      var lift = (depth - 0.5) * 42;
 
-      var scale = 0.34 + Math.pow(depth, 1.35) * 0.98;
-      var opacity = 0.28 + depth * 0.72;
+      /* Más zoom al frente, más pequeño atrás */
+      var scale = 0.22 + Math.pow(depth, 0.92) * 1.55;
+      var opacity = 0.22 + depth * 0.78;
 
       var size = baseSize * scale;
       var half = size / 2;
@@ -202,14 +203,17 @@
       entry.el.style.transform =
         "translate3d(" + x.toFixed(1) + "px, " + lift.toFixed(1) + "px, " + z.toFixed(1) + "px)";
 
+      var isHero = depth > 0.86;
+
       var img = entry.el.querySelector("img");
       if (img) {
         img.style.opacity = String(opacity);
-        img.style.transform = "scale(" + (0.92 + depth * 0.12).toFixed(2) + ")";
+        var imgScale = 0.86 + depth * 0.26;
+        if (isHero) imgScale *= 1.08;
+        img.style.transform = "scale(" + imgScale.toFixed(2) + ")";
         img.style.filter = "none";
       }
 
-      var isHero = depth > 0.86;
       entry.el.classList.toggle("is-hero", isHero);
 
       if (depth > heroDepth) {

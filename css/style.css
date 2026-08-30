@@ -88,6 +88,10 @@ img {
   user-select: none;
 }
 
+.brand-logo--pending {
+  display: none;
+}
+
 /* Carrusel 3D */
 .carousel-section {
   width: 100%;

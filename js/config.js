@@ -11,8 +11,16 @@
  */
 
 window.CARTA_CONFIG = {
-  /* Logo de El Pollón (arriba del carrusel) */
-  logoUrl: "assets/logo-pollon.svg",
+  /*
+   * LOGO DE EL POLLÓN
+   * -----------------
+   * Pega aquí la URL de tu logo (PNG, JPG, WEBP o SVG).
+   * Debe empezar con https://
+   *
+   * Ejemplo:
+   * logoUrl: "https://tu-servidor.com/logo-pollon.png",
+   */
+  logoUrl: "PEGA_AQUI_TU_URL_DEL_LOGO",
 
   /* Botón INGRESAR — página web del Pollón */
   ingresarUrl: "https://www.el-pollon.cl",

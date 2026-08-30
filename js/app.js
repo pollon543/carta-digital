@@ -17,8 +17,14 @@
 
   /* Logo y botón INGRESAR desde config */
   const logoEl = document.querySelector(".brand-logo");
-  if (logoEl && config.logoUrl) {
-    logoEl.src = config.logoUrl;
+  const logoUrl =
+    typeof config.logoUrl === "string" ? config.logoUrl.trim() : "";
+
+  if (logoEl && logoUrl && !logoUrl.includes("PEGA_AQUI")) {
+    logoEl.src = logoUrl;
+  } else if (logoEl) {
+    logoEl.classList.add("brand-logo--pending");
+    logoEl.alt = "Agrega logoUrl en js/config.js";
   }
 
   const btnIngresar = document.querySelector(".btn-ingresar");

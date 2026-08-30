@@ -20,7 +20,7 @@ window.CARTA_CONFIG = {
    * Ejemplo:
    * logoUrl: "https://tu-servidor.com/logo-pollon.png",
    */
-  logoUrl: "PEGA_AQUI_TU_URL_DEL_LOGO",
+  logoUrl: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/logo.png?updatedAt=1781831566358",
 
   /* Botón INGRESAR — página web del Pollón */
   ingresarUrl: "https://www.el-pollon.cl",

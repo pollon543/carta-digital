@@ -24,23 +24,23 @@ window.CARTA_CONFIG = {
    */
   platos: [
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_h9xkwh9xkwh9xkwh-Photoroom.png",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/pechuga%20.png",
       nombre: "Pollo a la brasa",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_ee8mp2ee8mp2ee8m-Photoroom.png",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/pechuga%20.png?updatedAt=1788044935915",
       nombre: "Arroz chaufa",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_335uba335uba335u-Photoroom.png",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/arroz%20chaufa.webp",
       nombre: "Papas fritas",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_mmmwpmmmwpmmmwpm-Photoroom.png",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/fideo%20al%20pesto%20.webp",
       nombre: "Ensalada fresca",
     },
     {
-      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/Gemini_Generated_Image_r44sp1r44sp1r44s__1___2_-removebg-preview.png?updatedAt=1787963240954",
+      url: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/bistec%20a%20lo%20pobre.webp",
       nombre: "Combo familiar",
     },
     {

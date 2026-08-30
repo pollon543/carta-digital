@@ -8,7 +8,6 @@
   --shadow-soft: 0 18px 50px rgba(17, 17, 17, 0.1);
   --shadow-plate: 0 14px 34px rgba(17, 17, 17, 0.22);
   --font-display: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --tilt-x: 16deg;
 }
 
 *,
@@ -43,10 +42,10 @@ img {
   align-items: center;
   justify-items: center;
   padding: clamp(1.25rem, 4vw, 2rem) clamp(1rem, 4vw, 1.5rem)
-    calc(1.25rem + env(safe-area-inset-bottom));
+    calc(2.25rem + env(safe-area-inset-bottom));
   gap: clamp(0.65rem, 2.5vw, 1rem);
   background:
-    radial-gradient(ellipse 80% 50% at 50% 58%, rgba(239, 43, 45, 0.04), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 50% 62%, rgba(239, 43, 45, 0.035), transparent 68%),
     var(--white);
 }
 
@@ -80,10 +79,9 @@ img {
 }
 
 .brand-logo {
-  width: min(78vw, 270px);
+  width: min(82vw, 300px);
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.06));
   pointer-events: none;
   user-select: none;
 }
@@ -92,7 +90,7 @@ img {
   display: none;
 }
 
-/* Carrusel 3D */
+/* Carrusel orbital — anillo elíptico (referencia mockup) */
 .carousel-section {
   width: 100%;
   display: flex;
@@ -100,83 +98,65 @@ img {
   justify-content: center;
   min-height: 0;
   flex: 1;
-  contain: layout style;
+  overflow: visible;
 }
 
 .carousel-scene {
   position: relative;
-  width: min(100%, 480px);
-  height: clamp(300px, 58vw, 420px);
-  perspective: 1400px;
-  perspective-origin: 50% 36%;
+  width: min(100%, 520px);
+  height: clamp(240px, 58vw, 320px);
+  overflow: visible;
 }
 
 .carousel-stage {
   position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transform: rotateX(var(--tilt-x));
-}
-
-.carousel-floor {
-  position: absolute;
   left: 50%;
-  top: 62%;
-  width: min(58vw, 220px);
-  height: clamp(28px, 8vw, 42px);
+  top: 54%;
+  width: 0;
+  height: 0;
   transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(17, 17, 17, 0.22) 0%,
-    rgba(17, 17, 17, 0.06) 45%,
-    transparent 72%
-  );
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 0.15s linear;
 }
 
+.carousel-floor,
 .carousel-glow {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: min(76vw, 300px);
-  height: min(76vw, 300px);
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(239, 43, 45, 0.1) 0%,
-    rgba(239, 43, 45, 0.03) 42%,
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
 .carousel-item {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
-  backface-visibility: hidden;
   background: transparent;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.carousel-item__frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .carousel-item img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: center center;
   background: transparent;
-  /* Oculta fondo blanco de las fotos sobre fondo claro */
-  mix-blend-mode: multiply;
 }
 
-.carousel-item.is-hero img {
-  filter: none;
+.carousel-item.is-leader {
+  z-index: 999 !important;
 }
 
 .carousel-empty {
@@ -200,7 +180,8 @@ img {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 0.25rem;
+  padding-top: 0.5rem;
+  margin-bottom: clamp(0.75rem, 3vw, 1.25rem);
 }
 
 .btn-ingresar {
@@ -242,7 +223,11 @@ img {
   }
 
   .carousel-scene {
-    height: 380px;
+    height: 320px;
+  }
+
+  .carousel-stage {
+    top: 52%;
   }
 
   .btn-ingresar {
@@ -251,18 +236,10 @@ img {
   }
 }
 
-/* Móvil: menos efectos pesados, más fluidez */
+/* Móvil */
 @media (max-width: 767px) {
-  .carousel-glow {
-    opacity: 0.6;
-  }
-
-  .carousel-item.is-hero::after {
-    display: none;
-  }
-
-  .brand-logo {
-    filter: none;
+  .splash {
+    gap: clamp(0.5rem, 2vw, 0.85rem);
   }
 
   .btn-ingresar {

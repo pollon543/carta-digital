@@ -96,14 +96,11 @@
 
   var total = DISHES.length;
   var rotation = 0;
-  var speed = prefersReducedMotion ? 0.0012 : isMobile ? 0.0036 : 0.0042;
+  var speed = prefersReducedMotion ? 0.0012 : isMobile ? 0.0075 : 0.0055;
   var radius = 0;
   var baseSize = 0;
   var items = [];
   var rafId = null;
-  var frameSkip = isMobile ? 1 : 0;
-  var frameCount = 0;
-  var useBlur = !isMobile;
 
   function getMetrics() {
     var w = window.innerWidth;
@@ -192,7 +189,6 @@
 
       var scale = 0.34 + Math.pow(depth, 1.35) * 0.98;
       var opacity = 0.28 + depth * 0.72;
-      var blur = useBlur ? Math.pow(1 - depth, 1.8) * 2.2 : 0;
 
       var size = baseSize * scale;
       var half = size / 2;
@@ -201,28 +197,16 @@
       entry.el.style.height = size + "px";
       entry.el.style.marginLeft = -half + "px";
       entry.el.style.marginTop = -half + "px";
-      entry.el.style.opacity = String(opacity);
+      entry.el.style.opacity = "1";
       entry.el.style.zIndex = String(Math.round(depth * 1000));
       entry.el.style.transform =
         "translate3d(" + x.toFixed(1) + "px, " + lift.toFixed(1) + "px, " + z.toFixed(1) + "px)";
 
       var img = entry.el.querySelector("img");
       if (img) {
-        var shadowY = Math.round(10 + depth * 26);
-        var shadowBlur = Math.round(14 + depth * 22);
-        var shadowAlpha = (0.1 + depth * 0.26).toFixed(2);
-
-        img.style.filter =
-          "drop-shadow(0 " +
-          shadowY +
-          "px " +
-          shadowBlur +
-          "px rgba(0,0,0," +
-          shadowAlpha +
-          "))" +
-          (blur > 0.15 ? " blur(" + blur.toFixed(2) + "px)" : "");
-
+        img.style.opacity = String(opacity);
         img.style.transform = "scale(" + (0.92 + depth * 0.12).toFixed(2) + ")";
+        img.style.filter = "none";
       }
 
       var isHero = depth > 0.86;
@@ -250,14 +234,8 @@
   }
 
   function tick() {
-    frameCount += 1;
     rotation += speed;
-
-    if (frameCount > frameSkip) {
-      updateCarousel();
-      frameCount = 0;
-    }
-
+    updateCarousel();
     rafId = requestAnimationFrame(tick);
   }
 

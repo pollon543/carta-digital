@@ -162,7 +162,7 @@ img {
   transform-style: preserve-3d;
   pointer-events: none;
   backface-visibility: hidden;
-  contain: layout style paint;
+  background: transparent;
 }
 
 .carousel-item img {
@@ -170,28 +170,13 @@ img {
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-}
-
-.carousel-item.is-hero {
-  filter: brightness(1.04);
-}
-
-.carousel-item.is-hero::after {
-  content: "";
-  position: absolute;
-  inset: 8% 5% -8%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(239, 43, 45, 0.12) 0%,
-    transparent 68%
-  );
-  z-index: -1;
-  pointer-events: none;
+  background: transparent;
+  /* Oculta fondo blanco de las fotos sobre fondo claro */
+  mix-blend-mode: multiply;
 }
 
 .carousel-item.is-hero img {
-  filter: drop-shadow(0 30px 38px rgba(0, 0, 0, 0.34)) !important;
+  filter: none;
 }
 
 .carousel-empty {
@@ -287,7 +272,7 @@ img {
 
 /* Movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
-  .carousel-item img {
-    filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.18)) !important;
+  .carousel-stage {
+    animation: none;
   }
 }

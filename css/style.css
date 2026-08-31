@@ -43,7 +43,7 @@ img {
   justify-items: center;
   padding: clamp(1.25rem, 4vw, 2rem) clamp(1rem, 4vw, 1.5rem)
     calc(2.25rem + env(safe-area-inset-bottom));
-  gap: clamp(0.65rem, 2.5vw, 1rem);
+  gap: clamp(0.35rem, 1.5vw, 0.65rem);
   background:
     radial-gradient(ellipse 70% 45% at 50% 62%, rgba(239, 43, 45, 0.035), transparent 68%),
     var(--white);
@@ -79,7 +79,7 @@ img {
 }
 
 .brand-logo {
-  width: min(82vw, 300px);
+  width: min(64vw, 230px);
   height: auto;
   object-fit: contain;
   pointer-events: none;
@@ -94,11 +94,12 @@ img {
 .carousel-section {
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   min-height: 0;
   flex: 1;
   overflow: visible;
+  padding-top: clamp(0.15rem, 1vw, 0.4rem);
 }
 
 .carousel-scene {
@@ -106,12 +107,13 @@ img {
   width: min(100%, 520px);
   height: clamp(240px, 58vw, 320px);
   overflow: visible;
+  margin-top: clamp(-0.5rem, -1.5vw, 0);
 }
 
 .carousel-stage {
   position: absolute;
   left: 50%;
-  top: 54%;
+  top: 42%;
   width: 0;
   height: 0;
   transform: translate(-50%, -50%);
@@ -227,7 +229,11 @@ img {
   }
 
   .carousel-stage {
-    top: 52%;
+    top: 42%;
+  }
+
+  .brand-logo {
+    width: min(52vw, 220px);
   }
 
   .btn-ingresar {
@@ -239,7 +245,7 @@ img {
 /* Móvil */
 @media (max-width: 767px) {
   .splash {
-    gap: clamp(0.5rem, 2vw, 0.85rem);
+    gap: clamp(0.25rem, 1.2vw, 0.55rem);
   }
 
   .btn-ingresar {

@@ -109,12 +109,14 @@
 
   var total = DISHES.length;
   var rotation = 0;
-  var speed = prefersReducedMotion ? 0.001 : isMobile ? 0.0038 : 0.0035;
+  /* rad/segundo — móvil más rápido; independiente del FPS */
+  var speedPerSec = prefersReducedMotion ? 0.25 : isMobile ? 0.72 : 0.42;
   var radiusX = 0;
   var radiusY = 0;
   var plateSize = 0;
   var items = [];
   var rafId = null;
+  var lastTs = 0;
 
   /* Anillo elíptico — todos los platos orbitan como en la referencia */
   var SCALE_BACK = 0.4;
@@ -212,8 +214,11 @@
     });
   }
 
-  function tick() {
-    rotation += speed;
+  function tick(ts) {
+    if (!lastTs) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+    rotation += speedPerSec * dt;
     updateCarousel();
     rafId = requestAnimationFrame(tick);
   }
@@ -247,7 +252,9 @@
     if (document.hidden) {
       if (rafId) cancelAnimationFrame(rafId);
       rafId = null;
+      lastTs = 0;
     } else if (!rafId) {
+      lastTs = 0;
       rafId = requestAnimationFrame(tick);
     }
   });

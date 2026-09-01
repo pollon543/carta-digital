@@ -23,7 +23,7 @@ window.CARTA_CONFIG = {
   logoUrl: "https://ik.imagekit.io/cr9brsund/pollon-iquique-vivar/logo.png?updatedAt=1781831566358",
 
   /* Botón INGRESAR — página web del Pollón */
-  ingresarUrl: "https://www.el-pollon.cl",
+  ingresarUrl: "https://carta-digital-el-pollon.vercel.app/",
 
   /*
    * Rendimiento móvil (no necesitas cambiar esto)
